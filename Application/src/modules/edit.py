@@ -51,6 +51,8 @@ def editReplacedEquipment(equipment):
   db.commit()
   mycursor.close()
 
+#Equipment Array values must have
+#NewEquipmentID, NewBorrowerID, NewReturn_date, NewStatus, CurrentEquipmentID, CurrentBorrowerID, CurrentReturn_date
 def editReturnedEquipment(equipment):
   mycursor = db.cursor()
   mycursor.execute("UPDATE returned_equipment SET EquipmentID = %s, BorrowerID = %s, Return_date = %s, Status = %s WHERE (EquipmentID = %s AND BorrowerID = %s AND Return_date = %s)", equipment)
