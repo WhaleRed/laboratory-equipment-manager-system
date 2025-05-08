@@ -332,3 +332,65 @@ def sortProfLName(page):
   mycursor.close()
 
   return arr
+
+#-----Sort for equipment table-----#
+
+def sortEquipmentID(page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM equipment ORDER BY EquipmentID ASC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+
+  mycursor.close()
+
+  return arr
+
+def sortEquipmentName(page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM equipment ORDER BY Name ASC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+
+  mycursor.close()
+
+  return arr
+
+def sortEquipmentQty(page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM equipment ORDER BY Quantity DESC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+  
+  mycursor.close()
+
+  return arr
+
+def sortEquipmentCateg(page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM equipment ORDER BY Category ASC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+
+  mycursor.close()
+
+  return arr
