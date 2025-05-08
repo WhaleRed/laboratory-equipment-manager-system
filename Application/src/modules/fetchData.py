@@ -285,3 +285,50 @@ def sortStatusReturnedEquipment(page):
   mycursor.close()
 
   return arr
+
+#-----Sort for professor table-----#
+
+def sortProfID(page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM professor ORDER BY ProfessorID ASC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+  
+  mycursor.close()
+
+  return arr
+
+def sortProfFName(page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM professor ORDER BY FirstName ASC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+  
+  mycursor.close()
+
+  return arr
+
+def sortProfLName(page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM professor ORDER BY LastName ASC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+  
+  mycursor.close()
+
+  return arr
