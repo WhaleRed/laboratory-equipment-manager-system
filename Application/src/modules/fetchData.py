@@ -11,7 +11,8 @@ db = mysql.connector.connect(
   database= os.getenv("DATABASE_NAME")
 )
 
-#For Search with Pagnization
+#-----For search with pagination-----#
+
 def searchBorrower(searched, page):
   mycursor = db.cursor()
   
@@ -128,6 +129,52 @@ def searchReturnedEquipment(searched, page):
   for row in mycursor:
     arr.append(row)
 
+  mycursor.close()
+
+  return arr
+
+#-----Sort for borrowed_equipment table-----#
+def sortEIDBorrowedEquipment(page):
+  mycursor = db.cursor()
+  
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM borrowed_equipment ORDER BY EquipmentID ASC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+  
+  mycursor.close()
+
+  return arr
+
+def sortBIDBorrowedEquipment(page):
+  mycursor = db.cursor()
+  
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM borrowed_equipment ORDER BY BorrowerID ASC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+  
+  mycursor.close()
+
+  return arr
+
+def sortDateBorrowedEquipment(page):
+  mycursor = db.cursor()
+  
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM borrowed_equipment ORDER BY Borrow_date DESC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+  
   mycursor.close()
 
   return arr
