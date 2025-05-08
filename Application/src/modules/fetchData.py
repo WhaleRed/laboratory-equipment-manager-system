@@ -394,3 +394,95 @@ def sortEquipmentCateg(page):
   mycursor.close()
 
   return arr
+
+#-----Sort for borrower table-----#
+
+def sortBorrowerID(page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM borrower ORDER BY BorrowerID ASC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+
+  mycursor.close()
+
+  return arr
+
+def sortBorrowerProfID(page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM borrower ORDER BY ProfessorID ASC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+
+  mycursor.close()
+
+  return arr
+
+def sortBorrowerFName(page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM borrower ORDER BY FirstName ASC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+
+  mycursor.close()
+
+  return arr
+
+def sortBorrowerLName(page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM borrower ORDER BY LastName ASC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+
+  mycursor.close()
+
+  return arr
+
+def sortBorrowerProg(page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM borrower ORDER BY Program ASC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+
+  mycursor.close()
+
+  return arr
+
+def sortBorrowerBlock(page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM borrower ORDER BY Block ASC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+
+  mycursor.close()
+
+  return arr
