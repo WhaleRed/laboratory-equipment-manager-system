@@ -178,3 +178,49 @@ def sortDateBorrowedEquipment(page):
   mycursor.close()
 
   return arr
+
+#-----Sort for replaced_equipment table-----#
+def sortEIDReplacedEquipment(page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM replaced_equipment ORDER BY EquipmentID ASC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+  
+  mycursor.close()
+
+  return arr
+
+def sortBIDReplacedEquipment(page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM replaced_equipment ORDER BY BorrowerID ASC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+  
+  mycursor.close()
+
+  return arr
+
+def sortDateReplacedEquipment(page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+  arr = []
+
+  mycursor.execute("SELECT * FROM replaced_equipment ORDER BY Replacement_date DESC LIMIT 10 OFFSET %s", (offset,))
+
+  for row in mycursor:
+    arr.append(row)
+  
+  mycursor.close()
+
+  return arr
