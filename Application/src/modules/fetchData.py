@@ -361,6 +361,8 @@ def sortEquipmentName(page):
   for row in mycursor:
     arr.append(row)
 
+  mycursor.close()
+
   return arr
 
 def sortEquipmentQty(page):
@@ -373,6 +375,8 @@ def sortEquipmentQty(page):
 
   for row in mycursor:
     arr.append(row)
+  
+  mycursor.close()
 
   return arr
 
@@ -386,5 +390,7 @@ def sortEquipmentCateg(page):
 
   for row in mycursor:
     arr.append(row)
+
+  mycursor.close()
 
   return arr
