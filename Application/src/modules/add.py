@@ -17,36 +17,72 @@ db = mysql.connector.connect(
 
 def addBorrower(borrower):
   mycursor = db.cursor()
-  mycursor.execute("INSERT INTO borrower VALUE (%s, %s, %s, %s, %s, %s)", borrower)
-  db.commit()
-  mycursor.close()
+  try:
+    mycursor.execute("INSERT INTO borrower VALUE (%s, %s, %s, %s, %s, %s)", borrower)
+    db.commit()
+    return 0
+  except mysql.connector.IntegrityError as e:
+    if e.errno == 1062:
+      return 1
+  finally:
+    mycursor.close()
 
 def addProfessor(professor):
   mycursor = db.cursor()
-  mycursor.execute("INSERT INTO professor VALUE (%s, %s, %s)", professor)
-  db.commit()
-  mycursor.close()
+  try:
+    mycursor.execute("INSERT INTO professor VALUE (%s, %s, %s)", professor)
+    db.commit()
+    return 0
+  except mysql.connector.IntegrityError as e:
+    if e.errno == 1062:
+      return 1
+  finally:
+    mycursor.close()
 
 def addEquipment(equipment):
   mycursor = db.cursor()
-  mycursor.execute("INSERT INTO equipment VALUE (%s, %s, %s, %s)", equipment)
-  db.commit()
-  mycursor.close()
+  try:
+    mycursor.execute("INSERT INTO equipment VALUE (%s, %s, %s, %s)", equipment)
+    db.commit()
+    return 0
+  except mysql.connector.IntegrityError as e:
+    if e.errno == 1062:
+      return 1
+  finally:
+    mycursor.close()
 
 def addBorrowedEquipment(equipment):
   mycursor = db.cursor()
-  mycursor.execute("INSERT INTO borrowed_equipment VALUE (%s, %s, %s)", equipment)
-  db.commit()
-  mycursor.close()
+  try:
+    mycursor.execute("INSERT INTO borrowed_equipment VALUE (%s, %s, %s)", equipment)
+    db.commit()
+    return 0
+  except mysql.connector.IntegrityError as e:
+    if e.errno == 1062:
+      return 1
+  finally:
+    mycursor.close()
 
 def addReplacedEquipment(equipment):
   mycursor = db.cursor()
-  mycursor.execute("INSERT INTO replaced_equipment VALUE (%s, %s, %s)", equipment)
-  db.commit()
-  mycursor.close()
+  try:
+    mycursor.execute("INSERT INTO replaced_equipment VALUE (%s, %s, %s)", equipment)
+    db.commit()
+    return 0
+  except mysql.connector.IntegrityError as e:
+    if e.errno == 1062:
+      return 1
+  finally:
+    mycursor.close()
 
 def addReturnedEquipment(equipment):
   mycursor = db.cursor()
-  mycursor.execute("INSERT INTO returned_equipment VALUE (%s, %s, %s, %s)", equipment)
-  db.commit()
-  mycursor.close()
+  try:
+    mycursor.execute("INSERT INTO returned_equipment VALUE (%s, %s, %s, %s)", equipment)
+    db.commit()
+    return 0
+  except mysql.connector.IntegrityError as e:
+    if e.errno == 1062:
+      return 1
+  finally:
+    mycursor.close()
