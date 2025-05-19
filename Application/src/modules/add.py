@@ -19,7 +19,7 @@ def addBorrower(borrower):
   try:
     mycursor.execute(
             "INSERT INTO Borrower (BorrowerID, ProfessorID, FirstName, LastName, Program, Block) "
-            "VALUES (%(BorrowerID)s, %(ProfessorID)s, %(FirstName)s, %(LastName)s, %(Program)s, %(Block)s)",
+            "VALUES (%(borrowerId)s, %(profId)s, %(fname)s, %(lname)s, %(program)s, %(block)s)",
             borrower
         )
     db.commit()
@@ -34,8 +34,8 @@ def addProfessor(professor):
   mycursor = db.cursor()
   try:
     mycursor.execute(
-            "INSERT INTO Professor (ProfessorID, FirstName, LastName) "
-            "VALUES (%(ProfessorID)s, %(FirstName)s, %(LastName)s)",
+            "INSERT INTO Professor (ProfessorId, FirstName, LastName) "
+            "VALUES (%(profId)s, %(fname)s, %(lname)s)",
             professor
         )
     db.commit()
@@ -50,8 +50,8 @@ def addEquipment(equipment):
   mycursor = db.cursor()
   try:
     mycursor.execute(
-            "INSERT INTO Equipment (EquipmentID, Name, Quantity, Category"
-            "VALUES (%(EquipmentID)s, %(Name)s, %(Quantity)s, %(Category)s)",
+            "INSERT INTO Equipment (EquipmentId, Name, Quantity, Category"
+            "VALUES (%(equipId)s, %(name)s, %(quantity)s, %(category)s)",
             equipment
         )
     db.commit()
@@ -66,8 +66,8 @@ def addBorrowedEquipment(equipment):
   mycursor = db.cursor()
   try:
     mycursor.execute(
-            "INSERT INTO Borrowed_equipment (EquipmentID, BorrowerID, Borrow_date) "
-            "VALUES (%(EquipmentID)s, %(BorrowerID)s, %(Borrow_date)s)", equipment
+            "INSERT INTO Borrowed_equipment (EquipmentID, BorrowerID, Borro) "
+            "VALUES (%(equipId)s, %(borrowerId)s, GETDATE())", equipment
             )
     db.commit()
     return 0
@@ -81,8 +81,8 @@ def addReplacedEquipment(equipment):
   mycursor = db.cursor()
   try:
     mycursor.execute(
-            "INSERT INTO Replaced_equipment (EquipmentID, BorrowerID, Replacement_date ) "
-            "VALUES (%(EquipmentID)s, %(BorrowerID)s, %(Replacement_date )s)", equipment
+            "INSERT INTO Replaced_equipment (EquipmentID, BorrowerID) "
+            "VALUES (%(equipId)s, %(borrowerId)s, GETDATE())", equipment
             )
     return 0
   except mysql.connector.IntegrityError as e:
@@ -95,8 +95,8 @@ def addReturnedEquipment(equipment):
   mycursor = db.cursor()
   try:
     mycursor.execute(
-            "INSERT INTO Replaced_equipment (EquipmentID, BorrowerID, Return_date , Status) "
-            "VALUES (%(EquipmentID)s, %(BorrowerID)s, %(Return_date )s, %(Status)s)", equipment
+            "INSERT INTO Replaced_equipment (EquipmentID, BorrowerID , Status) "
+            "VALUES (%(equipId)s, %(borrowerId)s, GETDATE(), %(status)s)", equipment
             )
     db.commit()
     return 0

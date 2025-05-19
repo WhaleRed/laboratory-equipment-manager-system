@@ -63,9 +63,9 @@ def delBorrowedEquipment(conditions):
   try:
     mycursor.execute(
             "DELETE FROM borrowed_equipment "
-            "WHERE EquipmentID = %(EquipmentID)s "
-            "AND BorrowerID = %(BorrowerID)s "
-            "AND Borrow_date = %(Borrow_date)s",
+            "WHERE EquipmentID = %(equipId)s "
+            "AND BorrowerID = %(borrowerId)s "
+            "AND Borrow_date = %(borrow_date)s",
             conditions
         )
     db.commit()
@@ -82,9 +82,9 @@ def delReplacedEquipment(conditions):
   try:
     mycursor.execute(
             "DELETE FROM borrowed_equipment "
-            "WHERE EquipmentID = %(EquipmentID)s "
-            "AND BorrowerID = %(BorrowerID)s "
-            "AND Replacement_date  = %(Replacement_date )s",
+            "WHERE EquipmentID = %(equipId)s "
+            "AND BorrowerID = %(borrowerId)s "
+            "AND Replacement_date  = %(replacement_date)s",
             conditions
         )
     db.commit()
@@ -101,9 +101,9 @@ def delReturnedEquipment(conditions):
   try:
     mycursor.execute(
             "DELETE FROM borrowed_equipment "
-            "WHERE EquipmentID = %(EquipmentID)s "
-            "AND BorrowerID = %(BorrowerID)s "
-            "AND Return_date = %(Return_date)s",
+            "WHERE EquipmentID = %(equipId)s "
+            "AND BorrowerID = %(borrowerId)s "
+            "AND Return_date = %(return_date)s",
             conditions
         )
     db.commit()
