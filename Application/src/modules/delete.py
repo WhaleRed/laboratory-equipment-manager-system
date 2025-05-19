@@ -58,10 +58,16 @@ def delEquipment(idnum):
     mycursor.close()
 
 #Pass multiple values since compounded PK
-def delBorrowedEquipment(equipmentID, borrowerID, borrowDate):
+def delBorrowedEquipment(conditions):
   mycursor = db.cursor()
   try:
-    mycursor.execute("DELETE FROM borrowed_equipment WHERE (EquipmentID = %s AND BorrowerID = %s AND Borrow_date = %s)", (equipmentID, borrowerID, borrowDate))
+    mycursor.execute(
+            "DELETE FROM borrowed_equipment "
+            "WHERE EquipmentID = %(EquipmentID)s "
+            "AND BorrowerID = %(BorrowerID)s "
+            "AND Borrow_date = %(Borrow_date)s",
+            conditions
+        )
     db.commit()
     return 0
   except mysql.connector.IntegrityError as e:
@@ -71,10 +77,16 @@ def delBorrowedEquipment(equipmentID, borrowerID, borrowDate):
     mycursor.close()
 
 #Pass multiple values since compounded PK
-def delReplacedEquipment(equipmentID, borrowerID, replacementDate):
+def delReplacedEquipment(conditions):
   mycursor = db.cursor()
   try:
-    mycursor.execute("DELETE FROM replaced_equipment WHERE (EquipmentID = %s AND BorrowerID = %s AND Replacement_date = %s)", (equipmentID, borrowerID, replacementDate))
+    mycursor.execute(
+            "DELETE FROM borrowed_equipment "
+            "WHERE EquipmentID = %(EquipmentID)s "
+            "AND BorrowerID = %(BorrowerID)s "
+            "AND Replacement_date  = %(Replacement_date )s",
+            conditions
+        )
     db.commit()
     return 0
   except mysql.connector.IntegrityError as e:
@@ -84,10 +96,16 @@ def delReplacedEquipment(equipmentID, borrowerID, replacementDate):
     mycursor.close()
 
 #Pass multiple values since compounded PK
-def delReturnedEquipment(equipmentID, borrowerID, returnedDate):
+def delReturnedEquipment(conditions):
   mycursor = db.cursor()
   try:
-    mycursor.execute("DELETE FROM returned_equipment WHERE (EquipmentID = %s AND BorrowerID = %s AND Return_date = %s)", (equipmentID, borrowerID, returnedDate))
+    mycursor.execute(
+            "DELETE FROM borrowed_equipment "
+            "WHERE EquipmentID = %(EquipmentID)s "
+            "AND BorrowerID = %(BorrowerID)s "
+            "AND Return_date = %(Return_date)s",
+            conditions
+        )
     db.commit()
     return 0
   except mysql.connector.IntegrityError as e:

@@ -16,12 +16,24 @@ db = mysql.connector.connect(
 #return 1: error because duplicate / PK already exist
 #return 2: error because cannot be edited because existing data uses the current data being edited
 
-#Borrower Array values must have
-# NewID, NewProfID, NewFname, NewLname, NewProgram, NewBlock, CurrentID
+#Must pass dictionary
+
+#Required keys:
+# - new_borrowerId, new_professorId, new_fname, new_lname, 
+# - new_program, new_block, and current_borrowerId
 def editBorrower(borrower):
   mycursor = db.cursor()
   try:
-    mycursor.execute("UPDATE borrower SET BorrowerID = %s, ProfessorID = %s, FirstName = %s, LastName = %s, Program = %s, Block = %s WHERE BorrowerID = %s", borrower)
+    mycursor.execute("""
+            UPDATE borrower SET 
+                BorrowerID = %(new_borrowerId)s,
+                ProfessorID = %(new_profId)s,
+                FirstName = %(new_fname)s,
+                LastName = %(new_lname)s,
+                Program = %(new_program)s,
+                Block = %(new_block)s
+            WHERE BorrowerID = %(current_borrowerId)s
+            """, borrower)
     db.commit()
     return 0
   except mysql.connector.IntegrityError as e:
@@ -32,12 +44,18 @@ def editBorrower(borrower):
   finally:
     mycursor.close()
 
-#Prof Array values must have
-#NewProfID, NewFname, NewLname, CurrentProfID
+#Required keys:
+# - new_profId, new_fname, new_lname, current_profId
 def editProfessor(professor):
   mycursor = db.cursor()
   try:
-    mycursor.execute("UPDATE professor SET  ProfessorID = %s, FirstName = %s, LastName = %s WHERE ProfessorID =%s", professor)
+    mycursor.execute("""
+            UPDATE professor SET  
+              ProfessorID = %(new_profId)s,
+              FirstName = %(new_fname)s,
+              LastName = %(new_lname)s,
+            WHERE ProfessorID =%s"
+            """, professor)
     db.commit()
     return 0
   except mysql.connector.IntegrityError as e:
@@ -48,12 +66,19 @@ def editProfessor(professor):
   finally:
     mycursor.close()
 
-#Equipment Array values must have
-#NewEquipmentID, NewName, NewQuantity, NewCategory, CurrentEquipmentID
+#Required keys:
+# - new_equipId, new_name, new_quantity, new_category, current_equipId
 def editEquipment(equipment):
   mycursor = db.cursor()
   try:
-    mycursor.execute("UPDATE equipment SET EquipmentID = %s, Name = %s, Quantity = %s, Category = %s WHERE EquipmentID = %s", equipment)
+    mycursor.execute("""
+            UPDATE equipment SET
+                EquipmentID = %(new_equipId)s,
+                Name = %(new_name)s,
+                Quantity = %(new_quantity)s,
+                Category = %(new_category)s
+            WHERE EquipmentID = %(current_equipId)s
+            """, equipment)
     db.commit()
     return 0
   except mysql.connector.IntegrityError as e:
@@ -64,12 +89,21 @@ def editEquipment(equipment):
   finally:
     mycursor.close()
 
-#Equipment Array values must have
-#NewEquipmentID, NewBorrowerID, NewBorrow_date, CurrentEquipmentID, CurrentBorrowerID, CurrentBurror_date
+#Required keys:
+# - new_equipId, new_borrowerId, new_borrowDate,
+# - current_equipId, current_borrowerId, current_borrowDate
 def editBorrowedEquipment(equipment):
   mycursor = db.cursor()
   try:
-    mycursor.execute("UPDATE borrowed_equipment SET EquipmentID = %s, BorrowerID = %s, Borrow_date = %s WHERE (EquipmentID = %s AND BorrowerID = %s AND Borrow_date = %s)", equipment)
+    mycursor.execute("""
+            UPDATE borrowed_equipment SET
+                EquipmentID = %(new_equipId)s,
+                BorrowerID = %(new_borrowerId)s,
+                Borrow_date = %(new_borrowDate)s
+            WHERE EquipmentID = %(current_equipId)s
+              AND BorrowerID = %(current_borrowerId)s
+              AND Borrow_date = %(current_borrowDate)s
+            """, equipment)
     db.commit()
     return 0
   except mysql.connector.IntegrityError as e:
@@ -80,12 +114,21 @@ def editBorrowedEquipment(equipment):
   finally:
     mycursor.close()
 
-#Equipment Array values must have
-#NewEquipmentID, NewBorrowerID, NewReplacement_date, CurrentEquipmentID, CurrentBorrowerID, CurrentReplaced_date
+#Required keys:
+# - new_equipId, new_borrowerId, new_replaceDate,
+# - current_equipId, current_borrowerId, current_replaceDate
 def editReplacedEquipment(equipment):
   mycursor = db.cursor()
   try:
-    mycursor.execute("UPDATE replaced_equipment SET EquipmentID = %s, BorrowerID = %s, Replacement_date = %s WHERE (EquipmentID = %s AND BorrowerID = %s AND Replacement_date = %s)", equipment)
+    mycursor.execute("""
+            UPDATE replaced_equipment SET
+                EquipmentID = %(new_equipId)s,
+                BorrowerID = %(new_borrowerId)s,
+                Replacement_date = %(new_replaceDate)s
+            WHERE EquipmentID = %(current_equipId)s
+              AND BorrowerID = %(current_borrowerId)s
+              AND Replacement_date = %(current_replaceDate)s
+            """, equipment)
     db.commit()
     return 0
   except mysql.connector.IntegrityError as e:
@@ -96,12 +139,22 @@ def editReplacedEquipment(equipment):
   finally:
     mycursor.close()
 
-#Equipment Array values must have
-#NewEquipmentID, NewBorrowerID, NewReturn_date, NewStatus, CurrentEquipmentID, CurrentBorrowerID, CurrentReturn_date
+#Required keys:
+# - new_equipId, new_borrowerId, new_returnDate, new_status,
+# - current_equipId, current_borrowerId, current_returnDate
 def editReturnedEquipment(equipment):
   mycursor = db.cursor()
   try:
-    mycursor.execute("UPDATE returned_equipment SET EquipmentID = %s, BorrowerID = %s, Return_date = %s, Status = %s WHERE (EquipmentID = %s AND BorrowerID = %s AND Return_date = %s)", equipment)
+    mycursor.execute("""
+            UPDATE returned_equipment SET
+                EquipmentID = %(new_equipId)s,
+                BorrowerID = %(new_borrowerId)s,
+                Return_date = %(new_returnDate)s,
+                Status = %(new_status)s
+            WHERE EquipmentID = %(current_equipId)s
+              AND BorrowerID = %(current_borrowerId)s
+              AND Return_date = %(current_returnDate)s
+            """, equipment)
     db.commit()
     return 0
   except mysql.connector.IntegrityError as e:
