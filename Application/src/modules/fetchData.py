@@ -59,12 +59,14 @@ def searchEquipment(searched, page):
   pattern = f"%{searched}%"
   arr = []
   search = []
-  for i in range(4):
+  for i in range(3):
     search.append(pattern)
   offset = (page-1) * 10
   search.append(offset)
-
-  mycursor.execute("SELECT * FROM equipment WHERE EquipmentID LIKE %s OR Name LIKE %s OR Quantity LIKE %s OR Category LIKE %s ORDER BY EquipmentID ASC LIMIT 10 OFFSET %s", search)
+  if searched.isdigit() and len(searched) <= 2:
+    mycursor.execute("SELECT * FROM equipment WHERE Quantity LIKE %s ORDER BY EquipmentID ASC LIMIT 10 OFFSET %s", (searched, offset,))
+  else:
+    mycursor.execute("SELECT * FROM equipment WHERE EquipmentID LIKE %s OR Name LIKE %s OR Category LIKE %s ORDER BY EquipmentID ASC LIMIT 10 OFFSET %s", search)
 
   for row in mycursor:
     arr.append(row)
