@@ -54,7 +54,7 @@ def editProfessor(professor):
               ProfessorID = %(new_profId)s,
               FirstName = %(new_fname)s,
               LastName = %(new_lname)s,
-            WHERE ProfessorID =%s"
+            WHERE ProfessorID =%(current_profId)s"
             """, professor)
     db.commit()
     return 0
