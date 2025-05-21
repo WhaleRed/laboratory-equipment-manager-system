@@ -104,7 +104,7 @@ def searchReplacedEquipment(searched, page):
   pattern = f"%{searched}%"
   arr = []
   search = []
-  for i in range(3):
+  for i in range(2):
     search.append(pattern)
   offset = (page-1) * 10
   search.append(offset)
