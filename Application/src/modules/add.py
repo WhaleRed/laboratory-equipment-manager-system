@@ -11,14 +11,17 @@ db = mysql.connector.connect(
   database= os.getenv("DATABASE_NAME")
 )
 
-#Must pass an Array of Values 
-#On dates format must be 'YYYY-MM-DD'
+#Must pass a dictionary
 
 
 def addBorrower(borrower):
   mycursor = db.cursor()
   try:
-    mycursor.execute("INSERT INTO borrower VALUE (%s, %s, %s, %s, %s, %s)", borrower)
+    mycursor.execute(
+            "INSERT INTO Borrower (BorrowerID, ProfessorID, FirstName, LastName, Program, Block) "
+            "VALUES (%(borrowerId)s, %(profId)s, %(fname)s, %(lname)s, %(program)s, %(block)s)",
+            borrower
+        )
     db.commit()
     return 0
   except mysql.connector.IntegrityError as e:
@@ -30,7 +33,11 @@ def addBorrower(borrower):
 def addProfessor(professor):
   mycursor = db.cursor()
   try:
-    mycursor.execute("INSERT INTO professor VALUE (%s, %s, %s)", professor)
+    mycursor.execute(
+            "INSERT INTO Professor (ProfessorId, FirstName, LastName) "
+            "VALUES (%(profId)s, %(fname)s, %(lname)s)",
+            professor
+        )
     db.commit()
     return 0
   except mysql.connector.IntegrityError as e:
@@ -42,7 +49,11 @@ def addProfessor(professor):
 def addEquipment(equipment):
   mycursor = db.cursor()
   try:
-    mycursor.execute("INSERT INTO equipment VALUE (%s, %s, %s, %s)", equipment)
+    mycursor.execute(
+            "INSERT INTO Equipment (EquipmentId, Name, Quantity, Category)"
+            "VALUES (%(equipId)s, %(name)s, %(quantity)s, %(category)s)",
+            equipment
+        )
     db.commit()
     return 0
   except mysql.connector.IntegrityError as e:
@@ -54,7 +65,10 @@ def addEquipment(equipment):
 def addBorrowedEquipment(equipment):
   mycursor = db.cursor()
   try:
-    mycursor.execute("INSERT INTO borrowed_equipment VALUE (%s, %s, %s)", equipment)
+    mycursor.execute(
+            "INSERT INTO Borrowed_equipment (EquipmentID, BorrowerID, Borrow_date) "
+            "VALUES (%(equipId)s, %(borrowerId)s, NOW())", equipment
+            )
     db.commit()
     return 0
   except mysql.connector.IntegrityError as e:
@@ -66,7 +80,10 @@ def addBorrowedEquipment(equipment):
 def addReplacedEquipment(equipment):
   mycursor = db.cursor()
   try:
-    mycursor.execute("INSERT INTO replaced_equipment VALUE (%s, %s, %s)", equipment)
+    mycursor.execute(
+            "INSERT INTO Replaced_equipment (EquipmentID, BorrowerID, Replacement_date) "
+            "VALUES (%(equipId)s, %(borrowerId)s, NOW())", equipment
+            )
     db.commit()
     return 0
   except mysql.connector.IntegrityError as e:
@@ -78,7 +95,10 @@ def addReplacedEquipment(equipment):
 def addReturnedEquipment(equipment):
   mycursor = db.cursor()
   try:
-    mycursor.execute("INSERT INTO returned_equipment VALUE (%s, %s, %s, %s)", equipment)
+    mycursor.execute(
+            "INSERT INTO Returned_equipment (EquipmentID, BorrowerID ,Return_date , Status) "
+            "VALUES (%(equipId)s, %(borrowerId)s, NOW(), %(status)s)", equipment
+            )
     db.commit()
     return 0
   except mysql.connector.IntegrityError as e:
