@@ -50,7 +50,7 @@ def addEquipment(equipment):
   mycursor = db.cursor()
   try:
     mycursor.execute(
-            "INSERT INTO Equipment (EquipmentId, Name, Quantity, Category"
+            "INSERT INTO Equipment (EquipmentId, Name, Quantity, Category)"
             "VALUES (%(equipId)s, %(name)s, %(quantity)s, %(category)s)",
             equipment
         )
@@ -84,6 +84,7 @@ def addReplacedEquipment(equipment):
             "INSERT INTO Replaced_equipment (EquipmentID, BorrowerID, Replacement_date) "
             "VALUES (%(equipId)s, %(borrowerId)s, NOW())", equipment
             )
+    db.commit()
     return 0
   except mysql.connector.IntegrityError as e:
     if e.errno == 1062:
@@ -95,7 +96,7 @@ def addReturnedEquipment(equipment):
   mycursor = db.cursor()
   try:
     mycursor.execute(
-            "INSERT INTO Replaced_equipment (EquipmentID, BorrowerID ,Return_date , Status) "
+            "INSERT INTO Returned_equipment (EquipmentID, BorrowerID ,Return_date , Status) "
             "VALUES (%(equipId)s, %(borrowerId)s, NOW(), %(status)s)", equipment
             )
     db.commit()
