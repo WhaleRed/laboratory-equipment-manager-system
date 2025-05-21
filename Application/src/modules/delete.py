@@ -81,7 +81,7 @@ def delReplacedEquipment(conditions):
   mycursor = db.cursor()
   try:
     mycursor.execute(
-            "DELETE FROM borrowed_equipment "
+            "DELETE FROM replaced_equipment "
             "WHERE EquipmentID = %(equipId)s "
             "AND BorrowerID = %(borrowerId)s "
             "AND Replacement_date  = %(replacement_date)s",
@@ -100,7 +100,7 @@ def delReturnedEquipment(conditions):
   mycursor = db.cursor()
   try:
     mycursor.execute(
-            "DELETE FROM borrowed_equipment "
+            "DELETE FROM returned_equipment "
             "WHERE EquipmentID = %(equipId)s "
             "AND BorrowerID = %(borrowerId)s "
             "AND Return_date = %(return_date)s",
