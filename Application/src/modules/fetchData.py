@@ -109,7 +109,10 @@ def searchReplacedEquipment(searched, page):
   offset = (page-1) * 10
   search.append(offset)
 
-  mycursor.execute("SELECT * FROM replaced_equipment WHERE EquipmentID LIKE %s OR BorrowerID LIKE %s OR Replacement_date LIKE %s ORDER BY Replacement_date DESC LIMIT 10 OFFSET %s", search)
+  if searched.isdigit() and len(searched) <= 3:
+    mycursor.execute("SELECT * FROM replaced_equipment WHERE EquipmentID LIKE %s ORDER BY Replacement_date DESC LIMIT 10 OFFSET %s", (pattern, offset,))
+  else:
+    mycursor.execute("SELECT * FROM replaced_equipment WHERE BorrowerID LIKE %s OR Replacement_date LIKE %s ORDER BY Replacement_date DESC LIMIT 10 OFFSET %s", search)
 
   for row in mycursor:
     arr.append(row)
