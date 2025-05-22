@@ -497,3 +497,158 @@ def sortBorrowerBlock(page):
   mycursor.close()
 
   return arr
+
+
+#-----All functions above are for viewing records for "All Time"-----#
+
+#-----All functions below are for viewing records by "date range"-----#
+
+
+#-----get records for the last n days for borrowed equipment-----#
+
+#Get transactions for the last n days and sorted by EquipmentID
+def getBorrowedEquipmentByEquipIdSince(days, page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  mycursor.execute("SELECT * FROM borrowed_equipment WHERE Borrow_date >= DATE_SUB(CURRENT_DATE, INTERVAL %s DAYS) ORDER BY EquipmentID ASC LIMIT 10 OFFSET %s", (days, offset,))
+
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+
+  return arr
+
+#Get transaction for the last n days and sorted by BorrowerID
+def getBorrowedEquipmentByBorrowerIdSInce(days, page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  mycursor.execute("SELECT * FROM borrowed_equipment WHERE Borrow_date >= DATE_SUB(CURRENT_DATE, INTERVAL %s DAYS) ORDER BY BorrowerID ASC LIMIT 10 OFFSET %s", (days, offset,))
+
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+
+  return arr
+
+#Get transaction for the last n days sorted by DATE DESC
+#Default
+def getBorrowedEquipmentByDateSince(days, page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  mycursor.execute("SELECT * FROM borrowed_equipment WHERE Borrow_date >= DATE_SUB(CURRENT_DATE, INTERVAL %s DAYS) ORDER BY Borrow_date DESC LIMIT 10 OFFSET %s", (days, offset,))
+
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+
+  return arr
+
+#-----get records for the last n days for replaced equipment-----#
+
+#Get transation for the last n days sorted by EquipmentID
+def getReplacedEquipmentByEquipIdSince(days, page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  mycursor.execute("SELECT * FROM replaced_equipment WHERE Replacement_date >= DATE_SUB(CURRENT_DATE, INTERVAL %s DAYS) ORDER BY EquipmentID ASC LIMIT 10 OFFSET %s", (days, offset,))
+
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+
+  return arr
+
+#Get transation for the last n days sorted by BorrowerID
+def getReplacedEquipmentByBorrowerIdSince(days, page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  mycursor.execute("SELECT * FROM replaced_equipment WHERE Replacement_date >= DATE_SUB(CURRENT_DATE, INTERVAL %s DAYS) ORDER BY BorrowerID ASC LIMIT 10 OFFSET %s", (days, offset,))
+
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+
+  return arr
+
+#Get transation for the last n days sorted by DATE DESC
+#Default
+def getReplacedEquipmentByDateIdSince(days, page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  mycursor.execute("SELECT * FROM replaced_equipment WHERE Replacement_date >= DATE_SUB(CURRENT_DATE, INTERVAL %s DAYS) ORDER BY Replacement_date DESC LIMIT 10 OFFSET %s", (days, offset,))
+
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+
+  return arr
+
+#-----get records for the last n days for replaced equipment-----#
+
+#Get transation for the last n days sorted by EquipmentID
+def getReturnedEquipmentByEquipIdSince(days, page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  mycursor.execute("SELECT * FROM returned_equipment WHERE Return_date >= DATE_SUB(CURRENT_DATE, INTERVAL %s DAYS) ORDER BY EquipmentID ASC LIMIT 10 OFFSET %s", (days, offset,))
+
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+
+  return arr
+
+#Get transation for the last n days sorted by BorrowerID
+def getReturnedEquipmentByBorrowerIdSince(days, page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  mycursor.execute("SELECT * FROM returned_equipment WHERE Return_date >= DATE_SUB(CURRENT_DATE, INTERVAL %s DAYS) ORDER BY BorrowerID ASC LIMIT 10 OFFSET %s", (days, offset,))
+
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+
+  return arr
+
+#Get transation for the last n days sorted by DATE DESC
+#Default
+def getReturnedEquipmentByDateSince(days, page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  mycursor.execute("SELECT * FROM returned_equipment WHERE Return_date >= DATE_SUB(CURRENT_DATE, INTERVAL %s DAYS) ORDER BY Return_date DESC LIMIT 10 OFFSET %s", (days, offset,))
+
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+
+  return arr
+
+#Get transation for the last n days sorted by Status
+def getReturnedEquipmentByStatusSince(days, page):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  mycursor.execute("SELECT * FROM returned_equipment WHERE Return_date >= DATE_SUB(CURRENT_DATE, INTERVAL %s DAYS) ORDER BY Status DESC LIMIT 10 OFFSET %s", (days, offset,))
+
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+
+  return arr
