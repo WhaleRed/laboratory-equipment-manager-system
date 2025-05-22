@@ -581,7 +581,7 @@ def getReplacedEquipmentByBorrowerIdSince(days, page):
 
 #Get transation for the last n days sorted by DATE DESC
 #Default
-def getReplacedEquipmentByDateIdSince(days, page):
+def getReplacedEquipmentByDateSince(days, page):
   mycursor = db.cursor()
 
   offset = (page-1) * 10
