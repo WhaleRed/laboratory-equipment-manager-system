@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>476</width>
+    <height>440</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QFrame" name="Add_item_frame">
+        <property name="styleSheet">
+         <string notr="true">#Add_item_frame {
+background-color: rgb(255, 255, 255);
+border: 2px solid rgb(195, 25, 25);
+border-radius: 30px;
+}
+   
+
+
+
+</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <widget class="QFrame" name="Title_Frame_4">
+         <property name="geometry">
+          <rect>
+           <x>15</x>
+           <y>28</y>
+           <width>211</width>
+           <height>50</height>
+          </rect>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QFormLayout" name="formLayout_16">
+          <item row="0" column="0">
+           <widget class="QLabel" name="Add_New_Item_Text_4">
+            <property name="font">
+             <font>
+              <family>Nunito ExtraBold</family>
+              <pointsize>20</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Add Item</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QFrame" name="Name_Frame_4">
+         <property name="geometry">
+          <rect>
+           <x>15</x>
+           <y>99</y>
+           <width>411</width>
+           <height>51</height>
+          </rect>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QFormLayout" name="formLayout_17">
+          <item row="0" column="0">
+           <widget class="QLabel" name="Name_text_4">
+            <property name="font">
+             <font>
+              <family>Nunito ExtraBold</family>
+              <pointsize>15</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Name:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="comboBox">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>60</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QFrame" name="Quantity_frame_4">
+         <property name="geometry">
+          <rect>
+           <x>14</x>
+           <y>165</y>
+           <width>291</width>
+           <height>51</height>
+          </rect>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QFormLayout" name="formLayout_19">
+          <item row="0" column="0">
+           <widget class="QLabel" name="Quantity_text_4">
+            <property name="font">
+             <font>
+              <family>Nunito ExtraBold</family>
+              <pointsize>15</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Quantity: </string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="Quantity_spinbox_4">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>Nunito</family>
+              <pointsize>12</pointsize>
+             </font>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QFrame" name="Category_frame_4">
+         <property name="geometry">
+          <rect>
+           <x>15</x>
+           <y>235</y>
+           <width>411</width>
+           <height>51</height>
+          </rect>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QFormLayout" name="formLayout_20">
+          <item row="0" column="0">
+           <widget class="QLabel" name="Category_text_4">
+            <property name="font">
+             <font>
+              <family>Nunito ExtraBold</family>
+              <pointsize>15</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Category: </string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="comboBox_2">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>60</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QPushButton" name="Cancel_button_newitem">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>320</y>
+           <width>124</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>Nunito ExtraBold</family>
+           <pointsize>15</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">#Cancel_button_newitem {
+    border: 2px solid #a80000;
+    border-radius: 18px;
+    padding: 8px 20px;
+    min-width: 80px;
+}
+#Cancel_button_newitem {
+    background-color: #ffffff;
+    color: #a80000;
+}
+
+#Cancel_button_newitem::hover{
+	background-color:rgb(195, 25, 25);
+	color: rgb(255, 255, 255)
+}</string>
+         </property>
+         <property name="text">
+          <string>Cancel</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="Add_item_button_newitem">
+         <property name="geometry">
+          <rect>
+           <x>240</x>
+           <y>320</y>
+           <width>124</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>Nunito ExtraBold</family>
+           <pointsize>15</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">#Add_item_button_newitem{
+    border: 2px solid #a80000;
+    border-radius: 18px;
+    padding: 8px 20px;
+    min-width: 80px;
+}
+#Add_item_button_newitem {
+    background-color: #ffffff;
+    color: #a80000;
+}
+
+#Add_item_button_newitem::hover{
+	background-color:rgb(195, 25, 25);
+	color: rgb(255, 255, 255)
+}</string>
+         </property>
+         <property name="text">
+          <string>Add</string>
+         </property>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
