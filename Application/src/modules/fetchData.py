@@ -367,7 +367,7 @@ def sortEquipmentName(page):
   offset = (page-1) * 10
   arr = []
 
-  mycursor.execute("SELECT * FROM equipment ORDER BY Name ASC LIMIT 10 OFFSET %s", (offset,))
+  mycursor.execute("SELECT * FROM equipment ORDER BY Equipment_name ASC LIMIT 10 OFFSET %s", (offset,))
 
   for row in mycursor:
     arr.append(row)
