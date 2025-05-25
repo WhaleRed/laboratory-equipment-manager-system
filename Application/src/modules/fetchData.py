@@ -24,7 +24,7 @@ def searchBorrower(searched, page):
   offset = (page-1) * 10
   search.append(offset)
 
-  mycursor.execute("SELECT * FROM borrower WHERE BorrowerID LIKE %s OR ProfessorID LIKE %s OR FirstName LIKE %s OR LastName LIKE %s OR Program LIKE %s OR Block LIKE %s ORDER BY BorrowerID ASC LIMIT 10 OFFSET %s", search)
+  mycursor.execute("SELECT * FROM borrower WHERE BorrowerID LIKE %s OR ProfessorID LIKE %s OR FirstName LIKE %s OR LastName LIKE %s OR Program LIKE %s OR YearLevel LIKE %s ORDER BY BorrowerID ASC LIMIT 10 OFFSET %s", search)
 
   for row in mycursor:
     arr.append(row)
@@ -64,7 +64,7 @@ def searchEquipment(searched, page):
   offset = (page-1) * 10
   search.append(offset)
   if searched.isdigit() and len(searched) <= 2:
-    mycursor.execute("SELECT * FROM equipment WHERE Quantity LIKE %s ORDER BY EquipmentID ASC LIMIT 10 OFFSET %s", (searched, offset,))
+    mycursor.execute("SELECT * FROM equipment WHERE Available LIKE %s ORDER BY EquipmentID ASC LIMIT 10 OFFSET %s", (searched, offset,))
   else:
     mycursor.execute("SELECT * FROM equipment WHERE EquipmentID LIKE %s OR Name LIKE %s OR Category LIKE %s ORDER BY EquipmentID ASC LIMIT 10 OFFSET %s", search)
 
@@ -135,7 +135,7 @@ def searchReturnedEquipment(searched, page):
   if searched.isdigit() and len(searched) <= 3:
     mycursor.execute("SELECT * FROM returned_equipment WHERE EquipmentID LIKE %s  ORDER BY Return_date DESC LIMIT 10 OFFSET %s", (pattern, offset,))
   else:
-    mycursor.execute("SELECT * FROM returned_equipment WHERE BorrowerID LIKE %s OR Return_date LIKE %s OR Status LIKE %s ORDER BY Return_date DESC LIMIT 10 OFFSET %s", search)
+    mycursor.execute("SELECT * FROM returned_equipment WHERE BorrowerID LIKE %s OR Return_date LIKE %s OR State LIKE %s ORDER BY Return_date DESC LIMIT 10 OFFSET %s", search)
 
   for row in mycursor:
     arr.append(row)
@@ -282,13 +282,13 @@ def sortDateReturnedEquipment(page):
 
   return arr
 
-def sortStatusReturnedEquipment(page):
+def sortStateReturnedEquipment(page):
   mycursor = db.cursor()
 
   offset = (page-1) * 10
   arr = []
 
-  mycursor.execute("SELECT * FROM returned_equipment ORDER BY Status ASC LIMIT 10 OFFSET %s", (offset,))
+  mycursor.execute("SELECT * FROM returned_equipment ORDER BY State ASC LIMIT 10 OFFSET %s", (offset,))
 
   for row in mycursor:
     arr.append(row)
@@ -382,7 +382,7 @@ def sortEquipmentQty(page):
   offset = (page-1) * 10
   arr = []
 
-  mycursor.execute("SELECT * FROM equipment ORDER BY Quantity DESC LIMIT 10 OFFSET %s", (offset,))
+  mycursor.execute("SELECT * FROM equipment ORDER BY Available DESC LIMIT 10 OFFSET %s", (offset,))
 
   for row in mycursor:
     arr.append(row)
@@ -483,13 +483,13 @@ def sortBorrowerProg(page):
 
   return arr
 
-def sortBorrowerBlock(page):
+def sortBorrowerYearLevel(page):
   mycursor = db.cursor()
 
   offset = (page-1) * 10
   arr = []
 
-  mycursor.execute("SELECT * FROM borrower ORDER BY Block ASC LIMIT 10 OFFSET %s", (offset,))
+  mycursor.execute("SELECT * FROM borrower ORDER BY YearLevel ASC LIMIT 10 OFFSET %s", (offset,))
 
   for row in mycursor:
     arr.append(row)
@@ -639,13 +639,13 @@ def getReturnedEquipmentByDateSince(days, page):
 
   return arr
 
-#Get transation for the last n days sorted by Status
-def getReturnedEquipmentByStatusSince(days, page):
+#Get transation for the last n days sorted by State
+def getReturnedEquipmentByStateSince(days, page):
   mycursor = db.cursor()
 
   offset = (page-1) * 10
 
-  mycursor.execute("SELECT * FROM returned_equipment WHERE Return_date >= DATE_SUB(CURRENT_DATE, INTERVAL %s DAY) ORDER BY Status ASC LIMIT 10 OFFSET %s", (days, offset,))
+  mycursor.execute("SELECT * FROM returned_equipment WHERE Return_date >= DATE_SUB(CURRENT_DATE, INTERVAL %s DAY) ORDER BY State ASC LIMIT 10 OFFSET %s", (days, offset,))
 
   arr = mycursor.fetchall()
 
@@ -789,13 +789,13 @@ def getRecentReturnedEquipmentByDate(hour, page):
 
   return arr
 
-#get transaction for the last n hour(s) sorted by Status DESC
-def getRecentReturnedEquipmentByStatus(hour, page):
+#get transaction for the last n hour(s) sorted by State DESC
+def getRecentReturnedEquipmentByState(hour, page):
   mycursor = db.cursor()
 
   offset = (page-1) * 10
 
-  mycursor.execute("SELECT * FROM returned_equipment WHERE Return_date >= DATE_SUB(NOW(), INTERVAL %s HOUR) ORDER BY Status ASC LIMIT 10 OFFSET %s", (hour, offset,))
+  mycursor.execute("SELECT * FROM returned_equipment WHERE Return_date >= DATE_SUB(NOW(), INTERVAL %s HOUR) ORDER BY State ASC LIMIT 10 OFFSET %s", (hour, offset,))
 
   arr = mycursor.fetchall()
 
