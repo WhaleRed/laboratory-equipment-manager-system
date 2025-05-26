@@ -990,7 +990,7 @@ def searchBorrowedEquipmentMatch(page, sortStateidx, dateState, searched=None):
   return arr
 
 
-def searchReturnedEquipmentMatch(searched, page, sortStateidx, dateState):
+def searchReturnedEquipmentMatch(page, sortStateidx, dateState, searched=None):
   mycursor = db.cursor()
 
   offset = (page-1) * 10
@@ -999,16 +999,12 @@ def searchReturnedEquipmentMatch(searched, page, sortStateidx, dateState):
   if not sortState:
       return 1      #Attempt to inject
   
-  print(f"sort state: {sortState}")
-  
   dateFilter = ""
   if dateState != 0:
     if dateState not in DATE_OPTIONS:
         return 1  # Invalid dateState
     unit, value = DATE_OPTIONS[dateState]
     dateFilter = f"AND Borrow_date >= DATE_SUB(NOW(), INTERVAL {value} {unit})"
-    
-  print(f"Date filter: {dateFilter}")
   
   if not searched:  # if empty or None
         if sortState == "Return_date":
@@ -1043,18 +1039,15 @@ def searchReturnedEquipmentMatch(searched, page, sortStateidx, dateState):
           f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
       )
     mycursor.execute(query, (searched, offset))
-    
-  print(f"rows returned: {len(arr)}")
   
   arr = mycursor.fetchall()
 
   mycursor.close()
   
-  print (f"Arr: {arr}")
   return arr
 
 
-def searchReplacedEquipmentMatch(searched, page, sortStateidx, dateState):
+def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
   mycursor = db.cursor()
 
   offset = (page-1) * 10
@@ -1111,7 +1104,7 @@ def searchReplacedEquipmentMatch(searched, page, sortStateidx, dateState):
   return arr
 
 
-def searchBorrowerMatch(searched, page, sortState):
+def searchBorrowerMatch(page, sortState, searched=None):
   mycursor = db.cursor()
 
   offset = (page-1) * 10
@@ -1135,7 +1128,7 @@ def searchBorrowerMatch(searched, page, sortState):
   return arr
 
 
-def searchEquipmentMatch(searched, page, sortState):
+def searchEquipmentMatch(page, sortState, searched=None):
   mycursor = db.cursor()
 
   offset = (page-1) * 10
@@ -1159,7 +1152,7 @@ def searchEquipmentMatch(searched, page, sortState):
   return arr
 
 
-def searchProfessorMatch(searched, page, sortState):
+def searchProfessorMatch(page, sortState, searched=None):
   mycursor = db.cursor()
 
   offset = (page-1) * 10
