@@ -802,3 +802,171 @@ def getRecentReturnedEquipmentByState(hour, page):
   mycursor.close()
 
   return arr
+
+
+#------Search using match------#
+def searchBorrowedEquipmentMatch(searched, page, sortState):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  validSortField = {'EquipmentID', 'BorrowerID', 'State', 'Borrow_date', 'Quantity'}
+  if sortState not in validSortField:
+    return 1      #Attempt to inject
+  
+  if sortState == "Borrow_date":
+    query = (
+        f"SELECT * FROM borrowed_equipment "
+        f"WHERE MATCH(EquipmentID, BorrowerID, State) "
+        f"AGAINST (%s IN BOOLEAN MODE) "
+        f"ORDER BY Borrow_date DESC LIMIT 10 OFFSET %s"      
+    )
+  else:
+    query = (
+        f"SELECT * FROM borrowed_equipment "
+        f"WHERE MATCH(EquipmentID, BorrowerID, State) "
+        f"AGAINST (%s IN BOOLEAN MODE) "
+        f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+    )
+  
+  mycursor.execute(query, (searched, offset))
+
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+  return arr
+
+
+def searchReturnedEquipmentMatch(searched, page, sortState):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  validSortField = {'EquipmentID', 'BorrowerID', 'State', 'Return_date', 'Quantity'}
+  if sortState not in validSortField:
+    return 1      #Attempt to inject
+  
+  if sortState == "Return_date":
+    query = (
+        f"SELECT * FROM returned_equipment "
+        f"WHERE MATCH(EquipmentID, BorrowerID, State) "
+        f"AGAINST (%s IN BOOLEAN MODE) "
+        f"ORDER BY Return_date DESC LIMIT 10 OFFSET %s"      
+    )
+  else:
+    query = (
+        f"SELECT * FROM returned_equipment "
+        f"WHERE MATCH(EquipmentID, BorrowerID, State) "
+        f"AGAINST (%s IN BOOLEAN MODE) "
+        f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+    )
+  
+  mycursor.execute(query, (searched, offset))
+
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+  return arr
+
+
+def searchReplacedEquipmentMatch(searched, page, sortState):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  validSortField = {'EquipmentID', 'BorrowerID', 'Replacement_date', 'Quantity'}
+  if sortState not in validSortField:
+    return 1      #Attempt to inject
+  
+  if sortState == "Replacement_date":
+    query = (
+        f"SELECT * FROM replaced_equipment "
+        f"WHERE MATCH(EquipmentID, BorrowerID) "
+        f"AGAINST (%s IN BOOLEAN MODE) "
+        f"ORDER BY Replacement_date DESC LIMIT 10 OFFSET %s"      
+    )
+  else:
+    query = (
+        f"SELECT * FROM replaced_equipment "
+        f"WHERE MATCH(EquipmentID, BorrowerID) "
+        f"AGAINST (%s IN BOOLEAN MODE) "
+        f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+    )
+  
+  mycursor.execute(query, (searched, offset))
+
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+  return arr
+
+def searchBorrowerMatch(searched, page, sortState):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  validSortField = {'ProfessorID', 'BorrowerID', 'FirstName', 'LastName', 'Program', 'YearLevel'}
+  if sortState not in validSortField:
+    return 1      #Attempt to inject
+  
+  query = (
+        f"SELECT * FROM borrower "
+        f"WHERE MATCH(ProfessorID, BorrowerID, FirstName, LastName, Program, YearLevel) "
+        f"AGAINST (%s IN BOOLEAN MODE) "
+        f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+    )
+  
+  mycursor.execute(query, (searched, offset))
+
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+  return arr
+
+
+def searchEquipmentMatch(searched, page, sortState):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  validSortField = {'EquipmentID', 'Equipment_name', 'Category', 'Available'}
+  if sortState not in validSortField:
+    return 1      #Attempt to inject
+  
+  query = (
+        f"SELECT * FROM equipment "
+        f"WHERE MATCH(EquipmentID, Equipment_name, Category) "
+        f"AGAINST (%s IN BOOLEAN MODE) "
+        f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+    )
+  
+  mycursor.execute(query, (searched, offset))
+
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+  return arr
+
+
+def searchProfessorMatch(searched, page, sortState):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  validSortField = {'ProfessorID', 'FirstName', 'LastName'}
+  if sortState not in validSortField:
+    return 1      #Attempt to inject
+  
+  query = (
+        f"SELECT * FROM professor "
+        f"WHERE MATCH(ProfessorID, FirstName, LastName) "
+        f"AGAINST (%s IN BOOLEAN MODE) "
+        f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+    )
+  
+  mycursor.execute(query, (searched, offset))
+
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+  return arr
