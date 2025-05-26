@@ -1,5 +1,5 @@
-from EquipmentManager_CSM import Ui_MainWindow
-from confirmation import Confirmation
+from .EquipmentManager_CSM import Ui_MainWindow
+from .confirmation import Confirmation
 class Connector:
     def __init__(self, ui: Ui_MainWindow):
         self.ui = ui
