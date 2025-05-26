@@ -888,7 +888,7 @@ def searchReplacedEquipmentMatch(searched, page, sortState):
   else:
     query = (
         f"SELECT * FROM replaced_equipment "
-        f"WHERE MATCH(EquipmentID, BorrowerID "
+        f"WHERE MATCH(EquipmentID, BorrowerID) "
         f"AGAINST (%s IN BOOLEAN MODE) "
         f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
     )
