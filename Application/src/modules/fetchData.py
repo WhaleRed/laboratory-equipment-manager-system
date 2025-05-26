@@ -802,3 +802,17 @@ def getRecentReturnedEquipmentByState(hour, page):
   mycursor.close()
 
   return arr
+
+
+#------Search using match------#
+def searchBorrowedEquipmentMatch(searched, page, sortState):
+   mycursor = db.cursor()
+
+   offset = (page-1) * 10
+
+   mycursor.execute("SELECT * FROM borrowed_equipment WHERE MATCH(EquipmentID, BorrowerID, State) AGAINST(%s IN BOOLEAN MODE) ORDER BY %s ASC LIMIT 10 OFFSET %s", (searched, sortState, offset,))
+
+   arr = mycursor.fetchall()
+
+   mycursor.close()
+   return arr
