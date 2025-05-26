@@ -4,12 +4,83 @@ import mysql.connector
 
 load_dotenv()
 
+PAGE_SIZE = 10
+
+def test():
+  mycursor = db.cursor()
+  
+  mycursor.execute("SELECT EquipmentID FROM Equipment ORDER BY EquipmentID")
+  
+  arr = []
+  for row in mycursor:
+    arr.append(row)
+  
+  mycursor.close()
+
+  return arr
+  
+  mycursor.close()
+
 db = mysql.connector.connect(
   host= os.getenv("DATABASE_HOST"),
   user = os.getenv("DATABASE_USER"),
   password= os.getenv("DATABASE_PASSWORD"),
   database= os.getenv("DATABASE_NAME")
+
 )
+
+#-----For adding items to database-----#
+def fetchEquipmentIds():
+  mycursor = db.cursor()
+  
+  mycursor.execute("SELECT EquipmentID FROM Equipment ORDER BY EquipmentID")
+  results = mycursor.fetchall()
+  
+  mycursor.close()
+  
+  return [row[0] for row in results]
+
+def fetchEquipmentName():
+  mycursor = db.cursor()
+  
+  mycursor.execute("SELECT Equipment_name FROM Equipment ORDER BY EquipmentID")
+  results = mycursor.fetchall()
+  
+  mycursor.close()
+  
+  return [row[0] for row in results]
+
+def fetchCategory():
+  mycursor = db.cursor()
+  
+  mycursor.execute("SELECT Category FROM Equipment ORDER BY Category")
+  results = mycursor.fetchall()
+  
+  mycursor.close()
+  
+  return [row[0] for row in results]
+
+#-----For getting items in use-----#
+def fetchItemsInUse(borrowerID):
+  mycursor = db.cursor()
+  
+  mycursor.execute("SELECT Equipment_name, Quantity FROM Borrowed_equipment WHERE BorrowerID = %s AND State = 'In use'", (borrowerID,))
+  results = mycursor.fetchall()
+  
+  mycursor.close()
+  
+  return results
+
+#-----For getting damaged items-----#
+def fetchDamagedItems(borrowerID):
+  mycursor = db.cursor()
+  
+  mycursor.execute("SELECT Equipment_name, Quantity FROM Returned_equipment WHERE BorrowerID = %s and State = 'Damaged'", (borrowerID,))
+  results = mycursor.fetchall()
+  
+  mycursor.close()
+  
+  return results
 
 #-----For search with pagination-----#
 
@@ -181,7 +252,9 @@ def sortDateBorrowedEquipment(page):
   offset = (page-1) * 10
   arr = []
 
+  print(f"Offset value: {offset}, type: {type(offset)}")
   mycursor.execute("SELECT * FROM borrowed_equipment ORDER BY Borrow_date DESC LIMIT 10 OFFSET %s", (offset,))
+  print("Query executed")
 
   for row in mycursor:
     arr.append(row)

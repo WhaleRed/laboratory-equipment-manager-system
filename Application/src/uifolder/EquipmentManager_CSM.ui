@@ -968,11 +968,11 @@ QTableWidget::item:selected {
                     <attribute name="horizontalHeaderCascadingSectionResizes">
                      <bool>false</bool>
                     </attribute>
-                    <attribute name="horizontalHeaderMinimumSectionSize">
-                     <number>40</number>
-                    </attribute>
                     <attribute name="horizontalHeaderDefaultSectionSize">
                      <number>252</number>
+                    </attribute>
+                    <attribute name="horizontalHeaderMinimumSectionSize">
+                     <number>40</number>
                     </attribute>
                     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
                      <bool>false</bool>
@@ -2717,7 +2717,7 @@ border: 20px;</string>
                   <enum>QTabWidget::Rounded</enum>
                  </property>
                  <property name="currentIndex">
-                  <number>0</number>
+                  <number>2</number>
                  </property>
                  <property name="tabsClosable">
                   <bool>false</bool>
@@ -2753,6 +2753,9 @@ QTableWidget::item:selected {
     color: rgb(255, 255, 255);
 }</string>
                      </property>
+                     <property name="columnCount">
+                      <number>6</number>
+                     </property>
                      <attribute name="horizontalHeaderDefaultSectionSize">
                       <number>272</number>
                      </attribute>
@@ -2781,7 +2784,7 @@ QTableWidget::item:selected {
                      </column>
                      <column>
                       <property name="text">
-                       <string>Borrow Date</string>
+                       <string>Borrower ID</string>
                       </property>
                       <property name="font">
                        <font>
@@ -2803,7 +2806,7 @@ QTableWidget::item:selected {
                      </column>
                      <column>
                       <property name="text">
-                       <string>Borrower ID</string>
+                       <string>Borrow Date</string>
                       </property>
                       <property name="font">
                        <font>
@@ -2845,6 +2848,29 @@ QTableWidget::item:selected {
                        </brush>
                       </property>
                      </column>
+                     <column>
+                      <property name="text">
+                       <string>State</string>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Nunito ExtraBold</family>
+                        <pointsize>10</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="foreground">
+                       <brush brushstyle="SolidPattern">
+                        <color alpha="255">
+                         <red>255</red>
+                         <green>251</green>
+                         <blue>255</blue>
+                        </color>
+                       </brush>
+                      </property>
+                     </column>
+                     <column/>
                     </widget>
                    </item>
                    <item row="2" column="0">
@@ -2975,6 +3001,41 @@ QComboBox::hover {
                         <item>
                          <property name="text">
                           <string>Please Select</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last Hour</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last 3 Hours</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last 24 Hours</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last Week</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last Month</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last 3 Months</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last 6 Months</string>
                          </property>
                         </item>
                        </widget>
@@ -3320,6 +3381,41 @@ QComboBox::hover {
                         <item>
                          <property name="text">
                           <string>Please Select</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last Hour</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last 3 Hours</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last 24 Hours</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last Week</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last Month</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last 3 Months</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last 6 Months</string>
                          </property>
                         </item>
                        </widget>
@@ -3756,6 +3852,41 @@ QComboBox::hover {
                         <item>
                          <property name="text">
                           <string>Please Select</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last Hour</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last 3 Hours</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last 24 Hours</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last Week</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last Month</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last 3 Months</string>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Last 6 Months</string>
                          </property>
                         </item>
                        </widget>
