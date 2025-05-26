@@ -57,7 +57,6 @@ SORT_FIELDS_PROFESSOR = {
     2: "LastName"
 }
 
-
 load_dotenv()
 
 PAGE_SIZE = 10
@@ -109,12 +108,24 @@ def fetchEquipmentName():
 def fetchCategory():
   mycursor = db.cursor()
   
-  mycursor.execute("SELECT Category FROM Equipment ORDER BY Category")
+  mycursor.execute("SELECT DISTINCT Category FROM Equipment ORDER BY Category")
   results = mycursor.fetchall()
   
   mycursor.close()
   
   return [row[0] for row in results]
+
+# temporary, will move mapping to other file
+def build_category_map():
+    categories = fetchCategory()
+    cat_map = {0: None}
+    for idx, cat in enumerate(categories, start=1):
+        cat_map[idx] = cat
+        
+    print(f"Cat map: {cat_map}")
+    return cat_map
+
+CATEGORY_MAP = build_category_map()
 
 #-----For getting items in use-----#
 def fetchItemsInUse(borrowerID):
@@ -1064,7 +1075,7 @@ def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
     dateFilter = f"AND Replacement_date >= DATE_SUB(NOW(), INTERVAL {value} {unit})"
   
   if not searched:  # if empty or None
-        if sortState == "Borrow_date":
+        if sortState == "replacement_date":
             query = (
                 f"SELECT * FROM replaced_equipment "
                 f"WHERE 1=1 {dateFilter} "
@@ -1128,23 +1139,44 @@ def searchBorrowerMatch(page, sortState, searched=None):
   return arr
 
 
-def searchEquipmentMatch(page, sortState, searched=None):
+def searchEquipmentMatch(page, sortStateidx, categoryidx, searched=None):
+  
   mycursor = db.cursor()
 
   offset = (page-1) * 10
 
-  validSortField = {'EquipmentID', 'Equipment_name', 'Category', 'Available'}
-  if sortState not in validSortField:
-    return 1      #Attempt to inject
+  sortState = SORT_FIELDS_EQUIPMENT.get(sortStateidx)
+  if not sortState:
+      return 1      #Attempt to inject
+    
+  category = CATEGORY_MAP.get(categoryidx)
+
+  catFilter = ""
+  params = []
   
-  query = (
-        f"SELECT * FROM equipment "
-        f"WHERE MATCH(EquipmentID, Equipment_name, Category) "
-        f"AGAINST (%s IN BOOLEAN MODE) "
-        f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
-    )
+  if category is not None:
+        catFilter = "AND Category = %s "
+        params.append(category)
   
-  mycursor.execute(query, (searched, offset))
+  if not searched:
+        print("Not searched")
+        query = (
+            f"SELECT * FROM equipment "
+            f"WHERE 1=1 {catFilter}"
+            f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+        )
+        params.append(offset)
+        mycursor.execute(query, params)
+  else:
+      print("searched")
+      query = (
+          f"SELECT * FROM equipment "
+          f"WHERE MATCH(EquipmentID, Equipment_name, Category) AGAINST (%s IN BOOLEAN MODE) "
+          f"{catFilter}"
+          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+      )
+      params = [searched] + params + [offset]
+      mycursor.execute(query, params)
 
   arr = mycursor.fetchall()
 
