@@ -2,6 +2,62 @@ import os
 from dotenv import load_dotenv
 import mysql.connector
 
+DATE_OPTIONS = {
+        1: ("HOUR", 1),
+        2: ("HOUR", 3),
+        3: ("DAY", 1),
+        4: ("DAY", 7),
+        5: ("DAY", 30),
+        6: ("DAY", 90),
+        7: ("DAY", 180),
+    }
+
+SORT_FIELDS_BORROWED = {
+    0: "Borrow_date",
+    1: "EquipmentID",
+    2: "BorrowerID",
+    3: "State",
+    4: "Quantity"
+}
+
+SORT_FIELDS_RETURNED = {
+    0: "Return_date",
+    1: "EquipmentID",
+    2: "BorrowerID",
+    3: "State",
+    4: "Quantity"
+}
+
+SORT_FIELDS_REPLACED = {
+    0: "Replacement_date",
+    1: "EquipmentID",
+    2: "BorrowerID",
+    3: "Quantity"
+}
+
+SORT_FIELDS_BORROWER = {
+    0: "ProfessorID",
+    1: "BorrowerID",
+    2: "FirstName",
+    3: "LastName",
+    4: "Program",
+    5: "YearLevel"
+}
+
+SORT_FIELDS_EQUIPMENT = {
+    0: "EquipmentID",
+    1: "Equipment_name",
+    2: "Category",
+    3: "Available"
+}
+
+SORT_FIELDS_PROFESSOR = {
+    0: "ProfessorID",
+    1: "FirstName",
+    2: "LastName"
+}
+
+
 load_dotenv()
 
 PAGE_SIZE = 10
@@ -878,31 +934,55 @@ def getRecentReturnedEquipmentByState(hour, page):
 
 
 #------Search using match------#
-def searchBorrowedEquipmentMatch(searched, page, sortState):
+def searchBorrowedEquipmentMatch(page, sortStateidx, dateState, searched=None):
   mycursor = db.cursor()
 
   offset = (page-1) * 10
 
-  validSortField = {'EquipmentID', 'BorrowerID', 'State', 'Borrow_date', 'Quantity'}
-  if sortState not in validSortField:
-    return 1      #Attempt to inject
+  sortState = SORT_FIELDS_BORROWED.get(sortStateidx)
+  if not sortState:
+      return 1      #Attempt to inject
   
-  if sortState == "Borrow_date":
-    query = (
-        f"SELECT * FROM borrowed_equipment "
-        f"WHERE MATCH(EquipmentID, BorrowerID, State) "
-        f"AGAINST (%s IN BOOLEAN MODE) "
-        f"ORDER BY Borrow_date DESC LIMIT 10 OFFSET %s"      
-    )
+  dateFilter = ""
+  if dateState != 0:
+    if dateState not in DATE_OPTIONS:
+        return 1  # Invalid dateState
+    unit, value = DATE_OPTIONS[dateState]
+    dateFilter = f"AND Borrow_date >= DATE_SUB(NOW(), INTERVAL {value} {unit})"
+    
+  if not searched:  # if empty or None
+        if sortState == "Borrow_date":
+            query = (
+                f"SELECT * FROM borrowed_equipment "
+                f"WHERE 1=1 {dateFilter} "
+                f"ORDER BY Borrow_date DESC LIMIT 10 OFFSET %s"
+            )
+            mycursor.execute(query, (offset,))
+        else:
+            query = (
+                f"SELECT * FROM borrowed_equipment "
+                f"WHERE 1=1 {dateFilter} "
+                f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+            )
+            mycursor.execute(query, (offset,))
   else:
-    query = (
-        f"SELECT * FROM borrowed_equipment "
-        f"WHERE MATCH(EquipmentID, BorrowerID, State) "
-        f"AGAINST (%s IN BOOLEAN MODE) "
-        f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
-    )
-  
-  mycursor.execute(query, (searched, offset))
+    if sortState == "Borrow_date":
+      query = (
+          f"SELECT * FROM borrowed_equipment "
+          f"WHERE MATCH(EquipmentID, BorrowerID, State) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"{dateFilter} "
+          f"ORDER BY Borrow_date DESC LIMIT 10 OFFSET %s"      
+      )
+    else:
+      query = (
+          f"SELECT * FROM borrowed_equipment "
+          f"WHERE MATCH(EquipmentID, BorrowerID, State) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"{dateFilter} "
+          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+      )
+    mycursor.execute(query, (searched, offset))
 
   arr = mycursor.fetchall()
 
@@ -910,68 +990,126 @@ def searchBorrowedEquipmentMatch(searched, page, sortState):
   return arr
 
 
-def searchReturnedEquipmentMatch(searched, page, sortState):
+def searchReturnedEquipmentMatch(searched, page, sortStateidx, dateState):
   mycursor = db.cursor()
 
   offset = (page-1) * 10
 
-  validSortField = {'EquipmentID', 'BorrowerID', 'State', 'Return_date', 'Quantity'}
-  if sortState not in validSortField:
-    return 1      #Attempt to inject
+  sortState = SORT_FIELDS_RETURNED.get(sortStateidx)
+  if not sortState:
+      return 1      #Attempt to inject
   
-  if sortState == "Return_date":
-    query = (
-        f"SELECT * FROM returned_equipment "
-        f"WHERE MATCH(EquipmentID, BorrowerID, State) "
-        f"AGAINST (%s IN BOOLEAN MODE) "
-        f"ORDER BY Return_date DESC LIMIT 10 OFFSET %s"      
-    )
+  print(f"sort state: {sortState}")
+  
+  dateFilter = ""
+  if dateState != 0:
+    if dateState not in DATE_OPTIONS:
+        return 1  # Invalid dateState
+    unit, value = DATE_OPTIONS[dateState]
+    dateFilter = f"AND Borrow_date >= DATE_SUB(NOW(), INTERVAL {value} {unit})"
+    
+  print(f"Date filter: {dateFilter}")
+  
+  if not searched:  # if empty or None
+        if sortState == "Return_date":
+            query = (
+                f"SELECT * FROM returned_equipment "
+                f"WHERE 1=1 {dateFilter} "
+                f"ORDER BY Return_date DESC LIMIT 10 OFFSET %s"
+            )
+            mycursor.execute(query, (offset,))
+        else:
+            query = (
+                f"SELECT * FROM returned_equipment "
+                f"WHERE 1=1 {dateFilter} "
+                f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+            )
+            mycursor.execute(query, (offset,))
   else:
-    query = (
-        f"SELECT * FROM returned_equipment "
-        f"WHERE MATCH(EquipmentID, BorrowerID, State) "
-        f"AGAINST (%s IN BOOLEAN MODE) "
-        f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
-    )
+    if sortState == "Return_date":
+      query = (
+          f"SELECT * FROM returned_equipment "
+          f"WHERE MATCH(EquipmentID, BorrowerID, State) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"{dateFilter} "
+          f"ORDER BY Return_date DESC LIMIT 10 OFFSET %s"      
+      )
+    else:
+      query = (
+          f"SELECT * FROM returned_equipment "
+          f"WHERE MATCH(EquipmentID, BorrowerID, State) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"{dateFilter} "
+          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+      )
+    mycursor.execute(query, (searched, offset))
+    
+  print(f"rows returned: {len(arr)}")
   
-  mycursor.execute(query, (searched, offset))
+  arr = mycursor.fetchall()
+
+  mycursor.close()
+  
+  print (f"Arr: {arr}")
+  return arr
+
+
+def searchReplacedEquipmentMatch(searched, page, sortStateidx, dateState):
+  mycursor = db.cursor()
+
+  offset = (page-1) * 10
+
+  sortState = SORT_FIELDS_REPLACED.get(sortStateidx)
+  if not sortState:
+      return 1      #Attempt to inject
+  
+  dateFilter = ""
+  if dateState != 0:
+    if dateState not in DATE_OPTIONS:
+        return 1  # Invalid dateState
+    unit, value = DATE_OPTIONS[dateState]
+    dateFilter = f"AND Replacement_date >= DATE_SUB(NOW(), INTERVAL {value} {unit})"
+  
+  if not searched:  # if empty or None
+        if sortState == "Borrow_date":
+            query = (
+                f"SELECT * FROM replaced_equipment "
+                f"WHERE 1=1 {dateFilter} "
+                f"ORDER BY replacement_date DESC LIMIT 10 OFFSET %s"
+            )
+            mycursor.execute(query, (offset,))
+        else:
+            query = (
+                f"SELECT * FROM replaced_equipment "
+                f"WHERE 1=1 {dateFilter} "
+                f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+            )
+            mycursor.execute(query, (offset,))
+  else:
+    if sortState == "Replacement_date":
+      query = (
+          f"SELECT * FROM replaced_equipment "
+          f"WHERE MATCH(EquipmentID, BorrowerID) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"{dateFilter} "
+          f"ORDER BY Replacement_date DESC LIMIT 10 OFFSET %s"      
+      )
+    else:
+      query = (
+          f"SELECT * FROM replaced_equipment "
+          f"WHERE MATCH(EquipmentID, BorrowerID) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"{dateFilter} "
+          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+      )
+    mycursor.execute(query, (searched, offset))
+  
 
   arr = mycursor.fetchall()
 
   mycursor.close()
   return arr
 
-
-def searchReplacedEquipmentMatch(searched, page, sortState):
-  mycursor = db.cursor()
-
-  offset = (page-1) * 10
-
-  validSortField = {'EquipmentID', 'BorrowerID', 'Replacement_date', 'Quantity'}
-  if sortState not in validSortField:
-    return 1      #Attempt to inject
-  
-  if sortState == "Replacement_date":
-    query = (
-        f"SELECT * FROM replaced_equipment "
-        f"WHERE MATCH(EquipmentID, BorrowerID) "
-        f"AGAINST (%s IN BOOLEAN MODE) "
-        f"ORDER BY Replacement_date DESC LIMIT 10 OFFSET %s"      
-    )
-  else:
-    query = (
-        f"SELECT * FROM replaced_equipment "
-        f"WHERE MATCH(EquipmentID, BorrowerID) "
-        f"AGAINST (%s IN BOOLEAN MODE) "
-        f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
-    )
-  
-  mycursor.execute(query, (searched, offset))
-
-  arr = mycursor.fetchall()
-
-  mycursor.close()
-  return arr
 
 def searchBorrowerMatch(searched, page, sortState):
   mycursor = db.cursor()
