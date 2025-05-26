@@ -7,6 +7,7 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
+import os
 
 
 class Ui_MainWindow(object):
@@ -198,8 +199,9 @@ class Ui_MainWindow(object):
 "    border-radius: 15px;\n"
 "}")
         self.admin_icon.setText("")
+        icon_path = os.path.join(os.path.dirname(__file__), "icons & fonts", "user.svg")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../compressed/user.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon.addPixmap(QtGui.QPixmap(str(icon_path)), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.admin_icon.setIcon(icon)
         self.admin_icon.setIconSize(QtCore.QSize(40, 40))
         self.admin_icon.setObjectName("admin_icon")
@@ -505,8 +507,9 @@ class Ui_MainWindow(object):
         self.search_button_additem.setStyleSheet("border:2px;\n"
 "border-radius: 10px;")
         self.search_button_additem.setText("")
+        icon1_path = os.path.join(os.path.dirname(__file__), "icons & fonts", "search.svg")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("../compressed/search.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon1.addPixmap(QtGui.QPixmap(str(icon1_path)), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.search_button_additem.setIcon(icon1)
         self.search_button_additem.setObjectName("search_button_additem")
         self.horizontalLayout_13.addWidget(self.search_button_additem)
@@ -594,8 +597,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_14.addItem(spacerItem2)
         self.decrement = QtWidgets.QPushButton(parent=self.count_frame)
         self.decrement.setText("")
+        icon2_path = os.path.join(os.path.dirname(__file__), "icons & fonts", "minus.svg")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("../compressed/minus.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon2.addPixmap(QtGui.QPixmap(str(icon2_path)), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.decrement.setIcon(icon2)
         self.decrement.setIconSize(QtCore.QSize(40, 20))
         self.decrement.setObjectName("decrement")
@@ -611,8 +615,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_14.addWidget(self.count_text)
         self.increment = QtWidgets.QPushButton(parent=self.count_frame)
         self.increment.setText("")
+        icon3_path = os.path.join(os.path.dirname(__file__), "icons & fonts", "add.svg")
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("../compressed/add.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon3.addPixmap(QtGui.QPixmap(str(icon3_path)), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.increment.setIcon(icon3)
         self.increment.setIconSize(QtCore.QSize(40, 20))
         self.increment.setObjectName("increment")
@@ -1061,8 +1066,9 @@ class Ui_MainWindow(object):
 "    border - radius: 20px;\n"
 "    background-color: rgb(255, 255, 255);\n"
 "}")
+        icon4_path = os.path.join(os.path.dirname(__file__), "icons & fonts", "box.svg")
         icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("../compressed/box.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon4.addPixmap(QtGui.QPixmap(str(icon4_path)), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.borrow_button_sidebar.setIcon(icon4)
         self.borrow_button_sidebar.setIconSize(QtCore.QSize(30, 30))
         self.borrow_button_sidebar.setFlat(False)
@@ -1293,8 +1299,9 @@ class Ui_MainWindow(object):
 "    background-color:rgb(202, 202, 202);\n"
 "}")
         self.arrow_left_borrow.setText("")
+        icon6_path = os.path.join(os.path.dirname(__file__), "icons & fonts", "arrowleft1.svg")
         icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap("../compressed/arrowleft1.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon6.addPixmap(QtGui.QPixmap(str(icon6_path)), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.arrow_left_borrow.setIcon(icon6)
         self.arrow_left_borrow.setIconSize(QtCore.QSize(32, 32))
         self.arrow_left_borrow.setObjectName("arrow_left_borrow")
@@ -1310,8 +1317,9 @@ class Ui_MainWindow(object):
 "    background-color:rgb(202, 202, 202);\n"
 "}")
         self.arrow_right_borrow.setText("")
+        icon7_path = os.path.join(os.path.dirname(__file__), "icons & fonts", "arrowright.svg")
         icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap("../compressed/arrowright.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon7.addPixmap(QtGui.QPixmap(str(icon7_path)), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.arrow_right_borrow.setIcon(icon7)
         self.arrow_right_borrow.setIconSize(QtCore.QSize(32, 32))
         self.arrow_right_borrow.setObjectName("arrow_right_borrow")
