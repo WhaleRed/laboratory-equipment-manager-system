@@ -1,4 +1,4 @@
-from EquipmentManager_CSM import Ui_MainWindow
+from .EquipmentManager_CSM import Ui_MainWindow
 from PyQt6 import QtWidgets
 import re
 
