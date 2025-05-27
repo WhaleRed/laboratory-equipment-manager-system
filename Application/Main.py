@@ -145,7 +145,44 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
               case 1:
                 self.populateBorrowerTable()
             
-    def createOptionsButton(self, id):
+    def createOptionsButtonED(self, id):
+        btn = QtWidgets.QPushButton(" ⋮ ")
+        btn.setCursor(QtCore.Qt.CursorShape.PointingHandCursor)
+        
+        btn.setStyleSheet("text-align: center;")
+        #btn.setFixedSize(30, 30)
+
+        menu = QtWidgets.QMenu(btn)
+        edit_action = QtGui.QAction("Edit", self)
+        delete_action = QtGui.QAction("Delete", self)
+        menu.addAction(edit_action)
+        menu.addAction(delete_action)
+
+        edit_action.triggered.connect(partial(self.editRow, id))
+        delete_action.triggered.connect(partial(self.deleteRow, id))
+
+        btn.setMenu(menu)
+
+        return btn
+      
+    def createOptionsButtonD(self, id):
+        btn = QtWidgets.QPushButton(" ⋮ ")
+        btn.setCursor(QtCore.Qt.CursorShape.PointingHandCursor)
+        
+        btn.setStyleSheet("text-align: center;")
+        #btn.setFixedSize(30, 30)
+
+        menu = QtWidgets.QMenu(btn)
+        delete_action = QtGui.QAction("Delete", self)
+        menu.addAction(delete_action)
+
+        delete_action.triggered.connect(partial(self.deleteRow, id))
+
+        btn.setMenu(menu)
+
+        return btn
+      
+    def createOptionsButtonED(self, id):
         btn = QtWidgets.QPushButton(" ⋮ ")
         btn.setCursor(QtCore.Qt.CursorShape.PointingHandCursor)
         
@@ -202,7 +239,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.inventory_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[2])))
                 self.inventory_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[3])))
                 
-                btn = self.createOptionsButton(item[0])
+                btn = self.createOptionsButtonED(item[0])
                 self.borrow_table.setCellWidget(row, 4, btn)
                 
         except Exception as e:
@@ -238,7 +275,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.borrow_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[4])))
                 self.borrow_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[3])))
                 
-                btn = self.createOptionsButton(item[0])
+                btn = self.createOptionsButtonD(item[0])
                 self.borrow_table.setCellWidget(row, 5, btn)
                 
         except Exception as e:
@@ -278,7 +315,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.return_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[4])))
                 self.return_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[3])))
                 
-                btn = self.createOptionsButton(item[0])
+                btn = self.createOptionsButtonD(item[0])
                 self.return_table.setCellWidget(row, 5, btn)
                 
         except Exception as e:
@@ -313,7 +350,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.replace_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[2])))
                 self.replace_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[3])))
                 
-                btn = self.createOptionsButton(item[0])
+                btn = self.createOptionsButtonD(item[0])
                 self.replace_table.setCellWidget(row, 4, btn)
             
         except Exception as e:
@@ -350,7 +387,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
               self.Students_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[5])))
               self.Students_table.setItem(row, 5, QtWidgets.QTableWidgetItem(str(item[1])))
               
-              btn = self.createOptionsButton(item[0])
+              btn = self.createOptionsButtonED(item[0])
               self.Students_table.setCellWidget(row, 6, btn)
               
       except Exception as e:
@@ -384,7 +421,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
               self.Professors_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
               self.Professors_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[2])))
               
-              btn = self.createOptionsButton(item[0])
+              btn = self.createOptionsButtonED(item[0])
               self.Professors_table.setCellWidget(row, 3, btn)
               
       except Exception as e:
