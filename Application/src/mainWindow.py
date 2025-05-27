@@ -1,10 +1,10 @@
 from PyQt6 import QtWidgets, QtCore, QtGui
 from functools import partial
-from .modules import fetchData
-from .uifolder.EquipmentManager_CSM import Ui_MainWindow
-from .uifolder.connectors import Connector
-from .uifolder.confirmation import Confirmation
-from .uifolder.connectors import Connector
+from src.modules import fetchData
+from src.uifolder.EquipmentManager_CSM import Ui_MainWindow
+from src.uifolder.connectors import Connector
+from src.uifolder.confirmation import Confirmation
+from src.uifolder.connectors import Connector
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -22,18 +22,30 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.populateBorrowTable()
         self.populateReplaceTable()
         
+        # Transaction connections
+        self.searchbox_transaction.returnPressed.connect(self.getCurrentTransactionTable) # change pa ni
+        
         self.Date_box_borrow.currentIndexChanged.connect(lambda _: self.populateBorrowTable())
         self.Date_box_return.currentIndexChanged.connect(lambda _: self.populateReturnTable())
         self.Date_box_replace.currentIndexChanged.connect(lambda _: self.populateReplaceTable())
         
-        self.searchbox_transaction.returnPressed.connect(self.getCurrentTransactionTab)
         self.searchbox_inventory.returnPressed.connect(self.populateEquipmentTable)
         
         self.arrow_right_borrow.clicked.connect(self.go_to_next_page)
+        self.arrow_right_replace.clicked.connect(self.go_to_next_page)
+        self.arrow_right_return.clicked.connect(self.go_to_next_page)
+        
+        self.arrow_left_borrow.clicked.connect(self.go_to_prev_page)
 
 #-----Helper-----#
 
-    def getCurrentTransactionTab(self):
+    def getCurrentTransactionTable(self):
+        
+        current_index = self.Dashboard_Frame.currentIndex()
+        
+        return current_index
+
+    def getCurrentTransactionTableSearch(self):
         
         current_index = self.Dashboard_Frame.currentIndex()
         
@@ -84,9 +96,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 sortState = 0
             
             if searchKeyword:
-                data = fetchData.searchEquipmentMatch(page, sortState, catState, searchKeyword)
+                data, count = fetchData.searchEquipmentMatch(page, sortState, catState, searchKeyword)
             else:
-                data = fetchData.searchEquipmentMatch(page, sortState, catState)
+                data, count = fetchData.searchEquipmentMatch(page, sortState, catState)
 
             self.inventory_table.setRowCount(len(data))
             for row, item in enumerate(data):
@@ -114,9 +126,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.borrow_table.clearContents()
             
             if searchKeyword:
-                data = fetchData.searchBorrowedEquipmentMatch(page, sortState, dateState, searchKeyword)
+                data, count = fetchData.searchBorrowedEquipmentMatch(page, sortState, dateState, searchKeyword)
             else:
-                data = fetchData.searchBorrowedEquipmentMatch(page, sortState, dateState)
+                data, count = fetchData.searchBorrowedEquipmentMatch(page, sortState, dateState)
 
             self.borrow_table.setRowCount(len(data))
             for row, item in enumerate(data):
@@ -149,9 +161,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 sortState = 0
 
             if searchKeyword:
-                data = fetchData.searchReturnedEquipmentMatch(page, sortState, dateState, searchKeyword)
+                data, count = fetchData.searchReturnedEquipmentMatch(page, sortState, dateState, searchKeyword)
             else:
-                data = fetchData.searchReturnedEquipmentMatch(page, sortState, dateState)
+                data, count = fetchData.searchReturnedEquipmentMatch(page, sortState, dateState)
 
             self.return_table.setRowCount(len(data))
             for row, item in enumerate(data):
@@ -180,9 +192,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.replace_table.clearContents()
 
             if searchKeyword:
-                data = fetchData.searchReplacedEquipmentMatch(page, sortState, dateState, searchKeyword)
+                data, count = fetchData.searchReplacedEquipmentMatch(page, sortState, dateState, searchKeyword)
             else:
-                data = fetchData.searchReplacedEquipmentMatch(page, sortState, dateState)
+                data, count = fetchData.searchReplacedEquipmentMatch(page, sortState, dateState)
         
             self.replace_table.setRowCount(len(data))
             for row, item in enumerate(data):
@@ -210,11 +222,32 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     
     def go_to_next_page(self):
         try:
+            current_tab_index = self.Dashboard_Frame.currentIndex()
             current_page = int(self.pageNum)
-            if current_page < 10:#self.total_pages:
+
+            if current_page < 10:  # placeholder sa
                 current_page += 1
                 self.pageNum = str(current_page)
                 print(f"Going to next page: {self.pageNum}")
-                self.populateBorrowTable()  # no arguments
+
+                match current_tab_index:
+                    case 0:  # borrow Table
+                        self.populateBorrowTable()
+                    case 1:  # return Table
+                        self.populateReturnTable()
+                    case 2:  # replace Table
+                        self.populateReplaceTable()
+                    case _:
+                        print("Unknown table index!")
         except Exception as e:
             print(f"Error in go_to_next_page: {e}")
+
+            
+    def go_to_prev_page(self):
+        return
+    
+    def go_to_page(self):
+        return
+    
+    def update_button_state(self):
+        return
