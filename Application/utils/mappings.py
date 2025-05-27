@@ -10,45 +10,51 @@ DATE_OPTIONS = {
 
 SORT_FIELDS_BORROWED = {
     0: "Borrow_date",
-    1: "EquipmentID",
-    2: "BorrowerID",
-    3: "State",
-    4: "Quantity"
+    1: "Borrow_date",
+    2: "EquipmentID",
+    3: "BorrowerID",
+    4: "State",
+    5: "Quantity"
 }
 
 SORT_FIELDS_RETURNED = {
     0: "Return_date",
-    1: "EquipmentID",
-    2: "BorrowerID",
-    3: "State",
-    4: "Quantity"
+    1: "Return_date",
+    2: "EquipmentID",
+    3: "BorrowerID",
+    4: "State",
+    5: "Quantity"
 }
 
 SORT_FIELDS_REPLACED = {
     0: "Replacement_date",
-    1: "EquipmentID",
-    2: "BorrowerID",
-    3: "Quantity"
+    1: "Replacement_date",
+    2: "EquipmentID",
+    3: "BorrowerID",
+    4: "Quantity"
 }
 
 SORT_FIELDS_BORROWER = {
-    0: "ProfessorID",
+    0: "BorrowerID",
     1: "BorrowerID",
-    2: "FirstName",
-    3: "LastName",
-    4: "Program",
-    5: "YearLevel"
+    2: "ProfessorID",
+    3: "FirstName",
+    4: "LastName",
+    5: "Program",
+    6: "YearLevel"
 }
 
 SORT_FIELDS_EQUIPMENT = {
     0: "EquipmentID",
-    1: "Equipment_name",
-    2: "Category",
-    3: "Available"
+    1: "EquipmentID",
+    2: "Equipment_name",
+    3: "Category",
+    4: "Available"
 }
 
 SORT_FIELDS_PROFESSOR = {
     0: "ProfessorID",
-    1: "FirstName",
-    2: "LastName"
+    1: "ProfessorID",
+    2: "FirstName",
+    3: "LastName"
 }

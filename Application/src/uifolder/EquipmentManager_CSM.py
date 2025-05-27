@@ -3085,19 +3085,19 @@ class Ui_MainWindow(object):
         self.Filter_box_return.addItem("State")
         self.Filter_box_return.addItem("Quantity")
         
-        self.Filter_box_return.addItem("Replacement Date")
-        self.Filter_box_return.addItem("Equipment ID")
-        self.Filter_box_return.addItem("Borrower ID")
-        self.Filter_box_return.addItem("Quantity")
+        self.Filter_box_replace.addItem("Replacement Date")
+        self.Filter_box_replace.addItem("Equipment ID")
+        self.Filter_box_replace.addItem("Borrower ID")
+        self.Filter_box_replace.addItem("Quantity")
         
-        self.Filter_box_return.addItem("Equipment ID")
-        self.Filter_box_return.addItem("Equipment Name")
-        self.Filter_box_return.addItem("Category")
-        self.Filter_box_return.addItem("Available")
+        self.sort_box_inventory.addItem("Equipment ID")
+        self.sort_box_inventory.addItem("Equipment Name")
+        self.sort_box_inventory.addItem("Category")
+        self.sort_box_inventory.addItem("Available")
         
         self.Filter_box_Prof.addItem("Professor ID")
         self.Filter_box_Prof.addItem("First Name")
-        self.Filter_box_Prof.addItem("First Name")
+        self.Filter_box_Prof.addItem("Last Name")
         
         self.Filter_box_Students.addItem("Borrower ID")
         self.Filter_box_Students.addItem("Professor ID")
