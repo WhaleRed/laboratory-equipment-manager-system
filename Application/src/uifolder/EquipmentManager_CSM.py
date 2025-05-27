@@ -9,11 +9,10 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 import os
 
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1440, 898)
+        MainWindow.resize(1440, 897)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -611,7 +610,7 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setWeight(75)
         self.count_text.setFont(font)
-        self.count_text.setObjectName("Page")
+        self.count_text.setObjectName("count_text")
         self.horizontalLayout_14.addWidget(self.count_text)
         self.increment = QtWidgets.QPushButton(parent=self.count_frame)
         self.increment.setText("")
@@ -1066,6 +1065,10 @@ class Ui_MainWindow(object):
 "    border - radius: 20px;\n"
 "    background-color: rgb(255, 255, 255);\n"
 "}")
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap("../compressed/box.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        self.borrow_button_sidebar.setIcon(icon4)
+        self.borrow_button_sidebar.setIconSize(QtCore.QSize(30, 30))
         self.borrow_button_sidebar.setFlat(False)
         self.borrow_button_sidebar.setObjectName("borrow_button_sidebar")
         self.gridLayout_5.addWidget(self.borrow_button_sidebar, 1, 0, 1, 1)
@@ -1083,7 +1086,8 @@ class Ui_MainWindow(object):
 "    background-color: rgb(255, 255, 255);\n"
 "    color: rgb(195, 25, 25);\n"
 "}")
-        
+        self.inventory_button_sidebar.setIcon(icon4)
+        self.inventory_button_sidebar.setIconSize(QtCore.QSize(30, 30))
         self.inventory_button_sidebar.setFlat(False)
         self.inventory_button_sidebar.setObjectName("inventory_button_sidebar")
         self.gridLayout_5.addWidget(self.inventory_button_sidebar, 2, 0, 1, 1)
@@ -1109,7 +1113,10 @@ class Ui_MainWindow(object):
 "    border - radius: 20px;\n"
 "    background-color: rgb(255, 255, 255);\n"
 "}")
-        
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap("../user f.svg"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        self.user_button_sidebar.setIcon(icon5)
+        self.user_button_sidebar.setIconSize(QtCore.QSize(30, 30))
         self.user_button_sidebar.setFlat(False)
         self.user_button_sidebar.setObjectName("user_button_sidebar")
         self.gridLayout_5.addWidget(self.user_button_sidebar, 3, 0, 1, 1)
@@ -1388,6 +1395,10 @@ class Ui_MainWindow(object):
         self.gridLayout_9.addWidget(self.ofTotal_Pages_borrow, 1, 3, 1, 1)
         self.gridLayout_10.addWidget(self.button_frame_borrow, 2, 0, 1, 1)
         self.borrow_table = QtWidgets.QTableWidget(parent=self.BorrowPage)
+        font = QtGui.QFont()
+        font.setFamily("Nunito ExtraBold")
+        font.setPointSize(15)
+        self.borrow_table.setFont(font)
         self.borrow_table.setStyleSheet("QTableWidget {\n"
 "    border: 1px solid #d3d3d3;\n"
 "    gridline-color: #ccc;\n"
@@ -1486,6 +1497,10 @@ class Ui_MainWindow(object):
         self.gridLayout_13 = QtWidgets.QGridLayout(self.ReturnPage)
         self.gridLayout_13.setObjectName("gridLayout_13")
         self.return_table = QtWidgets.QTableWidget(parent=self.ReturnPage)
+        font = QtGui.QFont()
+        font.setFamily("Nunito ExtraBold")
+        font.setPointSize(15)
+        self.return_table.setFont(font)
         self.return_table.setStyleSheet("QTableWidget {\n"
 "    border: 1px solid #d3d3d3;\n"
 "    gridline-color: #ccc;\n"
@@ -1726,6 +1741,10 @@ class Ui_MainWindow(object):
         self.gridLayout_15 = QtWidgets.QGridLayout(self.ReplacePage)
         self.gridLayout_15.setObjectName("gridLayout_15")
         self.replace_table = QtWidgets.QTableWidget(parent=self.ReplacePage)
+        font = QtGui.QFont()
+        font.setFamily("Nunito ExtraBold")
+        font.setPointSize(15)
+        self.replace_table.setFont(font)
         self.replace_table.setStyleSheet("QTableWidget {\n"
 "    border: 1px solid #d3d3d3;\n"
 "    gridline-color: #ccc;\n"
@@ -1818,15 +1837,43 @@ class Ui_MainWindow(object):
         self.button_frame_replace.setObjectName("button_frame_replace")
         self.gridLayout_11 = QtWidgets.QGridLayout(self.button_frame_replace)
         self.gridLayout_11.setObjectName("gridLayout_11")
-        self.Filter_text_replace = QtWidgets.QLabel(parent=self.button_frame_replace)
+        self.ofTotal_Pages_replace = QtWidgets.QLabel(parent=self.button_frame_replace)
         font = QtGui.QFont()
         font.setFamily("Nunito ExtraBold")
-        font.setPointSize(12)
+        font.setPointSize(13)
         font.setBold(True)
         font.setWeight(75)
-        self.Filter_text_replace.setFont(font)
-        self.Filter_text_replace.setObjectName("Filter_text_replace")
-        self.gridLayout_11.addWidget(self.Filter_text_replace, 1, 8, 1, 1)
+        self.ofTotal_Pages_replace.setFont(font)
+        self.ofTotal_Pages_replace.setObjectName("ofTotal_Pages_replace")
+        self.gridLayout_11.addWidget(self.ofTotal_Pages_replace, 1, 3, 1, 1)
+        self.Page_text_replace = QtWidgets.QLabel(parent=self.button_frame_replace)
+        font = QtGui.QFont()
+        font.setFamily("Nunito ExtraBold")
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setWeight(75)
+        self.Page_text_replace.setFont(font)
+        self.Page_text_replace.setObjectName("Page_text_replace")
+        self.gridLayout_11.addWidget(self.Page_text_replace, 1, 1, 1, 1)
+        self.Page_box_replace = QtWidgets.QLineEdit(parent=self.button_frame_replace)
+        self.Page_box_replace.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.Page_box_replace.setObjectName("Page_box_replace")
+        self.gridLayout_11.addWidget(self.Page_box_replace, 1, 2, 1, 1)
+        self.arrow_left_replace = QtWidgets.QToolButton(parent=self.button_frame_replace)
+        self.arrow_left_replace.setStyleSheet("#arrow_left_replace {\n"
+"    border: none;\n"
+"    border-radius: 30px;        /* Makes it round (for 60x60 button) */\n"
+"    padding: 10px;\n"
+"}\n"
+"\n"
+"#arrow_left_replace::pressed {\n"
+"    background-color:rgb(202, 202, 202);\n"
+"}")
+        self.arrow_left_replace.setText("")
+        self.arrow_left_replace.setIcon(icon6)
+        self.arrow_left_replace.setIconSize(QtCore.QSize(32, 32))
+        self.arrow_left_replace.setObjectName("arrow_left_replace")
+        self.gridLayout_11.addWidget(self.arrow_left_replace, 1, 0, 1, 1)
         self.Date_box_replace = QtWidgets.QComboBox(parent=self.button_frame_replace)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -1857,25 +1904,6 @@ class Ui_MainWindow(object):
         self.Date_box_replace.setObjectName("Date_box_replace")
         self.Date_box_replace.addItem("")
         self.gridLayout_11.addWidget(self.Date_box_replace, 1, 7, 1, 1)
-        self.arrow_left_replace = QtWidgets.QToolButton(parent=self.button_frame_replace)
-        self.arrow_left_replace.setStyleSheet("#arrow_left_replace {\n"
-"    border: none;\n"
-"    border-radius: 30px;        /* Makes it round (for 60x60 button) */\n"
-"    padding: 10px;\n"
-"}\n"
-"\n"
-"#arrow_left_replace::pressed {\n"
-"    background-color:rgb(202, 202, 202);\n"
-"}")
-        self.arrow_left_replace.setText("")
-        self.arrow_left_replace.setIcon(icon6)
-        self.arrow_left_replace.setIconSize(QtCore.QSize(32, 32))
-        self.arrow_left_replace.setObjectName("arrow_left_replace")
-        self.gridLayout_11.addWidget(self.arrow_left_replace, 1, 0, 1, 1)
-        self.Page_box_replace = QtWidgets.QLineEdit(parent=self.button_frame_replace)
-        self.Page_box_replace.setMaximumSize(QtCore.QSize(50, 16777215))
-        self.Page_box_replace.setObjectName("Page_box_replace")
-        self.gridLayout_11.addWidget(self.Page_box_replace, 1, 2, 1, 1)
         self.Date_text_replace = QtWidgets.QLabel(parent=self.button_frame_replace)
         font = QtGui.QFont()
         font.setFamily("Nunito ExtraBold")
@@ -1886,17 +1914,6 @@ class Ui_MainWindow(object):
         self.Date_text_replace.setStyleSheet("")
         self.Date_text_replace.setObjectName("Date_text_replace")
         self.gridLayout_11.addWidget(self.Date_text_replace, 1, 6, 1, 1)
-        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
-        self.gridLayout_11.addItem(spacerItem12, 1, 5, 1, 1)
-        self.Page_text_replace = QtWidgets.QLabel(parent=self.button_frame_replace)
-        font = QtGui.QFont()
-        font.setFamily("Nunito ExtraBold")
-        font.setPointSize(13)
-        font.setBold(True)
-        font.setWeight(75)
-        self.Page_text_replace.setFont(font)
-        self.Page_text_replace.setObjectName("Page_text_replace")
-        self.gridLayout_11.addWidget(self.Page_text_replace, 1, 1, 1, 1)
         self.arrow_right_replace = QtWidgets.QToolButton(parent=self.button_frame_replace)
         self.arrow_right_replace.setStyleSheet("#arrow_right_replace {\n"
 "    border: none;\n"
@@ -1912,6 +1929,15 @@ class Ui_MainWindow(object):
         self.arrow_right_replace.setIconSize(QtCore.QSize(32, 32))
         self.arrow_right_replace.setObjectName("arrow_right_replace")
         self.gridLayout_11.addWidget(self.arrow_right_replace, 1, 4, 1, 1)
+        self.Filter_text_replace = QtWidgets.QLabel(parent=self.button_frame_replace)
+        font = QtGui.QFont()
+        font.setFamily("Nunito ExtraBold")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.Filter_text_replace.setFont(font)
+        self.Filter_text_replace.setObjectName("Filter_text_replace")
+        self.gridLayout_11.addWidget(self.Filter_text_replace, 1, 8, 1, 1)
         self.Filter_box_replace = QtWidgets.QComboBox(parent=self.button_frame_replace)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -1942,15 +1968,8 @@ class Ui_MainWindow(object):
         self.Filter_box_replace.setObjectName("Filter_box_replace")
         self.Filter_box_replace.addItem("")
         self.gridLayout_11.addWidget(self.Filter_box_replace, 1, 9, 1, 1)
-        self.ofTotal_Pages_replace = QtWidgets.QLabel(parent=self.button_frame_replace)
-        font = QtGui.QFont()
-        font.setFamily("Nunito ExtraBold")
-        font.setPointSize(13)
-        font.setBold(True)
-        font.setWeight(75)
-        self.ofTotal_Pages_replace.setFont(font)
-        self.ofTotal_Pages_replace.setObjectName("ofTotal_Pages_replace")
-        self.gridLayout_11.addWidget(self.ofTotal_Pages_replace, 1, 3, 1, 1)
+        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        self.gridLayout_11.addItem(spacerItem12, 1, 5, 1, 1)
         self.gridLayout_15.addWidget(self.button_frame_replace, 1, 0, 1, 1)
         self.Dashboard_Frame.addTab(self.ReplacePage, "")
         self.verticalLayout_7.addWidget(self.Dashboard_Frame)
@@ -2064,6 +2083,12 @@ class Ui_MainWindow(object):
         self.gridLayout_4 = QtWidgets.QGridLayout(self.table_frame)
         self.gridLayout_4.setObjectName("gridLayout_4")
         self.inventory_table = QtWidgets.QTableWidget(parent=self.table_frame)
+        font = QtGui.QFont()
+        font.setFamily("Nunito ExtraBold")
+        font.setPointSize(15)
+        font.setBold(True)
+        font.setWeight(75)
+        self.inventory_table.setFont(font)
         self.inventory_table.setStyleSheet("QTableWidget {\n"
 "    border: 1px solid #d3d3d3;\n"
 "    gridline-color: #ccc;\n"
@@ -2313,10 +2338,8 @@ class Ui_MainWindow(object):
         self.frame_21.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
         self.frame_21.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.frame_21.setObjectName("frame_21")
-        self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.frame_21)
-        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
-        spacerItem18 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
-        self.horizontalLayout_9.addItem(spacerItem18)
+        self.gridLayout_16 = QtWidgets.QGridLayout(self.frame_21)
+        self.gridLayout_16.setObjectName("gridLayout_16")
         self.searchbox_borrowers = QtWidgets.QLineEdit(parent=self.frame_21)
         self.searchbox_borrowers.setMaximumSize(QtCore.QSize(500, 200))
         font = QtGui.QFont()
@@ -2329,7 +2352,9 @@ class Ui_MainWindow(object):
         self.searchbox_borrowers.setInputMask("")
         self.searchbox_borrowers.setClearButtonEnabled(False)
         self.searchbox_borrowers.setObjectName("searchbox_borrowers")
-        self.horizontalLayout_9.addWidget(self.searchbox_borrowers)
+        self.gridLayout_16.addWidget(self.searchbox_borrowers, 0, 3, 1, 1)
+        spacerItem18 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        self.gridLayout_16.addItem(spacerItem18, 0, 0, 1, 1)
         self.search_icon_borrowers = QtWidgets.QToolButton(parent=self.frame_21)
         self.search_icon_borrowers.setStyleSheet("border-radius: 60px;\n"
 "border: 20px;")
@@ -2337,7 +2362,7 @@ class Ui_MainWindow(object):
         self.search_icon_borrowers.setIcon(icon1)
         self.search_icon_borrowers.setIconSize(QtCore.QSize(20, 30))
         self.search_icon_borrowers.setObjectName("search_icon_borrowers")
-        self.horizontalLayout_9.addWidget(self.search_icon_borrowers)
+        self.gridLayout_16.addWidget(self.search_icon_borrowers, 0, 4, 1, 1)
         self.gridLayout_14.addWidget(self.frame_21, 2, 0, 1, 1)
         self.Dashboard_Frame_Borrowers = QtWidgets.QTabWidget(parent=self.Borrowers_Frame_Borrowers)
         font = QtGui.QFont()
@@ -2363,10 +2388,32 @@ class Ui_MainWindow(object):
         self.button_frame_Professors.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.button_frame_Professors.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.button_frame_Professors.setObjectName("button_frame_Professors")
-        self.gridLayout_38 = QtWidgets.QGridLayout(self.button_frame_Professors)
-        self.gridLayout_38.setObjectName("gridLayout_38")
-        spacerItem19 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
-        self.gridLayout_38.addItem(spacerItem19, 1, 11, 1, 1)
+        self.gridLayout_27 = QtWidgets.QGridLayout(self.button_frame_Professors)
+        self.gridLayout_27.setObjectName("gridLayout_27")
+        self.ofTotal_Pages_Prof = QtWidgets.QLabel(parent=self.button_frame_Professors)
+        font = QtGui.QFont()
+        font.setFamily("Nunito ExtraBold")
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setWeight(75)
+        self.ofTotal_Pages_Prof.setFont(font)
+        self.ofTotal_Pages_Prof.setObjectName("ofTotal_Pages_Prof")
+        self.gridLayout_27.addWidget(self.ofTotal_Pages_Prof, 0, 3, 1, 1)
+        
+        self.Filter_text_Prof = QtWidgets.QLabel(parent=self.button_frame_Professors)
+        font = QtGui.QFont()
+        font.setFamily("Nunito ExtraBold")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.Filter_text_Prof.setFont(font)
+        self.Filter_text_Prof.setObjectName("Filter_text_Prof")
+        self.gridLayout_27.addWidget(self.Filter_text_Prof, 0, 9, 1, 1)
+        self.page_box_Prof = QtWidgets.QLineEdit(parent=self.button_frame_Professors)
+        self.page_box_Prof.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.page_box_Prof.setObjectName("page_box_Prof")
+        self.gridLayout_27.addWidget(self.page_box_Prof, 0, 2, 1, 1)
+        
         self.Filter_box_Prof = QtWidgets.QComboBox(parent=self.button_frame_Professors)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -2396,7 +2443,7 @@ class Ui_MainWindow(object):
         self.Filter_box_Prof.setFrame(False)
         self.Filter_box_Prof.setObjectName("Filter_box_Prof")
         self.Filter_box_Prof.addItem("")
-        self.gridLayout_38.addWidget(self.Filter_box_Prof, 1, 15, 1, 1)
+        self.gridLayout_27.addWidget(self.Filter_box_Prof, 0, 10, 1, 1)
         self.arrow_left_Prof = QtWidgets.QToolButton(parent=self.button_frame_Professors)
         self.arrow_left_Prof.setStyleSheet("#arrow_left_Prof {\n"
 "    border: none;\n"
@@ -2411,7 +2458,18 @@ class Ui_MainWindow(object):
         self.arrow_left_Prof.setIcon(icon6)
         self.arrow_left_Prof.setIconSize(QtCore.QSize(32, 32))
         self.arrow_left_Prof.setObjectName("arrow_left_Prof")
-        self.gridLayout_38.addWidget(self.arrow_left_Prof, 1, 0, 1, 1)
+        self.gridLayout_27.addWidget(self.arrow_left_Prof, 0, 0, 1, 1)
+        self.Page_text_Prof = QtWidgets.QLabel(parent=self.button_frame_Professors)
+        font = QtGui.QFont()
+        font.setFamily("Nunito ExtraBold")
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setWeight(75)
+        self.Page_text_Prof.setFont(font)
+        self.Page_text_Prof.setObjectName("Page_text_Prof")
+        self.gridLayout_27.addWidget(self.Page_text_Prof, 0, 1, 1, 1)
+        spacerItem19 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        self.gridLayout_27.addItem(spacerItem19, 0, 5, 1, 1)
         self.arrow_right_Prof = QtWidgets.QToolButton(parent=self.button_frame_Professors)
         self.arrow_right_Prof.setStyleSheet("#arrow_right_Prof {\n"
 "    border: none;\n"
@@ -2426,42 +2484,41 @@ class Ui_MainWindow(object):
         self.arrow_right_Prof.setIcon(icon7)
         self.arrow_right_Prof.setIconSize(QtCore.QSize(32, 32))
         self.arrow_right_Prof.setObjectName("arrow_right_Prof")
-        self.gridLayout_38.addWidget(self.arrow_right_Prof, 1, 4, 1, 1)
-        self.Page_text_Prof = QtWidgets.QLabel(parent=self.button_frame_Professors)
+        self.gridLayout_27.addWidget(self.arrow_right_Prof, 0, 4, 1, 1)
+        self.addProfessor_button = QtWidgets.QToolButton(parent=self.button_frame_Professors)
         font = QtGui.QFont()
         font.setFamily("Nunito ExtraBold")
-        font.setPointSize(13)
+        font.setPointSize(10)
         font.setBold(True)
         font.setWeight(75)
-        self.Page_text_Prof.setFont(font)
-        self.Page_text_Prof.setObjectName("Page_text_Prof")
-        self.gridLayout_38.addWidget(self.Page_text_Prof, 1, 1, 1, 1)
-        
-        self.Filter_text_Prof = QtWidgets.QLabel(parent=self.button_frame_Professors)
-        font = QtGui.QFont()
-        font.setFamily("Nunito ExtraBold")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.Filter_text_Prof.setFont(font)
-        self.Filter_text_Prof.setObjectName("Filter_text_Prof")
-        self.gridLayout_38.addWidget(self.Filter_text_Prof, 1, 14, 1, 1)
-        
-        self.page_box_Prof = QtWidgets.QLineEdit(parent=self.button_frame_Professors)
-        self.page_box_Prof.setMaximumSize(QtCore.QSize(50, 16777215))
-        self.page_box_Prof.setObjectName("page_box_Prof")
-        self.gridLayout_38.addWidget(self.page_box_Prof, 1, 2, 1, 1)
-        self.ofTotal_Pages_Prof = QtWidgets.QLabel(parent=self.button_frame_Professors)
-        font = QtGui.QFont()
-        font.setFamily("Nunito ExtraBold")
-        font.setPointSize(13)
-        font.setBold(True)
-        font.setWeight(75)
-        self.ofTotal_Pages_Prof.setFont(font)
-        self.ofTotal_Pages_Prof.setObjectName("ofTotal_Pages_Prof")
-        self.gridLayout_38.addWidget(self.ofTotal_Pages_Prof, 1, 3, 1, 1)
+        self.addProfessor_button.setFont(font)
+        self.addProfessor_button.setStyleSheet("#addProfessor_button {\n"
+"    border: none;\n"
+"    color: #111;\n"
+"    padding: 4px 8px;\n"
+"    border-bottom: 2px solid #999;\n"
+"}\n"
+"\n"
+"#addProfessor_button:hover {\n"
+"    color: #e63946; /* Bright red on hover */\n"
+"    border-bottom: 2px solid #e63946;\n"
+"}\n"
+"\n"
+"#addProfessor_button:pressed {\n"
+"    color: #b71c1c;\n"
+"    border-bottom: 2px solid #b71c1c;\n"
+"}\n"
+"")
+        self.addProfessor_button.setIcon(icon3)
+        self.addProfessor_button.setToolButtonStyle(QtCore.Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        self.addProfessor_button.setObjectName("addProfessor_button")
+        self.gridLayout_27.addWidget(self.addProfessor_button, 0, 11, 1, 1)
         self.gridLayout_37.addWidget(self.button_frame_Professors, 2, 0, 1, 1)
         self.Professors_table = QtWidgets.QTableWidget(parent=self.Professors_Page)
+        font = QtGui.QFont()
+        font.setFamily("Nunito ExtraBold")
+        font.setPointSize(15)
+        self.Professors_table.setFont(font)
         self.Professors_table.setStyleSheet("QTableWidget {\n"
 "    border: 1px solid #d3d3d3;\n"
 "    gridline-color: #ccc;\n"
@@ -2538,6 +2595,10 @@ class Ui_MainWindow(object):
         self.gridLayout_39 = QtWidgets.QGridLayout(self.Students_Page)
         self.gridLayout_39.setObjectName("gridLayout_39")
         self.Students_table = QtWidgets.QTableWidget(parent=self.Students_Page)
+        font = QtGui.QFont()
+        font.setFamily("Nunito ExtraBold")
+        font.setPointSize(15)
+        self.Students_table.setFont(font)
         self.Students_table.setStyleSheet("QTableWidget {\n"
 "    border: 1px solid #d3d3d3;\n"
 "    gridline-color: #ccc;\n"
@@ -2647,25 +2708,8 @@ class Ui_MainWindow(object):
         self.button_frame_Students.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.button_frame_Students.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.button_frame_Students.setObjectName("button_frame_Students")
-        self.gridLayout_40 = QtWidgets.QGridLayout(self.button_frame_Students)
-        self.gridLayout_40.setObjectName("gridLayout_40")
-        self.arrow_right_Students = QtWidgets.QToolButton(parent=self.button_frame_Students)
-        self.arrow_right_Students.setStyleSheet("#arrow_right_Students {\n"
-"    border: none;\n"
-"    border-radius: 30px;        /* Makes it round (for 60x60 button) */\n"
-"    padding: 10px;\n"
-"}\n"
-"\n"
-"#arrow_right_Students::pressed {\n"
-"    background-color:rgb(202, 202, 202);\n"
-"}")
-        self.arrow_right_Students.setText("")
-        self.arrow_right_Students.setIcon(icon7)
-        self.arrow_right_Students.setIconSize(QtCore.QSize(32, 32))
-        self.arrow_right_Students.setObjectName("arrow_right_Students")
-        self.gridLayout_40.addWidget(self.arrow_right_Students, 1, 4, 1, 1)
-        spacerItem20 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
-        self.gridLayout_40.addItem(spacerItem20, 1, 5, 1, 1)
+        self.gridLayout_20 = QtWidgets.QGridLayout(self.button_frame_Students)
+        self.gridLayout_20.setObjectName("gridLayout_20")
         self.Page_text_Students = QtWidgets.QLabel(parent=self.button_frame_Students)
         font = QtGui.QFont()
         font.setFamily("Nunito ExtraBold")
@@ -2674,17 +2718,14 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.Page_text_Students.setFont(font)
         self.Page_text_Students.setObjectName("Page_text_Students")
-        self.gridLayout_40.addWidget(self.Page_text_Students, 1, 1, 1, 1)
-        self.Filter_text_Students = QtWidgets.QLabel(parent=self.button_frame_Students)
-        font = QtGui.QFont()
-        font.setFamily("Nunito ExtraBold")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.Filter_text_Students.setFont(font)
-        self.Filter_text_Students.setObjectName("Filter_text_Students")
-        self.gridLayout_40.addWidget(self.Filter_text_Students, 1, 8, 1, 1)
+        self.gridLayout_20.addWidget(self.Page_text_Students, 0, 1, 1, 1)
         
+        spacerItem20 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
+        self.gridLayout_20.addItem(spacerItem20, 0, 5, 1, 1)
+        self.page_box_Students = QtWidgets.QLineEdit(parent=self.button_frame_Students)
+        self.page_box_Students.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.page_box_Students.setObjectName("page_box_Students")
+        self.gridLayout_20.addWidget(self.page_box_Students, 0, 2, 1, 1)
         self.Filter_box_Students = QtWidgets.QComboBox(parent=self.button_frame_Students)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -2714,8 +2755,7 @@ class Ui_MainWindow(object):
         self.Filter_box_Students.setFrame(False)
         self.Filter_box_Students.setObjectName("Filter_box_Students")
         self.Filter_box_Students.addItem("")
-        self.gridLayout_40.addWidget(self.Filter_box_Students, 1, 9, 1, 1)
-
+        self.gridLayout_20.addWidget(self.Filter_box_Students, 0, 11, 1, 1)
         self.arrow_left_Students = QtWidgets.QToolButton(parent=self.button_frame_Students)
         self.arrow_left_Students.setStyleSheet("#arrow_left_Students {\n"
 "    border: none;\n"
@@ -2730,11 +2770,32 @@ class Ui_MainWindow(object):
         self.arrow_left_Students.setIcon(icon6)
         self.arrow_left_Students.setIconSize(QtCore.QSize(32, 32))
         self.arrow_left_Students.setObjectName("arrow_left_Students")
-        self.gridLayout_40.addWidget(self.arrow_left_Students, 1, 0, 1, 1)
-        self.page_box_Students = QtWidgets.QLineEdit(parent=self.button_frame_Students)
-        self.page_box_Students.setMaximumSize(QtCore.QSize(50, 16777215))
-        self.page_box_Students.setObjectName("page_box_Students")
-        self.gridLayout_40.addWidget(self.page_box_Students, 1, 2, 1, 1)
+        self.gridLayout_20.addWidget(self.arrow_left_Students, 0, 0, 1, 1)
+        self.arrow_right_Students = QtWidgets.QToolButton(parent=self.button_frame_Students)
+        self.arrow_right_Students.setStyleSheet("#arrow_right_Students {\n"
+"    border: none;\n"
+"    border-radius: 30px;        /* Makes it round (for 60x60 button) */\n"
+"    padding: 10px;\n"
+"}\n"
+"\n"
+"#arrow_right_Students::pressed {\n"
+"    background-color:rgb(202, 202, 202);\n"
+"}")
+        self.arrow_right_Students.setText("")
+        self.arrow_right_Students.setIcon(icon7)
+        self.arrow_right_Students.setIconSize(QtCore.QSize(32, 32))
+        self.arrow_right_Students.setObjectName("arrow_right_Students")
+        self.gridLayout_20.addWidget(self.arrow_right_Students, 0, 4, 1, 1)
+        self.Filter_text_Students = QtWidgets.QLabel(parent=self.button_frame_Students)
+        font = QtGui.QFont()
+        font.setFamily("Nunito ExtraBold")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.Filter_text_Students.setFont(font)
+        self.Filter_text_Students.setObjectName("Filter_text_Students")
+        self.gridLayout_20.addWidget(self.Filter_text_Students, 0, 10, 1, 1)
+        
         self.ofTotal_Pages_Students = QtWidgets.QLabel(parent=self.button_frame_Students)
         font = QtGui.QFont()
         font.setFamily("Nunito ExtraBold")
@@ -2743,7 +2804,35 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.ofTotal_Pages_Students.setFont(font)
         self.ofTotal_Pages_Students.setObjectName("ofTotal_Pages_Students")
-        self.gridLayout_40.addWidget(self.ofTotal_Pages_Students, 1, 3, 1, 1)
+        self.gridLayout_20.addWidget(self.ofTotal_Pages_Students, 0, 3, 1, 1)
+        self.addborrower_button = QtWidgets.QToolButton(parent=self.button_frame_Students)
+        font = QtGui.QFont()
+        font.setFamily("Nunito ExtraBold")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.addborrower_button.setFont(font)
+        self.addborrower_button.setStyleSheet("#addborrower_button {\n"
+"    border: none;\n"
+"    color: #111;\n"
+"    padding: 4px 8px;\n"
+"    border-bottom: 2px solid #999;\n"
+"}\n"
+"\n"
+"#addborrower_button:hover {\n"
+"    color: #e63946; /* Bright red on hover */\n"
+"    border-bottom: 2px solid #e63946;\n"
+"}\n"
+"\n"
+"#addborrower_button:pressed {\n"
+"    color: #b71c1c;\n"
+"    border-bottom: 2px solid #b71c1c;\n"
+"}\n"
+"")
+        self.addborrower_button.setIcon(icon3)
+        self.addborrower_button.setToolButtonStyle(QtCore.Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        self.addborrower_button.setObjectName("addborrower_button")
+        self.gridLayout_20.addWidget(self.addborrower_button, 0, 12, 1, 1)
         self.gridLayout_39.addWidget(self.button_frame_Students, 1, 0, 1, 1)
         self.Dashboard_Frame_Borrowers.addTab(self.Students_Page, "")
         self.gridLayout_14.addWidget(self.Dashboard_Frame_Borrowers, 3, 0, 1, 1)
@@ -2755,10 +2844,10 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.Admin_User_Page.setCurrentIndex(0)
-        self.User_Interactive_Page.setCurrentIndex(0)
+        self.Admin_User_Page.setCurrentIndex(1)
+        self.User_Interactive_Page.setCurrentIndex(1)
         self.Admin_Page.setCurrentIndex(2)
-        self.Dashboard_Frame.setCurrentIndex(1)
+        self.Dashboard_Frame.setCurrentIndex(0)
         self.Dashboard_Frame_Borrowers.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -2790,7 +2879,7 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Available"))
         item = self.Item_table.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Action"))
-        self.count_text.setText(_translate("MainWindow", "Page"))
+        self.count_text.setText(_translate("MainWindow", "Count"))
         self.back_button_additem.setText(_translate("MainWindow", "BACK"))
         self.next_button_additem.setText(_translate("MainWindow", "NEXT"))
         self.confirmation_text.setText(_translate("MainWindow", "Confirmation"))
@@ -2804,7 +2893,7 @@ class Ui_MainWindow(object):
         self.label_7.setText(_translate("MainWindow", "TextLabel"))
         self.Last_Name_text.setText(_translate("MainWindow", "Last Name:"))
         self.label_8.setText(_translate("MainWindow", "TextLabel"))
-        self.Section_text.setText(_translate("MainWindow", "Section:"))
+        self.Section_text.setText(_translate("MainWindow", "Year Level:"))
         self.label_6.setText(_translate("MainWindow", "TextLabel"))
         self.Program_text.setText(_translate("MainWindow", "Program:"))
         self.label_5.setText(_translate("MainWindow", "TextLabel"))
@@ -2876,14 +2965,14 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Quantity"))
         item = self.replace_table.horizontalHeaderItem(4)
         item.setText(_translate("MainWindow", "Option"))
-        self.Filter_text_replace.setText(_translate("MainWindow", "Filter: "))
+        self.ofTotal_Pages_replace.setText(_translate("MainWindow", "of Total Pages"))
+        self.Page_text_replace.setText(_translate("MainWindow", "Page"))
         self.Date_box_replace.setCurrentText(_translate("MainWindow", "Please Select"))
         self.Date_box_replace.setItemText(0, _translate("MainWindow", "Please Select"))
         self.Date_text_replace.setText(_translate("MainWindow", "Date: "))
-        self.Page_text_replace.setText(_translate("MainWindow", "Page"))
+        self.Filter_text_replace.setText(_translate("MainWindow", "Filter: "))
         self.Filter_box_replace.setCurrentText(_translate("MainWindow", "Please Select"))
         self.Filter_box_replace.setItemText(0, _translate("MainWindow", "Please Select"))
-        self.ofTotal_Pages_replace.setText(_translate("MainWindow", "of Total Pages"))
         self.Dashboard_Frame.setTabText(self.Dashboard_Frame.indexOf(self.ReplacePage), _translate("MainWindow", "Replacements"))
         self.inventory_text.setText(_translate("MainWindow", "Inventory"))
         self.additem_button.setText(_translate("MainWindow", "Add Item"))
@@ -2906,12 +2995,14 @@ class Ui_MainWindow(object):
         self.category_box_inventory.setItemText(0, _translate("MainWindow", "Please Select"))
         self.Borrowers_text.setText(_translate("MainWindow", "Borrowers"))
         self.searchbox_borrowers.setPlaceholderText(_translate("MainWindow", "Search"))
+        self.ofTotal_Pages_Prof.setText(_translate("MainWindow", "of Total Pages"))
+       
+        self.Filter_text_Prof.setText(_translate("MainWindow", "Filter: "))
+        
         self.Filter_box_Prof.setCurrentText(_translate("MainWindow", "Please Select"))
         self.Filter_box_Prof.setItemText(0, _translate("MainWindow", "Please Select"))
         self.Page_text_Prof.setText(_translate("MainWindow", "Page"))
-        self.Filter_text_Prof.setText(_translate("MainWindow", "Filter: "))
-        
-        self.ofTotal_Pages_Prof.setText(_translate("MainWindow", "of Total Pages"))
+        self.addProfessor_button.setText(_translate("MainWindow", "Add Professor"))
         self.Professors_table.setSortingEnabled(True)
         item = self.Professors_table.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Professor ID"))
@@ -2938,11 +3029,13 @@ class Ui_MainWindow(object):
         item = self.Students_table.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "Option"))
         self.Page_text_Students.setText(_translate("MainWindow", "Page"))
-        self.Filter_text_Students.setText(_translate("MainWindow", "Filter: "))
+        
         self.Filter_box_Students.setCurrentText(_translate("MainWindow", "Please Select"))
         self.Filter_box_Students.setItemText(0, _translate("MainWindow", "Please Select"))
+        self.Filter_text_Students.setText(_translate("MainWindow", "Filter: "))
         
         self.ofTotal_Pages_Students.setText(_translate("MainWindow", "of Total Pages"))
+        self.addborrower_button.setText(_translate("MainWindow", "Add Borrower"))
         self.Dashboard_Frame_Borrowers.setTabText(self.Dashboard_Frame_Borrowers.indexOf(self.Students_Page), _translate("MainWindow", "Students"))
 
 
