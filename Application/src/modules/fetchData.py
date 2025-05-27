@@ -932,7 +932,6 @@ def searchBorrowedEquipmentMatch(page, sortStateidx, dateState, searched=None):
             f"WHERE 1=1 {dateFilter}"
         )
   else:
-    print(f"is_valid_id(): {is_valid_id(searched)}")
     if is_valid_equipment_id(searched) or is_valid_id(searched):
       count_query = (
           f"SELECT COUNT(*) FROM borrowed_equipment "
