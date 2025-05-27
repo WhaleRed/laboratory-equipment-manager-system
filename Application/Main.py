@@ -26,6 +26,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.populateReturnTable()
         self.populateBorrowTable()
         self.populateReplaceTable()
+        self.populateBorrowerTable()
+        #self.populateProfTable()
+        
         
         # Transaction connections
         self.searchbox_transaction.returnPressed.connect(self.getCurrentTransactionTable) # change pa ni
@@ -56,6 +59,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.arrow_right.clicked.connect(self.go_to_next_page)
         self.arrow_left.clicked.connect(self.go_to_prev_page)
         self.page_box_inventory.returnPressed.connect(self.go_to_page)
+        
+        # Users connections
+        self.searchbox_borrowers
 
         #Add item connections
         self.next_button_uinfo.clicked.connect(self.addItemCombobox)
@@ -253,7 +259,46 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         except Exception as e:
             print(f"Error in populateReplaceTable: {e}")
             
-            
+    def populateBorrowerTable(self):
+      try:
+          sortState = self.Filter_box_Students.currentIndex() or 0
+          
+          searchKeyword = self.searchbox_borrowers.text().strip()
+          
+          data = []
+          page = int(self.pageNum)
+          
+          self.Students_table.clearContents()
+
+          if searchKeyword:
+              data, count = fetchData.searchBorrowerMatch(page, sortState, searchKeyword)
+          else:
+              print("fetching data")
+              data, count = fetchData.searchBorrowerMatch(page, sortState)
+              print(f"student data: {fetchData}")
+          
+          self.page_box_Students.setText(f"{self.pageNum}")
+              
+          self.total_pages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
+          self.ofTotal_Pages_Students.setText(f"of {self.total_pages}")
+          
+      
+          self.Students_table.setRowCount(len(data))
+          for row, item in enumerate(data):
+              self.Students_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
+              self.Students_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
+              self.Students_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[2])))
+              self.Students_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[3])))
+              self.Students_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[3])))
+              self.Students_table.setItem(row, 5, QtWidgets.QTableWidgetItem(str(item[3])))
+              
+              btn = self.createOptionsButton(item[0])
+              self.Students_table.setCellWidget(row, 6, btn)
+              
+      except Exception as e:
+            print(f"Error in populateBorrowerTable: {e}")
+        
+      
 #-----Edit and Delete functions-----#
 
     def editRow(row):
@@ -294,7 +339,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.update_button_state()
         except Exception as e:
             print(f"Error in go_to_next_page: {e}")
-
 
     def go_to_prev_page(self):
         try:
@@ -386,7 +430,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # Clear the QLineEdit in case of error
             self.clear_page_input(current_tab_index)
 
-
     def clear_page_input(self, tab_index):
         current_SWPage = self.Admin_Page.currentIndex()
         
@@ -407,7 +450,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             case _:
                 print("Unknown admin page index")
 
-    
     def update_button_state(self):
         try:
             current_SWPage = self.Admin_Page.currentIndex()
