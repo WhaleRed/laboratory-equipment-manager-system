@@ -438,8 +438,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         match current_SWPage:
             case 0:
                 current_tab_index = self.Dashboard_Frame.currentIndex()
-            case 1:   #Delete for equipment table
-                pass
+                match current_tab_index:
+                    case 0:
+                        pass
+                    case 1:
+                        pass
+                    case 2:
+                        pass
             case 2:
                 current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
                 match current_tab_index:
@@ -447,7 +452,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                         print(id)
                         res = delete.delProfessor(id)
                         print(res)
-
                         self.populateProfTable()
                     case 1:   #Delete for borrower table
                         print(id)
