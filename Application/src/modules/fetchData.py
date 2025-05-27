@@ -1,4 +1,4 @@
-import os
+import os, re
 from dotenv import load_dotenv
 from utils import mappings
 import mysql.connector
@@ -6,6 +6,13 @@ import mysql.connector
 load_dotenv()
 
 PAGE_SIZE = 10
+
+def is_valid_equipment_id(s):
+    return bool(re.match(r'^[A-Z]+(-[A-Z0-9]+)*$', s))
+  
+def is_valid_id(search_term):
+    cleaned = ''.join(c for c in search_term if c.isdigit())
+    return cleaned.isdigit()
 
 def test():
   mycursor = db.cursor()
@@ -905,6 +912,7 @@ def searchBorrowedEquipmentMatch(page, sortStateidx, dateState, searched=None):
   mycursor = db.cursor()
 
   offset = (page-1) * 10
+  params = []
 
   sortState = mappings.SORT_FIELDS_BORROWED.get(sortStateidx)
   if not sortState:
@@ -923,40 +931,40 @@ def searchBorrowedEquipmentMatch(page, sortStateidx, dateState, searched=None):
             f"WHERE 1=1 {dateFilter}"
         )
   else:
+    print(f"is_valid_id(): {is_valid_id(searched)}")
+    if is_valid_equipment_id(searched) or is_valid_id(searched):
+      count_query = (
+          f"SELECT COUNT(*) FROM borrowed_equipment "
+          f"WHERE (EquipmentID = %s OR BorrowerID = %s) {dateFilter}"
+      )
+      params = [searched, searched]
+    else:
       count_query = (
           f"SELECT COUNT(*) FROM borrowed_equipment "
           f"WHERE MATCH(EquipmentID, BorrowerID, State) "
           f"AGAINST (%s IN BOOLEAN MODE) "
           f"{dateFilter}"
       )
+      params = [searched]
   
-  mycursor.execute(count_query, (searched,) if searched else ())
+  mycursor.execute(count_query, tuple(params))
   total_count = mycursor.fetchone()[0] 
     
-  if not searched:  # if empty or None
-        if sortState == "Borrow_date":
-            query = (
-                f"SELECT * FROM borrowed_equipment "
-                f"WHERE 1=1 {dateFilter} "
-                f"ORDER BY Borrow_date DESC LIMIT 10 OFFSET %s"
-            )
-            mycursor.execute(query, (offset,))
-        else:
-            query = (
-                f"SELECT * FROM borrowed_equipment "
-                f"WHERE 1=1 {dateFilter} "
-                f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
-            )
-            mycursor.execute(query, (offset,))
-  else:
-    if sortState == "Borrow_date":
+  if not searched: 
       query = (
           f"SELECT * FROM borrowed_equipment "
-          f"WHERE MATCH(EquipmentID, BorrowerID, State) "
-          f"AGAINST (%s IN BOOLEAN MODE) "
-          f"{dateFilter} "
-          f"ORDER BY Borrow_date DESC LIMIT 10 OFFSET %s"      
+          f"WHERE 1=1 {dateFilter} "
+          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
       )
+      mycursor.execute(query, (offset,))
+  else:
+    if is_valid_equipment_id(searched) or is_valid_id(searched):
+      query = (
+          f"SELECT * FROM borrowed_equipment "
+          f"WHERE (EquipmentID = %s OR BorrowerID = %s) {dateFilter}"
+          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+      )
+      params = [searched, searched, offset]
     else:
       query = (
           f"SELECT * FROM borrowed_equipment "
@@ -965,7 +973,8 @@ def searchBorrowedEquipmentMatch(page, sortStateidx, dateState, searched=None):
           f"{dateFilter} "
           f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
       )
-    mycursor.execute(query, (searched, offset))
+      params = [searched, offset]
+    mycursor.execute(query, tuple(params))
 
   arr = mycursor.fetchall()
 
@@ -1213,6 +1222,9 @@ def searchEquipmentMatch(page, sortStateidx, categoryidx, searched=None):
         params.append(offset)
         mycursor.execute(query, params)
   else:
+    if searched.isdigit():
+      
+      
       query = (
           f"SELECT * FROM equipment "
           f"WHERE MATCH(EquipmentID, Equipment_name, Category) AGAINST (%s IN BOOLEAN MODE) "
