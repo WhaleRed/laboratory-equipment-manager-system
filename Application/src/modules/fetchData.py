@@ -93,6 +93,18 @@ def fetchDamagedItems(borrowerID):
   
   return results
 
+#-----For getting available items-----#
+
+def fetchAvailableItems():
+  mycursor = db.cursor()
+
+  mycursor.execute("SELECT Equipment_name, Available FROM equipment WHERE Available > 0")
+  results = mycursor.fetchall()
+  
+  mycursor.close()
+  
+  return results
+
 #-----For search with pagination-----#
 
 def searchBorrower(searched, page):
