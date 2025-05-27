@@ -1146,11 +1146,16 @@ def searchBorrowerMatch(page, sortStateidx, searched=None):
         )
         mycursor.execute(count_query)
   else:
-      if is_valid_equipment_id(searched) or is_valid_id(searched):
-        count_query = (
-            f"SELECT COUNT(*) FROM borrower "
-            f"WHERE MATCH(ProfessorID, BorrowerID, FirstName, LastName, Program, YearLevel) "
-            f"AGAINST (%s IN BOOLEAN MODE)"
+    if is_valid_equipment_id(searched) or is_valid_id(searched):
+      count_query = (
+          f"SELECT COUNT(*) FROM borrower "
+          f"WHERE (ProfessorID = %s OR BorrowerID = %s)"
+      )        
+    else:
+      count_query = (
+          f"SELECT COUNT(*) FROM borrower "
+          f"WHERE MATCH(ProfessorID, BorrowerID, FirstName, LastName, Program, YearLevel) "
+          f"AGAINST (%s IN BOOLEAN MODE)"
         )
       mycursor.execute(count_query, (searched,))
 
@@ -1163,12 +1168,18 @@ def searchBorrowerMatch(page, sortStateidx, searched=None):
         )
         mycursor.execute(query, (offset,))
   else:
-      if is_valid_equipment_id(searched) or is_valid_id(searched):
-        query = (
-            f"SELECT * FROM borrower "
-            f"WHERE MATCH(ProfessorID, BorrowerID, FirstName, LastName, Program, YearLevel) "
-            f"AGAINST (%s IN BOOLEAN MODE) "
-            f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+    if is_valid_equipment_id(searched) or is_valid_id(searched):
+      query = (
+          f"SELECT * FROM borrower "
+          f"WHERE (ProfessorID = %s OR BorrowerID = %s) "
+          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+      )
+    else:
+      query = (
+          f"SELECT * FROM borrower "
+          f"WHERE MATCH(ProfessorID, BorrowerID, FirstName, LastName, Program, YearLevel) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
         )
       mycursor.execute(query, (searched, offset))
 
@@ -1204,12 +1215,17 @@ def searchEquipmentMatch(page, sortStateidx, categoryidx, searched=None):
         )
         mycursor.execute(count_query, params)
   else:
-      if is_valid_equipment_id(searched) or is_valid_id(searched):
-        count_query = (
-            f"SELECT COUNT(*) FROM equipment "
-            f"WHERE MATCH(EquipmentID, Equipment_name, Category) AGAINST (%s IN BOOLEAN MODE) "
-            f"{catFilter}"
-        )
+    if is_valid_equipment_id(searched) or is_valid_id(searched):
+      count_query = (
+          f"SELECT COUNT(*) FROM equipment "
+          f"WHERE (EquipmentID = %s)"
+      )
+    else:
+      count_query = (
+          f"SELECT COUNT(*) FROM equipment "
+          f"WHERE MATCH(EquipmentID, Equipment_name, Category) AGAINST (%s IN BOOLEAN MODE) "
+          f"{catFilter}"
+      )
       params = [searched] + params  
       mycursor.execute(count_query, params)
   
@@ -1226,6 +1242,13 @@ def searchEquipmentMatch(page, sortStateidx, categoryidx, searched=None):
   else:
     if searched.isdigit():
       if is_valid_equipment_id(searched) or is_valid_id(searched):
+        query = (
+            f"SELECT * FROM borrowed_equipment "
+            f"WHERE (EquipmentID = %s) "
+            f"{catFilter}"
+            f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+        )       
+      else:
         query = (
             f"SELECT * FROM equipment "
             f"WHERE MATCH(EquipmentID, Equipment_name, Category) AGAINST (%s IN BOOLEAN MODE) "
@@ -1260,6 +1283,11 @@ def searchProfessorMatch(page, sortStateidx, searched=None):
       if is_valid_equipment_id(searched) or is_valid_id(searched):
         count_query = (
             f"SELECT COUNT(*) FROM professor "
+            f"WHERE (ProfessorID = %s)"
+        )      
+      else:
+        count_query = (
+            f"SELECT COUNT(*) FROM professor "
             f"WHERE MATCH(ProfessorID, FirstName, LastName) AGAINST (%s IN BOOLEAN MODE)"
         )
       mycursor.execute(count_query, (searched,))
@@ -1274,6 +1302,12 @@ def searchProfessorMatch(page, sortStateidx, searched=None):
         mycursor.execute(query, (offset,))
   else:
       if is_valid_equipment_id(searched) or is_valid_id(searched):
+        query = (
+            f"SELECT * FROM professor "
+            f"WHERE (ProfessorID = %s) "
+            f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+        )        
+      else:
         query = (
             f"SELECT * FROM professor "
             f"WHERE MATCH(ProfessorID, FirstName, LastName) "
