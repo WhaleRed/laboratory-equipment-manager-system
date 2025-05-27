@@ -75,7 +75,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         self.page_box_Prof.returnPressed.connect(self.go_to_page)
         self.page_box_Students.returnPressed.connect(self.go_to_page)
-
+        
+        # ui updates
+        self.Admin_Page.currentChanged.connect(self.onIndexChanged)
+        self.Dashboard_Frame.currentChanged.connect(self.onIndexChanged)
+        self.Dashboard_Frame_Borrowers.currentChanged.connect(self.onIndexChanged)
+        
         #Add item connections
         self.next_button_uinfo.clicked.connect(self.setItemTableValues)
         self.borrow_button_user.clicked.connect(self.populateAddItemBorrow)
@@ -84,6 +89,37 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.addItemState = 2
 
 #-----Helper-----#
+
+    def onIndexChanged(self):
+      
+      self.pageNum = "1"
+      current_SWPage = self.Admin_Page.currentIndex()
+      
+      match current_SWPage:
+          case 0:
+              current_tab_index = self.Dashboard_Frame.currentIndex()
+              match current_tab_index:
+                  case 0:  # borrow table
+                      self.populateBorrowTable()
+                  case 1:  # return table
+                      self.populateReturnTable()
+                  case 2:  # replace table
+                      self.populateReplaceTable()
+                  case _:
+                      print("Unknown table index")
+          case 1:
+              self.populateEquipmentTable()
+          case 2:
+              current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
+              match current_tab_index:
+                case 0:
+                  self.populateProfTable()
+                case 1:
+                  self.populateBorrowerTable()
+          case _:
+              print(f"Unknown admin page index: {current_SWPage}")
+              
+      self.update_button_state()
 
     def populateCurrentTable(self):
       
