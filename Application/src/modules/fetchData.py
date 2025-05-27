@@ -1003,13 +1003,18 @@ def searchReturnedEquipmentMatch(page, sortStateidx, dateState, searched=None):
             f"WHERE 1=1 {dateFilter}"
         )
   else:
-      if is_valid_equipment_id(searched) or is_valid_id(searched):
-        count_query = (
-            f"SELECT COUNT(*) FROM returned_equipment "
-            f"WHERE MATCH(EquipmentID, BorrowerID, State) "
-            f"AGAINST (%s IN BOOLEAN MODE) "
-            f"{dateFilter}"
-        )
+    if is_valid_equipment_id(searched) or is_valid_id(searched):
+      count_query = (
+          f"SELECT COUNT(*) FROM returned_equipment "
+          f"WHERE (EquipmentID = %s OR BorrowerID = %s) {dateFilter}"
+      )       
+    else:
+      count_query = (
+          f"SELECT COUNT(*) FROM returned_equipment "
+          f"WHERE MATCH(EquipmentID, BorrowerID, State) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"{dateFilter}"
+      )
   
   mycursor.execute(count_query, (searched,) if searched else ())
   total_count = mycursor.fetchone()[0] 
@@ -1082,13 +1087,18 @@ def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
             f"WHERE 1=1 {dateFilter}"
         )
   else:
-      if is_valid_equipment_id(searched) or is_valid_id(searched):
-        count_query = (
-            f"SELECT COUNT(*) FROM replaced_equipment "
-            f"WHERE MATCH(EquipmentID, BorrowerID) "
-            f"AGAINST (%s IN BOOLEAN MODE) "
-            f"{dateFilter}"
-        )
+    if is_valid_equipment_id(searched) or is_valid_id(searched):
+      count_query = (
+          f"SELECT COUNT(*) FROM replaced_equipment "
+          f"WHERE (EquipmentID = %s OR BorrowerID = %s) {dateFilter}"   
+      )
+    else:
+      count_query = (
+          f"SELECT COUNT(*) FROM replaced_equipment "
+          f"WHERE MATCH(EquipmentID, BorrowerID) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"{dateFilter}"
+      )
   
   mycursor.execute(count_query, (searched,) if searched else ())
   total_count = mycursor.fetchone()[0] 
