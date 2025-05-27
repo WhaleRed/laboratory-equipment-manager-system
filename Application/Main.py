@@ -273,9 +273,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
           if searchKeyword:
               data, count = fetchData.searchBorrowerMatch(page, sortState, searchKeyword)
           else:
-              print("fetching data")
               data, count = fetchData.searchBorrowerMatch(page, sortState)
-              print(f"student data: {fetchData}")
           
           self.page_box_Students.setText(f"{self.pageNum}")
               
