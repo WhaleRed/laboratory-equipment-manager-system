@@ -6,6 +6,7 @@ class Confirmation:
     def __init__(self, ui: Ui_MainWindow):
         self.ui = ui
         self.parent_widget = self.ui.centralwidget
+        self.ui.next_button_additem.clicked.connect(self.User_Table_Inputs)
 
     
     def show_warning(self, title, message):
