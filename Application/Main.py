@@ -286,7 +286,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.inventory_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[3])))
                 
                 btn = self.createOptionsButtonED(item[0])
-                self.borrow_table.setCellWidget(row, 4, btn)
+                self.inventory_table.setCellWidget(row, 4, btn)
                 
         except Exception as e:
             print(f"Error in populateEquipmentTable: {e}")
@@ -839,7 +839,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def openAddItem(self):
         from src.uifolder.add_dialog import AddDialog
         dialog = AddDialog(self)
-
+        
         if dialog.exec():
             self.populateEquipmentTable()  # Refresh the equipment table after adding a new item
 
