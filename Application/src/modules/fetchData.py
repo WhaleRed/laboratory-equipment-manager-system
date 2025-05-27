@@ -79,38 +79,91 @@ def build_category_map():
 CATEGORY_MAP = build_category_map()
 
 #-----For getting items in use-----#
-def fetchItemsInUse(borrowerID):
+def fetchItemsInUse(borrowerID, page):
   mycursor = db.cursor()
   
-  mycursor.execute("SELECT e.Equipment_name, b.Quantity FROM equipment e INNER JOIN borrowed_equipment b ON e.equipmentID = b.equipmentID WHERE b.borrowerID = %s", (borrowerID,))
+  offset = (page - 1) * PAGE_SIZE
+  
+  count_query = """
+    SELECT COUNT(*)
+    FROM borrowed_equipment
+    WHERE borrowerID = %s
+    """
+    
+  mycursor.execute(count_query, (borrowerID,))
+  count = mycursor.fetchone()[0]
+    
+  query = """
+    SELECT e.Equipment_name, b.Quantity
+    FROM equipment e
+    INNER JOIN borrowed_equipment b ON e.equipmentID = b.equipmentID
+    WHERE b.borrowerID = %s
+    LIMIT %s OFFSET %s
+    """
+    
+  mycursor.execute(query, (borrowerID, PAGE_SIZE, offset))
   results = mycursor.fetchall()
   
   mycursor.close()
   
-  return results
+  return results, count
 
 #-----For getting damaged items-----#
-def fetchDamagedItems(borrowerID):
-  mycursor = db.cursor()
-  
-  mycursor.execute("SELECT e.Equipment_name, b.Quantity FROM equipment e INNER JOIN returned_equipment b ON e.equipmentID = b.equipmentID WHERE BorrowerID = %s and State = 'Damaged'", (borrowerID,))
-  results = mycursor.fetchall()
-  
-  mycursor.close()
-  
-  return results
+def fetchDamagedItems(borrowerID, page):
+    mycursor = db.cursor()
+
+    offset = (page - 1) * PAGE_SIZE
+
+    count_query = """
+      SELECT COUNT(*)
+      FROM returned_equipment
+      WHERE BorrowerID = %s AND State = 'Damaged'
+      """
+    mycursor.execute(count_query, (borrowerID,))
+    count = mycursor.fetchone()[0]
+
+    query = """
+      SELECT e.Equipment_name, b.Quantity
+      FROM equipment e
+      INNER JOIN returned_equipment b ON e.equipmentID = b.equipmentID
+      WHERE b.BorrowerID = %s AND b.State = 'Damaged'
+      LIMIT %s OFFSET %s
+      """
+    mycursor.execute(query, (borrowerID, PAGE_SIZE, offset))
+    results = mycursor.fetchall()
+
+    mycursor.close()
+
+    return results, count
 
 #-----For getting available items-----#
 
-def fetchAvailableItems():
-  mycursor = db.cursor()
+def fetchAvailableItems(page):
+    mycursor = db.cursor()
+    
+    offset = (page - 1) * PAGE_SIZE
+    
+    count_query = """
+      SELECT COUNT(*)
+      FROM equipment
+      WHERE Available > 0
+      """
+    mycursor.execute(count_query)
+    count = mycursor.fetchone()[0]
+    
+    query = """
+      SELECT Equipment_name, Available
+      FROM equipment
+      WHERE Available > 0
+      LIMIT %s OFFSET %s
+      """
+    mycursor.execute(query, (PAGE_SIZE, offset))
+    results = mycursor.fetchall()
+    
+    mycursor.close()
+    
+    return results, count
 
-  mycursor.execute("SELECT Equipment_name, Available FROM equipment WHERE Available > 0")
-  results = mycursor.fetchall()
-  
-  mycursor.close()
-  
-  return results
 
 #-----For search with pagination-----#
 
@@ -932,7 +985,6 @@ def searchBorrowedEquipmentMatch(page, sortStateidx, dateState, searched=None):
             f"WHERE 1=1 {dateFilter}"
         )
   else:
-    print(f"is_valid_id(): {is_valid_id(searched)}")
     if is_valid_equipment_id(searched) or is_valid_id(searched):
       count_query = (
           f"SELECT COUNT(*) FROM borrowed_equipment "
