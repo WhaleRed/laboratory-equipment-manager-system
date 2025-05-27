@@ -1146,8 +1146,6 @@ def searchBorrowerMatch(page, sortStateidx, searched=None):
           f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
       )
       mycursor.execute(query, (searched, offset))
-  
-  mycursor.execute(query, (searched, offset))
 
   arr = mycursor.fetchall()
 
@@ -1253,8 +1251,6 @@ def searchProfessorMatch(page, sortStateidx, searched=None):
           f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
       )
       mycursor.execute(query, (searched, offset))
-  
-  mycursor.execute(query, (searched, offset))
 
   arr = mycursor.fetchall()
 
