@@ -14,6 +14,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__()
         self.setupUi(self)
         #self.setupTableBehavior()
+       
         
         self.connector = Connector(self)
         self.logic = Confirmation(self)
@@ -29,6 +30,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.populateBorrowerTable()
         #self.populateProfTable()
         
+        self.Admin_User_Page.setCurrentIndex(0) # Set the initial page to the first tab
+        self.User_Interactive_Page.setCurrentIndex(0) # Set the initial page to the first tab
         
         # Transaction connections
         self.searchbox_transaction.returnPressed.connect(self.getCurrentTransactionTable) # change pa ni
