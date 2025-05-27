@@ -2,7 +2,7 @@ from .EquipmentManager_CSM import Ui_MainWindow
 from .confirmation import Confirmation
 from .Professor_dialog import ProfessorDialog
 from .Student_dialog import Students_Dialog
-
+from .add_dialog import AddDialog
 class Connector:
     def __init__(self, ui: Ui_MainWindow):
         self.ui = ui
@@ -33,6 +33,7 @@ class Connector:
         # Add Item Dialog Buttons
         self.ui.addProfessor_button.clicked.connect(self.Professorsdialog)
         self.ui.addborrower_button.clicked.connect(self.Studentsdialog)
+        self.ui.additem_button.clicked.connect(self.AddItemDialog)
 
     def connect_user_interactive_buttons(self):
         # Back Buttons
@@ -109,7 +110,9 @@ class Connector:
             self.ui.User_Interactive_Page.setCurrentIndex(current_index + 1)
 
     # Student Professor and Add Item Dialog
-    
+    def AddItemDialog(self):
+        add_dialog = AddDialog()
+        add_dialog.exec()
 
     def Professorsdialog(self):
         professor_dialog = ProfessorDialog()
