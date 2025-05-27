@@ -122,7 +122,6 @@ def build_category_map():
     for idx, cat in enumerate(categories, start=1):
         cat_map[idx] = cat
         
-    print(f"Cat map: {cat_map}")
     return cat_map
 
 CATEGORY_MAP = build_category_map()
@@ -1248,7 +1247,6 @@ def searchEquipmentMatch(page, sortStateidx, categoryidx, searched=None):
   total_count = mycursor.fetchone()[0]
   
   if not searched:
-        print("Not searched")
         query = (
             f"SELECT * FROM equipment "
             f"WHERE 1=1 {catFilter}"
@@ -1257,7 +1255,6 @@ def searchEquipmentMatch(page, sortStateidx, categoryidx, searched=None):
         params.append(offset)
         mycursor.execute(query, params)
   else:
-      print("searched")
       query = (
           f"SELECT * FROM equipment "
           f"WHERE MATCH(EquipmentID, Equipment_name, Category) AGAINST (%s IN BOOLEAN MODE) "
