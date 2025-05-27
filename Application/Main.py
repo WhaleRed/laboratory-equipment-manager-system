@@ -14,7 +14,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super(MainWindow, self).__init__()
         self.setupUi(self)
         self.setupTableBehavior()
-       
         
         self.connector = Connector(self)
         self.logic = Confirmation(self)
@@ -91,7 +90,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.addItemState = 2
 
         # Add professor connection
-        self.addProfessor_button.clicked.connect(self.openProfessor)
+        #self.addProfessor_button.clicked.connect(self.openProfessor)
 
 #-----Helper-----#
 
@@ -100,9 +99,39 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
       self.pageNum = "1"
       current_SWPage = self.Admin_Page.currentIndex()
       
+      buttons = self.sidebar_buttons.findChildren(QtWidgets.QPushButton)
+      desired_btn_index = {
+          'borrow_button_sidebar': 0,
+          'inventory_button_sidebar': 1,
+          'user_button_sidebar': 2
+      }
+      
+      for btn in buttons:
+        btn_index = desired_btn_index.get(btn.objectName())
+        if btn_index == current_SWPage:
+            btn.setStyleSheet("""
+                color: white;
+                border-top-left-radius: 18px;
+                border-bottom-left-radius: 18px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                background-color: #7a0000;  /* Dark red */
+            """)
+        else:
+            btn.setStyleSheet("""
+                color: white;
+                border-top-left-radius: 18px;
+                border-bottom-left-radius: 18px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                background-color: #A70000;  /* Default red */
+            """)
+    
+      
       match current_SWPage:
           case 0:
               current_tab_index = self.Dashboard_Frame.currentIndex()
+              
               match current_tab_index:
                   case 0:  # borrow table
                       self.populateBorrowTable()
