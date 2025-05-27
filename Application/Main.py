@@ -59,6 +59,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         #Add item connections
         self.next_button_uinfo.clicked.connect(self.addItemCombobox)
+        self.borrow_button_user.clicked.connect(self.populateAddItemBorrow)
+        self.return_button_user.clicked.connect(self.populateAddItemReturn)
+        self.replace_button_user.clicked.connect(self.populateAddItemReplace)
 
 #-----Helper-----#
 
@@ -452,12 +455,32 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         except Exception as e:
             print(f"Error in update_button_state: {e}")
 
-#-----Combobox choices-----#
+#-----Add item-----#
     def addItemCombobox(self):
         data = fetchData.fetchCategory()
         for row in data:
             self.category_box_additem.addItem(str(row))
     
+    def populateAddItemBorrow(self):
+        pass
+    
+    def populateAddItemReturn(self):
+        self.Item_table.clearContents()
+        data = fetchData.fetchItemsInUse(self.idno_uinfo.text())
+        self.Item_table.setRowCount(len(data))
+        for row, item in data:
+            self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
+            self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
+            
+    
+    def populateAddItemReplace(self):
+        self.Item_table.clearContents()
+        data = fetchData.fetchDamagedItems(self.idno_uinfo.text())
+        self.Item_table.setRowCount(len(data))
+        for row, item in data:
+            self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
+            self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
+
 if __name__ == "__main__":
   app = QApplication(sys.argv)
   window = MainWindow()
