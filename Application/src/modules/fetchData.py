@@ -75,7 +75,7 @@ CATEGORY_MAP = build_category_map()
 def fetchItemsInUse(borrowerID):
   mycursor = db.cursor()
   
-  mycursor.execute("SELECT Equipment_name, Quantity FROM Borrowed_equipment WHERE BorrowerID = %s AND State = 'In use'", (borrowerID,))
+  mycursor.execute("SELECT e.Equipment_name, b.Quantity FROM equipment e INNER JOIN borrowed_equipment b ON e.equipmentID = b.equipmentID WHERE b.borrowerID = %s", (borrowerID,))
   results = mycursor.fetchall()
   
   mycursor.close()
@@ -86,7 +86,7 @@ def fetchItemsInUse(borrowerID):
 def fetchDamagedItems(borrowerID):
   mycursor = db.cursor()
   
-  mycursor.execute("SELECT Equipment_name, Quantity FROM Returned_equipment WHERE BorrowerID = %s and State = 'Damaged'", (borrowerID,))
+  mycursor.execute("SELECT e.Equipment_name, b.Quantity FROM equipment e INNER JOIN returned_equipment b ON e.equipmentID = b.equipmentID WHERE BorrowerID = %s and State = 'Damaged'", (borrowerID,))
   results = mycursor.fetchall()
   
   mycursor.close()
