@@ -88,11 +88,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def populateCurrentTable(self):
       
         currentSWpage = self.Admin_Page.currentIndex()
-        current_index = self.Dashboard_Frame.currentIndex()
         
         match currentSWpage:
           case 0:
-            match current_index:
+            current_tab_index = self.Dashboard_Frame.currentIndex()
+            match current_tab_index:
               case 0:  
                   self.populateBorrowTable()
               case 1:  
@@ -102,7 +102,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
               case _:
                   print("Unknown table index")
           case 2:
-            match current_index:
+            current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
+            match current_tab_index:
               case 0:
                 self.populateProfTable()
               case 1:
@@ -366,7 +367,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def go_to_next_page(self):
         try:
             current_SWPage = self.Admin_Page.currentIndex()
-            current_tab_index = self.Dashboard_Frame.currentIndex()
             
             current_page = int(self.pageNum)
             current_page += 1
@@ -376,6 +376,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             
             match current_SWPage:
                 case 0:
+                    current_tab_index = self.Dashboard_Frame.currentIndex()
                     match current_tab_index:
                         case 0:  # borrow table
                             self.populateBorrowTable()
@@ -388,11 +389,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 case 1:
                     self.populateEquipmentTable()
                 case 2:
-                  match current_tab_index:
-                    case 0:
-                      self.populateProfTable()
-                    case 1:
-                      self.populateBorrowerTable()
+                    current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
+                    match current_tab_index:
+                      case 0:
+                        self.populateProfTable()
+                      case 1:
+                        self.populateBorrowerTable()
                 case _:
                     print(f"Unknown admin page index: {current_SWPage}")
                             
@@ -403,7 +405,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def go_to_prev_page(self):
         try:
             current_SWPage = self.Admin_Page.currentIndex()
-            current_tab_index = self.Dashboard_Frame.currentIndex()
             
             current_page = int(self.pageNum)
             current_page -= 1
@@ -411,6 +412,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             match current_SWPage:
                 case 0:
+                    current_tab_index = self.Dashboard_Frame.currentIndex()
                     match current_tab_index:
                         case 0:  # borrow table
                             self.populateBorrowTable()
@@ -423,6 +425,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 case 1: 
                     self.populateEquipmentTable()
                 case 2:
+                    current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
                     match current_tab_index:
                       case 0:
                         self.populateProfTable()
@@ -438,12 +441,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def go_to_page(self):
         try:
             current_SWPage = self.Admin_Page.currentIndex()
-            current_tab_index = self.Dashboard_Frame.currentIndex()
             
             match current_SWPage:
                 case 0:
                     current_tab_index = self.Dashboard_Frame.currentIndex()
-                    
                     match current_tab_index:
                         case 0:  # borrow table
                             page_input = self.page_box_borow.text().strip() 
@@ -457,11 +458,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 case 1:
                     page_input = self.page_box_inventory.text().strip()
                 case 2: 
+                    current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
                     match current_tab_index:
                         case 0:
-                          self.populateProfTable()
+                          page_input = self.page_box_Prof.text().strip() 
                         case 1:
-                          self.populateBorrowerTable()
+                          page_input = self.page_box_Students.text().strip() 
                 case _:
                     print("Unknown admin page index")
                     return
@@ -473,6 +475,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     
                     match current_SWPage:
                         case 0:
+                            current_tab_index = self.Dashboard_Frame.currentIndex()
                             match current_tab_index:
                                 case 0:  # borrow table
                                     self.populateBorrowTable()
@@ -485,13 +488,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                         case 1: 
                             self.populateEquipmentTable()
                         case 2:
-                          match current_tab_index:
-                            case 0:
-                              self.populateProfTable()
-                            case 1:
-                              self.populateBorrowerTable()
-                            case _:
-                                print("Unknown table page index")
+                            current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
+                            match current_tab_index:
+                              case 0:
+                                self.populateProfTable()
+                              case 1:
+                                self.populateBorrowerTable()
+                              case _:
+                                  print("Unknown table page index")
                       
                     self.update_button_state()
                 else:
@@ -533,11 +537,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def update_button_state(self):
         try:
-            current_SWPage = self.Admin_Page.currentIndex()
-            current_tab_index = self.Dashboard_Frame.currentIndex() 
+            current_SWPage = self.Admin_Page.currentIndex() 
             
             match current_SWPage:
                 case 0:
+                    current_tab_index = self.Dashboard_Frame.currentIndex()
                     match current_tab_index:
                         case 0:  # borrow table
                             current_page = int(self.pageNum) 
@@ -567,6 +571,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.arrow_left.setEnabled(current_page > 1)
                     self.arrow_right.setEnabled(current_page < total_pages)
                 case 2:
+                  current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
                   match current_tab_index:
                     case 0:
                       self.populateProfTable()
@@ -620,7 +625,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def populateAddItemReturn(self):
         self.addItemState = 0
             
-    
     def populateAddItemReplace(self):
         self.addItemState = 1
 
