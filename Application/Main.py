@@ -27,7 +27,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.populateBorrowTable()
         self.populateReplaceTable()
         self.populateBorrowerTable()
-        #self.populateProfTable()
+        self.populateProfTable()
         
         
         # Transaction connections
@@ -287,15 +287,51 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
               self.Students_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
               self.Students_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[2])))
               self.Students_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[3])))
-              self.Students_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[3])))
-              self.Students_table.setItem(row, 5, QtWidgets.QTableWidgetItem(str(item[3])))
+              self.Students_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[4])))
+              self.Students_table.setItem(row, 5, QtWidgets.QTableWidgetItem(str(item[5])))
               
               btn = self.createOptionsButton(item[0])
               self.Students_table.setCellWidget(row, 6, btn)
               
       except Exception as e:
             print(f"Error in populateBorrowerTable: {e}")
+            
+    def populateProfTable(self):
+      try:
+          sortState = self.Filter_box_Prof.currentIndex() or 0
+          
+          searchKeyword = self.searchbox_borrowers.text().strip()
+          
+          data = []
+          page = int(self.pageNum)
+          
+          self.Professors_table.clearContents()
+
+          if searchKeyword:
+              data, count = fetchData.searchBorrowerMatch(page, sortState, searchKeyword)
+          else:
+              data, count = fetchData.searchBorrowerMatch(page, sortState)
+          
+          self.page_box_Prof.setText(f"{self.pageNum}")
+              
+          self.total_pages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
+          self.ofTotal_Pages_Prof.setText(f"of {self.total_pages}")
+          
+      
+          self.Professors_table.setRowCount(len(data))
+          for row, item in enumerate(data):
+              self.Professors_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
+              self.Professors_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
+              self.Professors_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[2])))
+              
+              print(f"prof id: {item[0]}")
+              btn = self.createOptionsButton(item[0])
+              self.Professors_table.setCellWidget(row, 3, btn)
+              
+      except Exception as e:
+            print(f"Error in populateBorrowerTable: {e}")
         
+    
       
 #-----Edit and Delete functions-----#
 
