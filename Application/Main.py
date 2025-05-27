@@ -22,6 +22,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.total_pages = 1 # initial
         self.per_page = 10
         
+        #for users page
+        self.UpageNum = 1
+        self.UtotalPages = 1
+        
         self.populateEquipmentTable()
         self.populateReturnTable()
         self.populateBorrowTable()
@@ -215,6 +219,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         btn.setMenu(menu)
 
         return btn
+      
+    def createQuantitySpinBox(self, max_quantity):
+        spinbox = QtWidgets.QSpinBox()
+        spinbox.setMinimum(1)
+        spinbox.setMaximum(max_quantity)
+        spinbox.setValue(1)  # default selected quantity
+        return spinbox
       
     def createOptionsButtonED(self, id):
         btn = QtWidgets.QPushButton(" ⋮ ")
@@ -460,6 +471,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
               btn = self.createOptionsButtonED(item[0])
               self.Professors_table.setCellWidget(row, 3, btn)
               
+              btn = self.createOptionsButtonED(item[0])
+              self.Professors_table.setCellWidget(row, 3, btn)
+              
       except Exception as e:
             print(f"Error in populateBorrowerTable: {e}")
       
@@ -505,8 +519,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                             "Delete Failed",
                             f"This {field} cannot be deleted because it is referenced in another table."
                         )
+        else:
+            QtWidgets.QMessageBox.message(
+                            self,
+                            "Delete Failed",
+                            f"This {field} cannot be deleted because it is referenced in another table."
+                        )
         
-#-----Page navigation for transaction tables-----# 
+#-----Page navigation for admin tables-----# 
     
     def go_to_next_page(self):
         try:
@@ -718,40 +738,84 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         except Exception as e:
             print(f"Error in update_button_state: {e}")
 
+    def update_UpageNumber(self):
+      self.Page.setText(f"{self.UpageNum} of {self.UtotalPages}")  # page _ of _
+      self.decrement.setEnabled(self.UpageNum > 1)
+      self.increment.setEnabled(self.UpageNum < self.UtotalPages)
+
 #-----Add item-----#
     def setItemTableValues(self):
+      try:
         data = fetchData.fetchCategory()
+        page = self.UpageNum
+        
+        #for category, connect cat combobox. if indexchanged, trigger this function again. db func should accept cat as param
+        
+        category = self.category_box_additem.currentIndex() #fetches current cat ids for cat map
+        
         for row in data:
             self.category_box_additem.addItem(str(row))
         if self.addItemState == 0:
             self.Item_table.clearContents()
-            data = fetchData.fetchItemsInUse(self.idno_uinfo.text())
+            data, count = fetchData.fetchItemsInUse(self.idno_uinfo.text(), page)
+            
+            self.update_UpageNumber()
+            
+            self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
+            
             self.Item_table.setRowCount(len(data))
             row = 0
             for item in data:
                 self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
                 self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
+                
+                available_qty = int(item[2]) if len(item) > 2 else 1
+                spinbox = self.createQuantitySpinBox(available_qty)
+                self.Item_table.setCellWidget(row, 2, spinbox)
+                
                 row += 1
 
         elif  self.addItemState == 1:
             self.Item_table.clearContents()
-            data = fetchData.fetchDamagedItems(self.idno_uinfo.text())
+            data, count = fetchData.fetchDamagedItems(self.idno_uinfo.text(), page)
+            
+            self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
+            
+            self.update_UpageNumber()
+            
             self.Item_table.setRowCount(len(data))
             row = 0
             for item in data:
                 self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
                 self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
+                
+                available_qty = int(item[2]) if len(item) > 2 else 1
+                spinbox = self.createQuantitySpinBox(available_qty)
+                self.Item_table.setCellWidget(row, 2, spinbox)
+                
                 row += 1
 
         elif  self.addItemState == 2:
             self.Item_table.clearContents()
-            data = fetchData.fetchAvailableItems()
+            data, count = fetchData.fetchAvailableItems(page)
+            
+            self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
+            
+            self.update_UpageNumber()
+            
             self.Item_table.setRowCount(len(data))
             row = 0
             for item in data:
                 self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
                 self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
+                
+                available_qty = int(item[2]) if len(item) > 2 else 1
+                spinbox = self.createQuantitySpinBox(available_qty)
+                self.Item_table.setCellWidget(row, 2, spinbox)
+                
                 row += 1
+      except Exception as e:
+            print(f"Failed to populate: {e}")
     
     def populateAddItemBorrow(self):
         self.addItemState = 2
