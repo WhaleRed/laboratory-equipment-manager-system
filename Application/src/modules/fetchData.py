@@ -961,6 +961,22 @@ def searchBorrowedEquipmentMatch(page, sortStateidx, dateState, searched=None):
     unit, value = DATE_OPTIONS[dateState]
     dateFilter = f"AND Borrow_date >= DATE_SUB(NOW(), INTERVAL {value} {unit})"
     
+  if not searched:
+        count_query = (
+            f"SELECT COUNT(*) FROM borrowed_equipment "
+            f"WHERE 1=1 {dateFilter}"
+        )
+  else:
+      count_query = (
+          f"SELECT COUNT(*) FROM borrowed_equipment "
+          f"WHERE MATCH(EquipmentID, BorrowerID, State) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"{dateFilter}"
+      )
+  
+  mycursor.execute(count_query, (searched,) if searched else ())
+  total_count = mycursor.fetchone()[0] 
+    
   if not searched:  # if empty or None
         if sortState == "Borrow_date":
             query = (
@@ -998,7 +1014,7 @@ def searchBorrowedEquipmentMatch(page, sortStateidx, dateState, searched=None):
   arr = mycursor.fetchall()
 
   mycursor.close()
-  return arr
+  return arr, total_count
 
 
 def searchReturnedEquipmentMatch(page, sortStateidx, dateState, searched=None):
@@ -1008,14 +1024,30 @@ def searchReturnedEquipmentMatch(page, sortStateidx, dateState, searched=None):
 
   sortState = SORT_FIELDS_RETURNED.get(sortStateidx)
   if not sortState:
-      return 1      #Attempt to inject
+      return 1      # Attempt to inject
   
   dateFilter = ""
   if dateState != 0:
     if dateState not in DATE_OPTIONS:
-        return 1  # Invalid dateState
+        return 1  # Attempt to inject
     unit, value = DATE_OPTIONS[dateState]
     dateFilter = f"AND Borrow_date >= DATE_SUB(NOW(), INTERVAL {value} {unit})"
+    
+  if not searched:
+        count_query = (
+            f"SELECT COUNT(*) FROM returned_equipment "
+            f"WHERE 1=1 {dateFilter}"
+        )
+  else:
+      count_query = (
+          f"SELECT COUNT(*) FROM returned_equipment "
+          f"WHERE MATCH(EquipmentID, BorrowerID, State) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"{dateFilter}"
+      )
+  
+  mycursor.execute(count_query, (searched,) if searched else ())
+  total_count = mycursor.fetchone()[0] 
   
   if not searched:  # if empty or None
         if sortState == "Return_date":
@@ -1055,7 +1087,7 @@ def searchReturnedEquipmentMatch(page, sortStateidx, dateState, searched=None):
 
   mycursor.close()
   
-  return arr
+  return arr, total_count
 
 
 def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
@@ -1073,6 +1105,22 @@ def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
         return 1  # Invalid dateState
     unit, value = DATE_OPTIONS[dateState]
     dateFilter = f"AND Replacement_date >= DATE_SUB(NOW(), INTERVAL {value} {unit})"
+    
+  if not searched:
+        count_query = (
+            f"SELECT COUNT(*) FROM replaced_equipment "
+            f"WHERE 1=1 {dateFilter}"
+        )
+  else:
+      count_query = (
+          f"SELECT COUNT(*) FROM replaced_equipment "
+          f"WHERE MATCH(EquipmentID, BorrowerID) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"{dateFilter}"
+      )
+  
+  mycursor.execute(count_query, (searched,) if searched else ())
+  total_count = mycursor.fetchone()[0] 
   
   if not searched:  # if empty or None
         if sortState == "replacement_date":
@@ -1112,7 +1160,7 @@ def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
   arr = mycursor.fetchall()
 
   mycursor.close()
-  return arr
+  return arr, total_count
 
 
 def searchBorrowerMatch(page, sortState, searched=None):
@@ -1124,19 +1172,43 @@ def searchBorrowerMatch(page, sortState, searched=None):
   if sortState not in validSortField:
     return 1      #Attempt to inject
   
-  query = (
-        f"SELECT * FROM borrower "
-        f"WHERE MATCH(ProfessorID, BorrowerID, FirstName, LastName, Program, YearLevel) "
-        f"AGAINST (%s IN BOOLEAN MODE) "
-        f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
-    )
+  if not searched:
+        count_query = (
+            f"SELECT COUNT(*) FROM borrower "
+            f"WHERE 1=1"
+        )
+        mycursor.execute(count_query)
+  else:
+      count_query = (
+          f"SELECT COUNT(*) FROM borrower "
+          f"WHERE MATCH(ProfessorID, BorrowerID, FirstName, LastName, Program, YearLevel) "
+          f"AGAINST (%s IN BOOLEAN MODE)"
+      )
+      mycursor.execute(count_query, (searched,))
+
+  total_count = mycursor.fetchone()[0]
+  
+  if not searched:
+        query = (
+            f"SELECT * FROM borrower "
+            f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+        )
+        mycursor.execute(query, (offset,))
+  else:
+      query = (
+          f"SELECT * FROM borrower "
+          f"WHERE MATCH(ProfessorID, BorrowerID, FirstName, LastName, Program, YearLevel) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+      )
+      mycursor.execute(query, (searched, offset))
   
   mycursor.execute(query, (searched, offset))
 
   arr = mycursor.fetchall()
 
   mycursor.close()
-  return arr
+  return arr, total_count
 
 
 def searchEquipmentMatch(page, sortStateidx, categoryidx, searched=None):
@@ -1157,6 +1229,23 @@ def searchEquipmentMatch(page, sortStateidx, categoryidx, searched=None):
   if category is not None:
         catFilter = "AND Category = %s "
         params.append(category)
+        
+  if not searched:
+        count_query = (
+            f"SELECT COUNT(*) FROM equipment "
+            f"WHERE 1=1 {catFilter}"
+        )
+        mycursor.execute(count_query, params)
+  else:
+      count_query = (
+          f"SELECT COUNT(*) FROM equipment "
+          f"WHERE MATCH(EquipmentID, Equipment_name, Category) AGAINST (%s IN BOOLEAN MODE) "
+          f"{catFilter}"
+      )
+      params = [searched] + params  
+      mycursor.execute(count_query, params)
+  
+  total_count = mycursor.fetchone()[0]
   
   if not searched:
         print("Not searched")
@@ -1181,7 +1270,7 @@ def searchEquipmentMatch(page, sortStateidx, categoryidx, searched=None):
   arr = mycursor.fetchall()
 
   mycursor.close()
-  return arr
+  return arr, total_count
 
 
 def searchProfessorMatch(page, sortState, searched=None):
@@ -1193,16 +1282,39 @@ def searchProfessorMatch(page, sortState, searched=None):
   if sortState not in validSortField:
     return 1      #Attempt to inject
   
-  query = (
-        f"SELECT * FROM professor "
-        f"WHERE MATCH(ProfessorID, FirstName, LastName) "
-        f"AGAINST (%s IN BOOLEAN MODE) "
-        f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
-    )
+  if not searched:
+        count_query = (
+            f"SELECT COUNT(*) FROM professor "
+            f"WHERE 1=1"
+        )
+        mycursor.execute(count_query)
+  else: 
+      count_query = (
+          f"SELECT COUNT(*) FROM professor "
+          f"WHERE MATCH(ProfessorID, FirstName, LastName) AGAINST (%s IN BOOLEAN MODE)"
+      )
+      mycursor.execute(count_query, (searched,))
+
+  total_count = mycursor.fetchone()[0]
+  
+  if not searched:
+        query = (
+            f"SELECT * FROM professor "
+            f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+        )
+        mycursor.execute(query, (offset,))
+  else:
+      query = (
+          f"SELECT * FROM professor "
+          f"WHERE MATCH(ProfessorID, FirstName, LastName) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+      )
+      mycursor.execute(query, (searched, offset))
   
   mycursor.execute(query, (searched, offset))
 
   arr = mycursor.fetchall()
 
   mycursor.close()
-  return arr
+  return arr, total_count
