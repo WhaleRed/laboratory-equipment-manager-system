@@ -89,6 +89,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.return_button_user.clicked.connect(self.populateAddItemReturn)
         self.replace_button_user.clicked.connect(self.populateAddItemReplace)
         self.addItemState = 2
+        self.additem_button.clicked.connect(self.openAddItem)  # Add item button connection
 
         # Add professor connection
         self.addProfessor_button.clicked.connect(self.openProfessor)
@@ -740,6 +741,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if dialog.exec():
             self.populateProfTable()  # Refresh the professor table after adding a new professor
+
+    #-----Add Item-----#
+    def openAddItem(self):
+        from src.uifolder.add_dialog import AddDialog
+        dialog = AddDialog(self)
+
+        if dialog.exec():
+            self.populateEquipmentTable()  # Refresh the equipment table after adding a new item
 
 if __name__ == "__main__":
   app = QApplication(sys.argv)
