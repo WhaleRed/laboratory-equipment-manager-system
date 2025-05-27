@@ -1,61 +1,7 @@
 import os
 from dotenv import load_dotenv
+from utils import mappings
 import mysql.connector
-
-DATE_OPTIONS = {
-        1: ("HOUR", 1),
-        2: ("HOUR", 3),
-        3: ("DAY", 1),
-        4: ("DAY", 7),
-        5: ("DAY", 30),
-        6: ("DAY", 90),
-        7: ("DAY", 180),
-    }
-
-SORT_FIELDS_BORROWED = {
-    0: "Borrow_date",
-    1: "EquipmentID",
-    2: "BorrowerID",
-    3: "State",
-    4: "Quantity"
-}
-
-SORT_FIELDS_RETURNED = {
-    0: "Return_date",
-    1: "EquipmentID",
-    2: "BorrowerID",
-    3: "State",
-    4: "Quantity"
-}
-
-SORT_FIELDS_REPLACED = {
-    0: "Replacement_date",
-    1: "EquipmentID",
-    2: "BorrowerID",
-    3: "Quantity"
-}
-
-SORT_FIELDS_BORROWER = {
-    0: "ProfessorID",
-    1: "BorrowerID",
-    2: "FirstName",
-    3: "LastName",
-    4: "Program",
-    5: "YearLevel"
-}
-
-SORT_FIELDS_EQUIPMENT = {
-    0: "EquipmentID",
-    1: "Equipment_name",
-    2: "Category",
-    3: "Available"
-}
-
-SORT_FIELDS_PROFESSOR = {
-    0: "ProfessorID",
-    1: "FirstName",
-    2: "LastName"
-}
 
 load_dotenv()
 
@@ -115,7 +61,6 @@ def fetchCategory():
   
   return [row[0] for row in results]
 
-# temporary, will move mapping to other file
 def build_category_map():
     categories = fetchCategory()
     cat_map = {0: None}
@@ -949,15 +894,15 @@ def searchBorrowedEquipmentMatch(page, sortStateidx, dateState, searched=None):
 
   offset = (page-1) * 10
 
-  sortState = SORT_FIELDS_BORROWED.get(sortStateidx)
+  sortState = mappings.SORT_FIELDS_BORROWED.get(sortStateidx)
   if not sortState:
       return 1      #Attempt to inject
   
   dateFilter = ""
   if dateState != 0:
-    if dateState not in DATE_OPTIONS:
+    if dateState not in mappings.DATE_OPTIONS:
         return 1  # Invalid dateState
-    unit, value = DATE_OPTIONS[dateState]
+    unit, value = mappings.DATE_OPTIONS[dateState]
     dateFilter = f"AND Borrow_date >= DATE_SUB(NOW(), INTERVAL {value} {unit})"
     
   if not searched:
@@ -1021,15 +966,15 @@ def searchReturnedEquipmentMatch(page, sortStateidx, dateState, searched=None):
 
   offset = (page-1) * 10
 
-  sortState = SORT_FIELDS_RETURNED.get(sortStateidx)
+  sortState = mappings.SORT_FIELDS_RETURNED.get(sortStateidx)
   if not sortState:
       return 1      # Attempt to inject
   
   dateFilter = ""
   if dateState != 0:
-    if dateState not in DATE_OPTIONS:
+    if dateState not in mappings.DATE_OPTIONS:
         return 1  # Attempt to inject
-    unit, value = DATE_OPTIONS[dateState]
+    unit, value = mappings.DATE_OPTIONS[dateState]
     dateFilter = f"AND Borrow_date >= DATE_SUB(NOW(), INTERVAL {value} {unit})"
     
   if not searched:
@@ -1094,15 +1039,15 @@ def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
 
   offset = (page-1) * 10
 
-  sortState = SORT_FIELDS_REPLACED.get(sortStateidx)
+  sortState = mappings.SORT_FIELDS_REPLACED.get(sortStateidx)
   if not sortState:
       return 1      #Attempt to inject
   
   dateFilter = ""
   if dateState != 0:
-    if dateState not in DATE_OPTIONS:
+    if dateState not in mappings.DATE_OPTIONS:
         return 1  # Invalid dateState
-    unit, value = DATE_OPTIONS[dateState]
+    unit, value = mappings.DATE_OPTIONS[dateState]
     dateFilter = f"AND Replacement_date >= DATE_SUB(NOW(), INTERVAL {value} {unit})"
     
   if not searched:
@@ -1162,14 +1107,14 @@ def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
   return arr, total_count
 
 
-def searchBorrowerMatch(page, sortState, searched=None):
+def searchBorrowerMatch(page, sortStateidx, searched=None):
   mycursor = db.cursor()
 
   offset = (page-1) * 10
 
-  validSortField = {'ProfessorID', 'BorrowerID', 'FirstName', 'LastName', 'Program', 'YearLevel'}
-  if sortState not in validSortField:
-    return 1      #Attempt to inject
+  sortState = mappings.SORT_FIELDS_BORROWER.get(sortStateidx)
+  if not sortState:
+      return 1      #Attempt to inject
   
   if not searched:
         count_query = (
@@ -1216,7 +1161,7 @@ def searchEquipmentMatch(page, sortStateidx, categoryidx, searched=None):
 
   offset = (page-1) * 10
 
-  sortState = SORT_FIELDS_EQUIPMENT.get(sortStateidx)
+  sortState = mappings.SORT_FIELDS_EQUIPMENT.get(sortStateidx)
   if not sortState:
       return 1      #Attempt to inject
     
@@ -1270,14 +1215,14 @@ def searchEquipmentMatch(page, sortStateidx, categoryidx, searched=None):
   return arr, total_count
 
 
-def searchProfessorMatch(page, sortState, searched=None):
+def searchProfessorMatch(page, sortStateidx, searched=None):
   mycursor = db.cursor()
 
   offset = (page-1) * 10
 
-  validSortField = {'ProfessorID', 'FirstName', 'LastName'}
-  if sortState not in validSortField:
-    return 1      #Attempt to inject
+  sortState = mappings.SORT_FIELDS_PROFESSOR.get(sortStateidx)
+  if not sortState:
+      return 1      #Attempt to inject
   
   if not searched:
         count_query = (
