@@ -28,19 +28,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.populateBorrowTable()
         self.populateReplaceTable()
         self.populateBorrowerTable()
-        #self.populateProfTable()
+        self.populateProfTable()
         
         self.Admin_User_Page.setCurrentIndex(0) # Set the initial page to the first tab
         self.User_Interactive_Page.setCurrentIndex(0) # Set the initial page to the first tab
         
         # Transaction connections
-        self.searchbox_transaction.returnPressed.connect(self.getCurrentTransactionTable) # change pa ni
+        self.searchbox_transaction.returnPressed.connect(self.populateCurrentTable) # change pa ni
         
         self.Date_box_borrow.currentIndexChanged.connect(lambda _: self.populateBorrowTable())
         self.Date_box_return.currentIndexChanged.connect(lambda _: self.populateReturnTable())
         self.Date_box_replace.currentIndexChanged.connect(lambda _: self.populateReplaceTable())
-        
-        self.searchbox_inventory.returnPressed.connect(self.populateEquipmentTable)
         
         self.arrow_right_borrow.clicked.connect(self.go_to_next_page)
         self.arrow_right_return.clicked.connect(self.go_to_next_page)
@@ -64,7 +62,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.page_box_inventory.returnPressed.connect(self.go_to_page)
         
         # Users connections
-        self.searchbox_borrowers
+        self.searchbox_borrowers.returnPressed.connect(self.populateCurrentTable)
+        
+        self.Filter_box_Prof.currentIndexChanged.connect(self.populateProfTable)
+        self.Filter_box_Students.currentIndexChanged.connect(self.populateBorrowerTable)
+        
+        self.arrow_right_Prof.clicked.connect(self.go_to_next_page)
+        self.arrow_right_Students.clicked.connect(self.go_to_next_page)
+        
+        self.arrow_left_Prof.clicked.connect(self.go_to_prev_page)
+        self.arrow_left_Students.clicked.connect(self.go_to_prev_page)
+        
+        self.page_box_Prof.returnPressed.connect(self.go_to_page)
+        self.page_box_Students.returnPressed.connect(self.go_to_page)
 
         #Add item connections
         self.next_button_uinfo.clicked.connect(self.setItemTableValues)
@@ -75,22 +85,28 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 #-----Helper-----#
 
-    def getCurrentTransactionTable(self):
-        
+    def populateCurrentTable(self):
+      
+        currentSWpage = self.Admin_Page.currentIndex()
         current_index = self.Dashboard_Frame.currentIndex()
         
-        return current_index
-
-    def getCurrentTransactionTableSearch(self):
-        
-        current_index = self.Dashboard_Frame.currentIndex()
-        
-        if current_index == 0:
-            self.populateBorrowTable()
-        elif current_index == 1:
-            self.populateReturnTable()
-        elif current_index == 2:
-            self.populateReplaceTable()
+        match currentSWpage:
+          case 0:
+            match current_index:
+              case 0:  
+                  self.populateBorrowTable()
+              case 1:  
+                  self.populateReturnTable()
+              case 2:  
+                  self.populateReplaceTable()
+              case _:
+                  print("Unknown table index")
+          case 2:
+            match current_index:
+              case 0:
+                self.populateProfTable()
+              case 1:
+                self.populateBorrowerTable()
             
     def createOptionsButton(self, id):
         btn = QtWidgets.QPushButton(" ⋮ ")
@@ -294,15 +310,48 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
               self.Students_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
               self.Students_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[2])))
               self.Students_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[3])))
-              self.Students_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[3])))
-              self.Students_table.setItem(row, 5, QtWidgets.QTableWidgetItem(str(item[3])))
+              self.Students_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[4])))
+              self.Students_table.setItem(row, 5, QtWidgets.QTableWidgetItem(str(item[5])))
               
               btn = self.createOptionsButton(item[0])
               self.Students_table.setCellWidget(row, 6, btn)
               
       except Exception as e:
             print(f"Error in populateBorrowerTable: {e}")
-        
+            
+    def populateProfTable(self):
+      try:
+          sortState = self.Filter_box_Prof.currentIndex() or 0
+          
+          searchKeyword = self.searchbox_borrowers.text().strip()
+          
+          data = []
+          page = int(self.pageNum)
+          
+          self.Professors_table.clearContents()
+
+          if searchKeyword:
+              data, count = fetchData.searchBorrowerMatch(page, sortState, searchKeyword)
+          else:
+              data, count = fetchData.searchBorrowerMatch(page, sortState)
+          
+          self.page_box_Prof.setText(f"{self.pageNum}")
+              
+          self.total_pages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
+          self.ofTotal_Pages_Prof.setText(f"of {self.total_pages}")
+          
+      
+          self.Professors_table.setRowCount(len(data))
+          for row, item in enumerate(data):
+              self.Professors_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
+              self.Professors_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
+              self.Professors_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[2])))
+              
+              btn = self.createOptionsButton(item[0])
+              self.Professors_table.setCellWidget(row, 3, btn)
+              
+      except Exception as e:
+            print(f"Error in populateBorrowerTable: {e}")
       
 #-----Edit and Delete functions-----#
 
@@ -317,15 +366,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def go_to_next_page(self):
         try:
             current_SWPage = self.Admin_Page.currentIndex()
+            current_tab_index = self.Dashboard_Frame.currentIndex()
             
             current_page = int(self.pageNum)
             current_page += 1
             self.pageNum = str(current_page)
             
+            print(f"page num: {current_page}")
+            
             match current_SWPage:
                 case 0:
-                    current_tab_index = self.Dashboard_Frame.currentIndex()
-                    
                     match current_tab_index:
                         case 0:  # borrow table
                             self.populateBorrowTable()
@@ -337,9 +387,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                             print("Unknown table index")
                 case 1:
                     self.populateEquipmentTable()
-                #case 2: for users
+                case 2:
+                  match current_tab_index:
+                    case 0:
+                      self.populateProfTable()
+                    case 1:
+                      self.populateBorrowerTable()
                 case _:
-                    print("Unknown admin page index")
+                    print(f"Unknown admin page index: {current_SWPage}")
                             
             self.update_button_state()
         except Exception as e:
@@ -348,6 +403,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def go_to_prev_page(self):
         try:
             current_SWPage = self.Admin_Page.currentIndex()
+            current_tab_index = self.Dashboard_Frame.currentIndex()
             
             current_page = int(self.pageNum)
             current_page -= 1
@@ -355,7 +411,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             match current_SWPage:
                 case 0:
-                    current_tab_index = self.Dashboard_Frame.currentIndex()
                     match current_tab_index:
                         case 0:  # borrow table
                             self.populateBorrowTable()
@@ -367,7 +422,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                             print("Unknown table index")
                 case 1: 
                     self.populateEquipmentTable()
-                #case 2: users page
+                case 2:
+                    match current_tab_index:
+                      case 0:
+                        self.populateProfTable()
+                      case 1:
+                        self.populateBorrowerTable()
                 case _:
                     print("Unknown admin page index")
                 
@@ -378,6 +438,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def go_to_page(self):
         try:
             current_SWPage = self.Admin_Page.currentIndex()
+            current_tab_index = self.Dashboard_Frame.currentIndex()
             
             match current_SWPage:
                 case 0:
@@ -395,7 +456,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                             return
                 case 1:
                     page_input = self.page_box_inventory.text().strip()
-                #case 2: for users
+                case 2: 
+                    match current_tab_index:
+                        case 0:
+                          self.populateProfTable()
+                        case 1:
+                          self.populateBorrowerTable()
                 case _:
                     print("Unknown admin page index")
                     return
@@ -418,10 +484,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                                     print("Unknown table index")
                         case 1: 
                             self.populateEquipmentTable()
-                        #case 2: users page
-                        case _:
-                            print("Unknown admin page index")
-                        
+                        case 2:
+                          match current_tab_index:
+                            case 0:
+                              self.populateProfTable()
+                            case 1:
+                              self.populateBorrowerTable()
+                            case _:
+                                print("Unknown table page index")
+                      
                     self.update_button_state()
                 else:
                     print(f"Invalid page number: {page_input}")
@@ -451,18 +522,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                         print("Unknown tab index. Could not clear page input.")
             case 1:
                 self.page_box_inventory.clear()
-            #case 2:
+            case 2:
+              match tab_index:
+                    case 0:
+                      self.page_box_Prof()
+                    case 1:
+                      self.page_box_Students()
             case _:
                 print("Unknown admin page index")
 
     def update_button_state(self):
         try:
             current_SWPage = self.Admin_Page.currentIndex()
+            current_tab_index = self.Dashboard_Frame.currentIndex() 
             
             match current_SWPage:
                 case 0:
-                    current_tab_index = self.Dashboard_Frame.currentIndex() 
-
                     match current_tab_index:
                         case 0:  # borrow table
                             current_page = int(self.pageNum) 
@@ -491,7 +566,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     
                     self.arrow_left.setEnabled(current_page > 1)
                     self.arrow_right.setEnabled(current_page < total_pages)
-                #case 2:
+                case 2:
+                  match current_tab_index:
+                    case 0:
+                      self.populateProfTable()
+                    case 1:
+                      self.populateBorrowerTable()
                 case _:
                     print("Unknown admin page index")  
 
