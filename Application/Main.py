@@ -377,7 +377,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
           self.total_pages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
           self.ofTotal_Pages_Students.setText(f"of {self.total_pages}")
           
-      
+          print(data[0])
           self.Students_table.setRowCount(len(data))
           for row, item in enumerate(data):
               self.Students_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
@@ -429,11 +429,31 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
       
 #-----Edit and Delete functions-----#
 
-    def editRow(row):
-        return
+    def editRow(self, id):
+        print(id)
         
-    def deleteRow(row):
-        return
+    def deleteRow(self, id):
+        current_SWPage = self.Admin_Page.currentIndex()
+
+        match current_SWPage:
+            case 0:
+                current_tab_index = self.Dashboard_Frame.currentIndex()
+            case 1:   #Delete for equipment table
+                pass
+            case 2:
+                current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
+                match current_tab_index:
+                    case 0:   #Delete for prof table
+                        print(id)
+                        res = delete.delProfessor(id)
+                        print(res)
+
+                        self.populateProfTable()
+                    case 1:   #Delete for borrower table
+                        print(id)
+                        res = delete.delBorrower(id)
+                        print(res)
+                        self.populateBorrowerTable()
     
 #-----Page navigation for transaction tables-----# 
     
