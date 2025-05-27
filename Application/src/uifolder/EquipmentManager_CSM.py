@@ -3056,6 +3056,55 @@ class Ui_MainWindow(object):
         self.Date_box_borrow.addItem("Last Month")
         self.Date_box_borrow.addItem("Last 3 Months")
         self.Date_box_borrow.addItem("Last 6 Months")
+        
+        self.Date_box_return.addItem("Last Hour")
+        self.Date_box_return.addItem("Last 3 Hours")
+        self.Date_box_return.addItem("Last 24 Hours")
+        self.Date_box_return.addItem("Last Week")
+        self.Date_box_return.addItem("Last Month")
+        self.Date_box_return.addItem("Last 3 Months")
+        self.Date_box_return.addItem("Last 6 Months")
+        
+        self.Date_box_replace.addItem("Last Hour")
+        self.Date_box_replace.addItem("Last 3 Hours")
+        self.Date_box_replace.addItem("Last 24 Hours")
+        self.Date_box_replace.addItem("Last Week")
+        self.Date_box_replace.addItem("Last Month")
+        self.Date_box_replace.addItem("Last 3 Months")
+        self.Date_box_replace.addItem("Last 6 Months")
+        
+        self.Filter_box_borrow.addItem("Borrow Date")
+        self.Filter_box_borrow.addItem("Equipment ID")
+        self.Filter_box_borrow.addItem("Borrower ID")
+        self.Filter_box_borrow.addItem("State")
+        self.Filter_box_borrow.addItem("Quantity")
+        
+        self.Filter_box_return.addItem("Return Date")
+        self.Filter_box_return.addItem("Equipment ID")
+        self.Filter_box_return.addItem("Borrower ID")
+        self.Filter_box_return.addItem("State")
+        self.Filter_box_return.addItem("Quantity")
+        
+        self.Filter_box_return.addItem("Replacement Date")
+        self.Filter_box_return.addItem("Equipment ID")
+        self.Filter_box_return.addItem("Borrower ID")
+        self.Filter_box_return.addItem("Quantity")
+        
+        self.Filter_box_return.addItem("Equipment ID")
+        self.Filter_box_return.addItem("Equipment Name")
+        self.Filter_box_return.addItem("Category")
+        self.Filter_box_return.addItem("Available")
+        
+        self.Filter_box_Prof.addItem("Professor ID")
+        self.Filter_box_Prof.addItem("First Name")
+        self.Filter_box_Prof.addItem("First Name")
+        
+        self.Filter_box_Students.addItem("Borrower ID")
+        self.Filter_box_Students.addItem("Professor ID")
+        self.Filter_box_Students.addItem("First Name")
+        self.Filter_box_Students.addItem("First Name")
+        self.Filter_box_Students.addItem("Program")
+        self.Filter_box_Students.addItem("Year Level")
 
 if __name__ == "__main__":
     import sys

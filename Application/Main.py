@@ -13,7 +13,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.setupUi(self)
-        #self.setupTableBehavior()
+        self.setupTableBehavior()
        
         
         self.connector = Connector(self)
@@ -275,8 +275,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.return_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
                 self.return_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
                 self.return_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[2])))
-                self.return_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[3])))
-                self.return_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[4])))
+                self.return_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[4])))
+                self.return_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[3])))
                 
                 btn = self.createOptionsButton(item[0])
                 self.return_table.setCellWidget(row, 5, btn)
