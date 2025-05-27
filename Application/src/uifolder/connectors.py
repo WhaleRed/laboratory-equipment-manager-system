@@ -20,13 +20,10 @@ class Connector:
         # Inventory Buttons
         self.ui.inventory_button_sidebar.clicked.connect(self.Inventory_Page)
 
-
         # Transaction Buttons
         self.ui.borrow_button_sidebar.clicked.connect(self.Transaction_Page)
-      
 
         # User Button
-
         self.ui.user_button_sidebar.clicked.connect(self.go_to_AdminBorrower_Page)
 
     def connect_user_interactive_buttons(self):
@@ -44,6 +41,14 @@ class Connector:
         self.ui.return_button_user.clicked.connect(self.go_to_borrow)
         self.ui.replace_button_user.clicked.connect(self.go_to_borrow)
         
+        # Submit Button
+        self.ui.submit_confirmation.clicked.connect(self.go_to_user_interactive_page)
+
+   
+
+    def go_to_user_interactive_page(self):
+        self.ui.User_Interactive_Page.setCurrentIndex(0)
+
     # Admin User
     def go_to_admin_user_page(self):
         index = self.ui.Admin_User_Page.indexOf(self.ui.page)

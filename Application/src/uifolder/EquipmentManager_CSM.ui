@@ -1109,7 +1109,7 @@ QTableWidget::item:selected {
                       </widget>
                      </item>
                      <item>
-                      <widget class="QLabel" name="count_text">
+                      <widget class="QLabel" name="Page">
                        <property name="font">
                         <font>
                          <family>Nunito ExtraBold</family>
