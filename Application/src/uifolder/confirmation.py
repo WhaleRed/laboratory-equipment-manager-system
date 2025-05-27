@@ -7,7 +7,12 @@ class Confirmation:
         self.ui = ui
         self.parent_widget = self.ui.centralwidget
         self.ui.next_button_additem.clicked.connect(self.User_Table_Inputs)
+        self.populate_yearlevel_combo()
 
+    def populate_yearlevel_combo(self):
+        year_levels = ["YEAR LEVEL", "1st Year", "2nd Year", "3rd Year", "4th Year"]
+        self.ui.yearlevel_uinfo.clear()  # Clear existing items
+        self.ui.yearlevel_uinfo.addItems(year_levels)
     
     def show_warning(self, title, message):
         QtWidgets.QMessageBox.warning(self.parent_widget, title, message)
@@ -18,11 +23,11 @@ class Confirmation:
         student_id = self.ui.idno_uinfo.text().strip()
         first_name = self.ui.first_name_uinfo.text().strip()
         last_name = self.ui.last_name_uinfo.text().strip()
-        section = self.ui.section_uinfo.text().strip()
+        year_level = self.ui.yearlevel_uinfo.currentIndex()
         program = self.ui.program_uinfo.text().strip()
         professor = self.ui.professor_uinfo.text().strip()
 
-        if not student_id or not first_name or not last_name or not section or not program or not professor:
+        if not student_id or not first_name or not last_name or not year_level or not program or not professor:
             self.show_warning("Input Error", "All fields must be filled out.")
             return False
 
@@ -37,7 +42,6 @@ class Confirmation:
         self.ui.label_3.setText(student_id)
         self.ui.label_7.setText(first_name)
         self.ui.label_8.setText(last_name)
-        self.ui.label_6.setText(section)
         self.ui.label_5.setText(program)
         self.ui.label_4.setText(professor)
 
