@@ -1054,6 +1054,9 @@ def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
   sortState = mappings.SORT_FIELDS_REPLACED.get(sortStateidx)
   if not sortState:
       return 1      #Attempt to inject
+    
+  print(f"replacement date sort state idx: {sortStateidx}")
+  print(f"replacement sort state: {sortState}")
   
   dateFilter = ""
   if dateState != 0:
@@ -1079,7 +1082,7 @@ def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
   total_count = mycursor.fetchone()[0] 
   
   if not searched:  # if empty or None
-        if sortState == "replacement_date":
+        if sortState == "Replacement_date":
             query = (
                 f"SELECT * FROM replaced_equipment "
                 f"WHERE 1=1 {dateFilter} "
