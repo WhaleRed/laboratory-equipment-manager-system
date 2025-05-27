@@ -1020,20 +1020,12 @@ def searchReturnedEquipmentMatch(page, sortStateidx, dateState, searched=None):
   total_count = mycursor.fetchone()[0] 
   
   if not searched:  # if empty or None
-        if sortState == "Return_date":
-            query = (
-                f"SELECT * FROM returned_equipment "
-                f"WHERE 1=1 {dateFilter} "
-                f"ORDER BY Return_date DESC LIMIT 10 OFFSET %s"
-            )
-            mycursor.execute(query, (offset,))
-        else:
-            query = (
-                f"SELECT * FROM returned_equipment "
-                f"WHERE 1=1 {dateFilter} "
-                f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
-            )
-            mycursor.execute(query, (offset,))
+      query = (
+          f"SELECT * FROM returned_equipment "
+          f"WHERE 1=1 {dateFilter} "
+          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+      )
+      mycursor.execute(query, (offset,))
   else:
     if sortState == "Return_date":
       if is_valid_equipment_id(searched) or is_valid_id(searched):
@@ -1104,20 +1096,12 @@ def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
   total_count = mycursor.fetchone()[0] 
   
   if not searched:  # if empty or None
-        if sortState == "Replacement_date":
-            query = (
-                f"SELECT * FROM replaced_equipment "
-                f"WHERE 1=1 {dateFilter} "
-                f"ORDER BY replacement_date DESC LIMIT 10 OFFSET %s"
-            )
-            mycursor.execute(query, (offset,))
-        else:
-            query = (
-                f"SELECT * FROM replaced_equipment "
-                f"WHERE 1=1 {dateFilter} "
-                f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
-            )
-            mycursor.execute(query, (offset,))
+      query = (
+          f"SELECT * FROM replaced_equipment "
+          f"WHERE 1=1 {dateFilter} "
+          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+      )
+      mycursor.execute(query, (offset,))
   else:
     if sortState == "Replacement_date":
       if is_valid_equipment_id(searched) or is_valid_id(searched):
