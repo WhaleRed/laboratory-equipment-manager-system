@@ -56,6 +56,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.arrow_right.clicked.connect(self.go_to_next_page)
         self.arrow_left.clicked.connect(self.go_to_prev_page)
         self.page_box_inventory.returnPressed.connect(self.go_to_page)
+
+        #Add item connections
+        self.borrow_button_user.clicked.connect(self.addBorrowItemCombobox)
 #-----Helper-----#
 
     def getCurrentTransactionTable(self):
@@ -448,7 +451,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         except Exception as e:
             print(f"Error in update_button_state: {e}")
 
-
+#-----Combobox choices-----#
+    def addBorrowItemCombobox(self):
+        data = fetchData.fetchCategory()
+        for row in data:
+            self.category_box_additem.addItem(str(row))
+    
 if __name__ == "__main__":
   app = QApplication(sys.argv)
   window = MainWindow()
