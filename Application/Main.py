@@ -90,6 +90,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.replace_button_user.clicked.connect(self.populateAddItemReplace)
         self.addItemState = 2
 
+        # Add professor connection
+        self.addProfessor_button.clicked.connect(self.openProfessor)
+
 #-----Helper-----#
 
     def onIndexChanged(self):
@@ -729,6 +732,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             
     def populateAddItemReplace(self):
         self.addItemState = 1
+
+    #-----Add Professor-----#
+    def openProfessor(self):
+        from src.uifolder.Professor_dialog import ProfessorDialog
+        dialog = ProfessorDialog(self)
+
+        if dialog.exec():
+            self.populateProfTable()  # Refresh the professor table after adding a new professor
 
 if __name__ == "__main__":
   app = QApplication(sys.argv)
