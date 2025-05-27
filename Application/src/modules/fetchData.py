@@ -909,6 +909,7 @@ def getRecentReturnedEquipmentByState(hour, page):
 
 #------Search using match------#
 def searchBorrowedEquipmentMatch(page, sortStateidx, dateState, searched=None):
+  db.commit()
   mycursor = db.cursor()
 
   offset = (page-1) * 10
@@ -983,6 +984,7 @@ def searchBorrowedEquipmentMatch(page, sortStateidx, dateState, searched=None):
 
 
 def searchReturnedEquipmentMatch(page, sortStateidx, dateState, searched=None):
+  db.commit()
   mycursor = db.cursor()
 
   offset = (page-1) * 10
@@ -1056,6 +1058,7 @@ def searchReturnedEquipmentMatch(page, sortStateidx, dateState, searched=None):
 
 
 def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
+  db.commit()
   mycursor = db.cursor()
 
   offset = (page-1) * 10
@@ -1063,9 +1066,6 @@ def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
   sortState = mappings.SORT_FIELDS_REPLACED.get(sortStateidx)
   if not sortState:
       return 1      #Attempt to inject
-    
-  print(f"replacement date sort state idx: {sortStateidx}")
-  print(f"replacement sort state: {sortState}")
   
   dateFilter = ""
   if dateState != 0:
@@ -1132,6 +1132,7 @@ def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
 
 
 def searchBorrowerMatch(page, sortStateidx, searched=None):
+  db.commit()
   mycursor = db.cursor()
 
   offset = (page-1) * 10
@@ -1178,7 +1179,7 @@ def searchBorrowerMatch(page, sortStateidx, searched=None):
 
 
 def searchEquipmentMatch(page, sortStateidx, categoryidx, searched=None):
-  
+  db.commit()
   mycursor = db.cursor()
 
   offset = (page-1) * 10
@@ -1241,6 +1242,7 @@ def searchEquipmentMatch(page, sortStateidx, categoryidx, searched=None):
 
 
 def searchProfessorMatch(page, sortStateidx, searched=None):
+  db.commit()
   mycursor = db.cursor()
 
   offset = (page-1) * 10
