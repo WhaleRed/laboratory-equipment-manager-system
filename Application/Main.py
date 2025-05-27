@@ -368,9 +368,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
           self.Professors_table.clearContents()
 
           if searchKeyword:
-              data, count = fetchData.searchBorrowerMatch(page, sortState, searchKeyword)
+              data, count = fetchData.searchProfessorMatch(page, sortState, searchKeyword)
           else:
-              data, count = fetchData.searchBorrowerMatch(page, sortState)
+              data, count = fetchData.searchProfessorMatch(page, sortState)
           
           self.page_box_Prof.setText(f"{self.pageNum}")
               
