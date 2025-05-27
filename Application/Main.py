@@ -344,11 +344,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
           self.Students_table.setRowCount(len(data))
           for row, item in enumerate(data):
               self.Students_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
-              self.Students_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
-              self.Students_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[2])))
-              self.Students_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[3])))
-              self.Students_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[4])))
-              self.Students_table.setItem(row, 5, QtWidgets.QTableWidgetItem(str(item[5])))
+              self.Students_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[2])))
+              self.Students_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[3])))
+              self.Students_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[4])))
+              self.Students_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[5])))
+              self.Students_table.setItem(row, 5, QtWidgets.QTableWidgetItem(str(item[1])))
               
               btn = self.createOptionsButton(item[0])
               self.Students_table.setCellWidget(row, 6, btn)

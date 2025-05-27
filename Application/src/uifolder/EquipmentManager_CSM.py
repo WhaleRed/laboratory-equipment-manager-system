@@ -3102,7 +3102,7 @@ class Ui_MainWindow(object):
         self.Filter_box_Students.addItem("Borrower ID")
         self.Filter_box_Students.addItem("Professor ID")
         self.Filter_box_Students.addItem("First Name")
-        self.Filter_box_Students.addItem("First Name")
+        self.Filter_box_Students.addItem("Last Name")
         self.Filter_box_Students.addItem("Program")
         self.Filter_box_Students.addItem("Year Level")
 
