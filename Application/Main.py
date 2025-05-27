@@ -64,7 +64,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.searchbox_borrowers
 
         #Add item connections
-        self.next_button_uinfo.clicked.connect(self.addItemCombobox)
+        self.next_button_uinfo.clicked.connect(self.setItemTableValues)
         self.borrow_button_user.clicked.connect(self.populateAddItemBorrow)
         self.return_button_user.clicked.connect(self.populateAddItemReturn)
         self.replace_button_user.clicked.connect(self.populateAddItemReplace)
@@ -496,30 +496,39 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             print(f"Error in update_button_state: {e}")
 
 #-----Add item-----#
-    def addItemCombobox(self):
+    def setItemTableValues(self):
         data = fetchData.fetchCategory()
         for row in data:
             self.category_box_additem.addItem(str(row))
+        if self.addItemState == 0:
+            self.Item_table.clearContents()
+            data = fetchData.fetchItemsInUse(self.idno_uinfo.text())
+            self.Item_table.setRowCount(len(data))
+            row = 0
+            for item in data:
+                self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
+                self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
+                row += 1
+
+        if  self.addItemState == 1:
+            self.Item_table.clearContents()
+            data = fetchData.fetchDamagedItems(self.idno_uinfo.text())
+            self.Item_table.setRowCount(len(data))
+            row = 0
+            for item in data:
+                self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
+                self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
+                row += 1
     
     def populateAddItemBorrow(self):
         pass
     
     def populateAddItemReturn(self):
-        self.Item_table.clearContents()
-        data = fetchData.fetchItemsInUse(self.idno_uinfo.text())
-        self.Item_table.setRowCount(len(data))
-        for row, item in data:
-            self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
-            self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
+        self.addItemState = 0
             
     
     def populateAddItemReplace(self):
-        self.Item_table.clearContents()
-        data = fetchData.fetchDamagedItems(self.idno_uinfo.text())
-        self.Item_table.setRowCount(len(data))
-        for row, item in data:
-            self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
-            self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
+        self.addItemState = 1
 
 if __name__ == "__main__":
   app = QApplication(sys.argv)
