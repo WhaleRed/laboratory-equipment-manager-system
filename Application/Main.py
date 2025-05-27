@@ -277,7 +277,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.borrow_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[4])))
                 self.borrow_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[3])))
                 
-                btn = self.createOptionsButtonD(item[0])
+                key = (item[0], item[1], item[2])
+                btn = self.createOptionsButtonD(key)
                 self.borrow_table.setCellWidget(row, 5, btn)
                 
         except Exception as e:
@@ -317,7 +318,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.return_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[4])))
                 self.return_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[3])))
                 
-                btn = self.createOptionsButtonD(item[0])
+                key = (item[0], item[1], item[2])
+                btn = self.createOptionsButtonD(key)
                 self.return_table.setCellWidget(row, 5, btn)
                 
         except Exception as e:
@@ -352,7 +354,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.replace_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[2])))
                 self.replace_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[3])))
                 
-                btn = self.createOptionsButtonD(item[0])
+                key = (item[0], item[1], item[2])
+                btn = self.createOptionsButtonD(key)
                 self.replace_table.setCellWidget(row, 4, btn)
             
         except Exception as e:
@@ -379,7 +382,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
           self.total_pages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
           self.ofTotal_Pages_Students.setText(f"of {self.total_pages}")
           
-          print(data[0])
           self.Students_table.setRowCount(len(data))
           for row, item in enumerate(data):
               self.Students_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
@@ -432,7 +434,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 #-----Edit and Delete functions-----#
 
     def editRow(self, id):
-        print(id)
+        return
         
     def deleteRow(self, id):
         current_SWPage = self.Admin_Page.currentIndex()
@@ -442,25 +444,36 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 current_tab_index = self.Dashboard_Frame.currentIndex()
                 match current_tab_index:
                     case 0:
-                        pass
+                        res = delete.delBorrowedEquipment(id)
+                        self.populateBorrowTable()
                     case 1:
-                        pass
+                        res = delete.delReturnedEquipment(id)
+                        self.populateReturnTable()
                     case 2:
-                        pass
+                        res = delete.delReplacedEquipment(id)
+                        self.populateReplaceTable()
+            case 1:
+                field = "equipment"
+                res = delete.delEquipment(id)
+                self.populateEquipmentTable()
             case 2:
                 current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
                 match current_tab_index:
                     case 0:   #Delete for prof table
-                        print(id)
+                        field = "professor"
                         res = delete.delProfessor(id)
-                        print(res)
                         self.populateProfTable()
                     case 1:   #Delete for borrower table
-                        print(id)
+                        field = "student"
                         res = delete.delBorrower(id)
-                        print(res)
                         self.populateBorrowerTable()
-    
+        if res == 1:              
+            QtWidgets.QMessageBox.warning(
+                            self,
+                            "Delete Failed",
+                            f"This {field} cannot be deleted because it is referenced in another table."
+                        )
+        
 #-----Page navigation for transaction tables-----# 
     
     def go_to_next_page(self):
@@ -670,8 +683,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                       self.arrow_right_Students.setEnabled(current_page < total_pages)
                 case _:
                     print("Unknown admin page index")  
-
-            print(f"Button states updated")
         except Exception as e:
             print(f"Error in update_button_state: {e}")
 
