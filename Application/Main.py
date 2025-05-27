@@ -30,6 +30,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.populateBorrowerTable()
         self.populateProfTable()
         
+        self.update_button_state()
+        
         self.Admin_User_Page.setCurrentIndex(0) # Set the initial page to the first tab
         self.User_Interactive_Page.setCurrentIndex(0) # Set the initial page to the first tab
         
@@ -611,45 +613,37 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def update_button_state(self):
         try:
             current_SWPage = self.Admin_Page.currentIndex() 
+            current_page = int(self.pageNum) 
+            total_pages = self.total_pages
             
             match current_SWPage:
                 case 0:
                     current_tab_index = self.Dashboard_Frame.currentIndex()
                     match current_tab_index:
-                        case 0:  # borrow table
-                            current_page = int(self.pageNum) 
-                            total_pages = self.total_pages
-                            
+                        case 0:  # borrow table    
                             self.arrow_left_borrow.setEnabled(current_page > 1)
                             self.arrow_right_borrow.setEnabled(current_page < total_pages)
                         case 1:  # return table
-                            current_page = int(self.pageNum)
-                            total_pages = self.total_pages
-                            
                             self.arrow_left_return.setEnabled(current_page > 1)
                             self.arrow_right_return.setEnabled(current_page < total_pages)
                         case 2:  # replace table
-                            current_page = int(self.pageNum) 
-                            total_pages = self.total_pages
-                            
                             self.arrow_left_replace.setEnabled(current_page > 1)
                             self.arrow_right_replace.setEnabled(current_page < total_pages)
                         case _:
                             print("Unknown table index")
                             return
                 case 1:
-                    current_page = int(self.pageNum) 
-                    total_pages = self.total_pages
-                    
                     self.arrow_left.setEnabled(current_page > 1)
                     self.arrow_right.setEnabled(current_page < total_pages)
                 case 2:
                   current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
                   match current_tab_index:
                     case 0:
-                      self.populateProfTable()
+                      self.arrow_left_Prof.setEnabled(current_page > 1)
+                      self.arrow_right_Prof.setEnabled(current_page < total_pages)
                     case 1:
-                      self.populateBorrowerTable()
+                      self.arrow_left_Students.setEnabled(current_page > 1)
+                      self.arrow_right_Students.setEnabled(current_page < total_pages)
                 case _:
                     print("Unknown admin page index")  
 
