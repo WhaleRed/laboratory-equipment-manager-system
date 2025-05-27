@@ -3039,6 +3039,15 @@ class Ui_MainWindow(object):
         self.Dashboard_Frame_Borrowers.setTabText(self.Dashboard_Frame_Borrowers.indexOf(self.Students_Page), _translate("MainWindow", "Students"))
 
 
+    def setupTableBehavior(self):
+        self.Date_box_borrow.addItem("Last Hour")
+        self.Date_box_borrow.addItem("Last 3 Hours")
+        self.Date_box_borrow.addItem("Last 24 Hours")
+        self.Date_box_borrow.addItem("Last Week")
+        self.Date_box_borrow.addItem("Last Month")
+        self.Date_box_borrow.addItem("Last 3 Months")
+        self.Date_box_borrow.addItem("Last 6 Months")
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
