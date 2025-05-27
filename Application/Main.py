@@ -68,6 +68,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.borrow_button_user.clicked.connect(self.populateAddItemBorrow)
         self.return_button_user.clicked.connect(self.populateAddItemReturn)
         self.replace_button_user.clicked.connect(self.populateAddItemReplace)
+        self.addItemState = 2
 
 #-----Helper-----#
 
@@ -510,7 +511,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
                 row += 1
 
-        if  self.addItemState == 1:
+        elif  self.addItemState == 1:
             self.Item_table.clearContents()
             data = fetchData.fetchDamagedItems(self.idno_uinfo.text())
             self.Item_table.setRowCount(len(data))
@@ -519,9 +520,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
                 self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
                 row += 1
+
+        elif  self.addItemState == 2:
+            self.Item_table.clearContents()
+            data = fetchData.fetchAvailableItems()
+            self.Item_table.setRowCount(len(data))
+            row = 0
+            for item in data:
+                self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
+                self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
+                row += 1
     
     def populateAddItemBorrow(self):
-        pass
+        self.addItemState = 2
     
     def populateAddItemReturn(self):
         self.addItemState = 0
