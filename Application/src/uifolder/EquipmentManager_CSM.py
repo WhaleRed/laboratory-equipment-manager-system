@@ -294,20 +294,41 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         self.idno_uinfo.setObjectName("idno_uinfo")
-        self.section_uinfo = QtWidgets.QLineEdit(parent=self.mainframe)
-        self.section_uinfo.setGeometry(QtCore.QRect(280, 313, 221, 61))
+        self.yearlevel_uinfo = QtWidgets.QComboBox(parent=self.mainframe)
+        self.yearlevel_uinfo.setGeometry(QtCore.QRect(290, 312, 201, 61))
         font = QtGui.QFont()
         font.setFamily("Nunito")
         font.setPointSize(12)
-        self.section_uinfo.setFont(font)
-        self.section_uinfo.setStyleSheet("QLineEdit {\n"
-"    border: 2px solid #a80000;\n"
-"    border-radius: 30px;\n"
-"    padding: 6px 12px;\n"
-"    background-color:rgb(248, 242, 242);\n"
+        font.setBold(False)
+        font.setItalic(False)
+        font.setWeight(50)
+        self.yearlevel_uinfo.setFont(font)
+        self.yearlevel_uinfo.setStyleSheet("QComboBox {\n"
+"    border: 2px solid #990000;\n"
+"    border-radius: 15px;\n"
+"    padding: 5px;\n"
+"       background-color:rgb(248, 242, 242);\n"
+"    color:rgb(0, 0, 0);\n"
+"}\n"
+"\n"
+"QComboBox:hover {\n"
+"    border: 2px solid #cc0000;\n"
+"}\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    background-color: rgb(248, 242, 242);               \n"
+"    border: none;                          /* Remove boxy border */\n"
+"    border-top-right-radius: 15px;         /* Match rounded corners */\n"
+"    border-bottom-right-radius: 15px;\n"
+"    width: 30px;\n"
+"    margin-right: 5px;\n"
 "}\n"
 "")
-        self.section_uinfo.setObjectName("section_uinfo")
+        self.yearlevel_uinfo.setObjectName("yearlevel_uinfo")
+        self.yearlevel_uinfo.addItem("")
+        self.gridLayout_8.addWidget(self.mainframe, 1, 0, 1, 1)
+        self.gridLayout_22.addWidget(self.uinfof_frame, 0, 0, 1, 1)
         self.last_name_uinfo = QtWidgets.QLineEdit(parent=self.mainframe)
         self.last_name_uinfo.setGeometry(QtCore.QRect(120, 234, 381, 61))
         font = QtGui.QFont()
@@ -2871,7 +2892,7 @@ class Ui_MainWindow(object):
         self.professor_uinfo.setPlaceholderText(_translate("MainWindow", "PROFESSOR"))
         self.program_uinfo.setPlaceholderText(_translate("MainWindow", "PROGRAM"))
         self.idno_uinfo.setPlaceholderText(_translate("MainWindow", "ID NUMBER"))
-        self.section_uinfo.setPlaceholderText(_translate("MainWindow", "SECTION"))
+        self.yearlevel_uinfo.setItemText(0, _translate("MainWindow", "YEAR LEVEL"))
         self.last_name_uinfo.setPlaceholderText(_translate("MainWindow", "LAST NAME"))
         self.first_name_uinfo.setPlaceholderText(_translate("MainWindow", "FIRST NAME"))
         self.back_button_uinfo.setText(_translate("MainWindow", "BACK"))
