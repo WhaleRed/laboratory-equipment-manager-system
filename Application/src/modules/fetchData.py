@@ -1494,6 +1494,7 @@ def fetchProfessor(idnum):
   
   mycursor.close()
   return results
+
 def fetch_EquipmentName(equipment_name):
    mycursor = db.cursor()
 
@@ -1502,3 +1503,12 @@ def fetch_EquipmentName(equipment_name):
 
    mycursor.close()
    return results
+
+def fetchEquipmentData(idnum):
+  mycursor = db.cursor()
+  
+  mycursor.execute("SELECT * FROM equipment WHERE EquipmentID = %s",(idnum,))
+  results = mycursor.fetchall()
+  
+  mycursor.close()
+  return results  
