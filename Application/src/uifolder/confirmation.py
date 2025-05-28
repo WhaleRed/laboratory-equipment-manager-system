@@ -21,8 +21,6 @@ class Confirmation:
     def show_warning(self, title, message):
         QtWidgets.QMessageBox.warning(self.parent_widget, title, message)
     
-    
-    
     def user_input_fields(self):
         student_id = self.ui.idno_uinfo.text().strip()
         first_name = self.ui.first_name_uinfo.text().strip()
@@ -62,6 +60,9 @@ class Confirmation:
     
     def User_Table_Inputs(self):
         item_details = []
+        item_names = []
+        quantities = []
+        
         for row in range(self.ui.Item_table.rowCount()):
             item_item = self.ui.Item_table.item(row, 0)
             qty_widget = self.ui.Item_table.cellWidget(row, 2)
@@ -70,9 +71,16 @@ class Confirmation:
                 quantity = qty_widget.value()
                 if quantity > 0:
                     item_details.append(f"{item_name}: {quantity}")
+                    item_names.append(item_name)
+                    quantities.append(quantity)
 
         item_summary = "\n".join(item_details) if item_details else "No items selected"
         self.ui.textEdit.setPlainText(item_summary)
+        
+        print(f"Extracted names: {item_names}")
+        print(f"Quantities: {quantities}")
+        
+        return item_names, quantities
     
     def submitConfirm(self):
         if self.studentInfo:

@@ -88,6 +88,28 @@ def editEquipment(equipment):
       return 2
   finally:
     mycursor.close()
+    
+def updateEquipmentQuantity(id, newQuantity, mode):
+  mycursor = db.cursor()
+  
+  if mode == 0 or mode == 1:
+        query = """
+            UPDATE equipment
+            SET available = available - %s
+            WHERE equipmentID = %s
+        """
+  elif mode == 2:
+      query = """
+          UPDATE equipment
+          SET available = available + %s
+          WHERE equipmentID = %s
+      """
+  else:
+      print("Invalid mode")
+      return
+
+  mycursor.execute(query, (newQuantity, id))
+  db.commit()
 
 #Required keys:
 # - new_equipId, new_borrowerId, new_borrowDate,

@@ -285,6 +285,36 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.addItemState = 1
         self.setItemTableValues()
       
+    def get_borrower_id(self):
+        self.borrower_id = self.idno_uinfo.text().strip()
+      
+    def get_item_id(self):
+      try:
+        item_names, quantities = self.logic.User_Table_Inputs()
+        
+        for name, qty in zip(item_names, quantities):
+            clean_name = name.strip(),
+            item_id = fetchData.fetch_itemID_from_name(clean_name)
+            self.add_transaction_to_db(item_id, qty)
+      except Exception as e:
+        print(f"error grtting item id: {e}")
+            
+    def add_transaction_to_db(self, id, quantity):
+      try:
+        print("Addiing transaction...☺")
+        mode = self.addItemState
+        
+        if mode == 0:
+            add.addReturnedEquipment(id, self.borrower_id, "Returned") #needs to change to accomodate multiple item state
+        elif mode == 1:
+            add.addReplacedEquipment(id, self.borrower_id)
+        elif mode == 2:
+            add.addBorrowedEquipment(id, self.borrower_id)
+        
+        edit.updateEquipmentQuantity(id, quantity, mode)
+      except Exception as e:
+        print(f"Error in add_transaction_to_db: {e}")
+            
 #-----Populates admin tables-----#
 
     def populateEquipmentTable(self):

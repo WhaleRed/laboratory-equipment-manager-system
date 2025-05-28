@@ -62,12 +62,12 @@ def addEquipment(equipment):
   finally:
     mycursor.close()
 
-def addBorrowedEquipment(equipment):
+def addBorrowedEquipment(equipmentID, borrowerID):
   mycursor = db.cursor()
   try:
     mycursor.execute(
             "INSERT INTO Borrowed_equipment (EquipmentID, BorrowerID, Borrow_date) "
-            "VALUES (%(equipId)s, %(borrowerId)s, NOW())", equipment
+            "VALUES (%s, %s, NOW())", equipmentID, borrowerID
             )
     db.commit()
     return 0
@@ -77,12 +77,12 @@ def addBorrowedEquipment(equipment):
   finally:
     mycursor.close()
 
-def addReplacedEquipment(equipment):
+def addReplacedEquipment(equipmentID, borrowerID):
   mycursor = db.cursor()
   try:
     mycursor.execute(
             "INSERT INTO Replaced_equipment (EquipmentID, BorrowerID, Replacement_date) "
-            "VALUES (%(equipId)s, %(borrowerId)s, NOW())", equipment
+            "VALUES (%s, %s, NOW())", equipmentID, borrowerID
             )
     db.commit()
     return 0
@@ -92,12 +92,12 @@ def addReplacedEquipment(equipment):
   finally:
     mycursor.close()
 
-def addReturnedEquipment(equipment):
+def addReturnedEquipment(equipmentID, borrowerId, status):
   mycursor = db.cursor()
   try:
     mycursor.execute(
             "INSERT INTO Returned_equipment (EquipmentID, BorrowerID ,Return_date , Status) "
-            "VALUES (%(equipId)s, %(borrowerId)s, NOW(), %(status)s)", equipment
+            "VALUES (%s, %s, NOW(), %s)", equipmentID, borrowerId, status
             )
     db.commit()
     return 0

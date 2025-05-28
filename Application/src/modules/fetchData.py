@@ -38,6 +38,14 @@ db = mysql.connector.connect(
 )
 
 #-----For adding items to database-----#
+def fetch_itemID_from_name(name):
+  mycursor = db.cursor()
+  
+  mycursor.execute("SELECT EquipmentID FROM Equipment WHERE Equipment_name = %s", (name))
+  result = mycursor.fetchone()
+  
+  return result
+
 def fetchEquipmentIds():
   mycursor = db.cursor()
   
