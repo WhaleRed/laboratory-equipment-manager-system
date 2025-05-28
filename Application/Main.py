@@ -21,10 +21,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pageNum = "1" #initial'
         self.total_pages = 1 # initial
         self.per_page = 10
+        self.borrower_id = ""
         
         #for users page
         self.UpageNum = 1
         self.UtotalPages = 1
+        self.spacer = "        "
         
         self.populateEquipmentTable()
         self.populateReturnTable()
@@ -103,6 +105,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # Add professor connection
         self.addProfessor_button.clicked.connect(self.openProfessor)
         self.addborrower_button.clicked.connect(self.openBorrower)
+        
+        self.next_button_uinfo.clicked.connect(self.get_borrower_id)
+        self.next_button_additem.clicked.connect(self.get_item_id)
 
 #-----Helper-----#
 
@@ -192,7 +197,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.populateBorrowerTable()
             
     def createOptionsButtonED(self, id):
-        btn = QtWidgets.QPushButton("   ⋮ ")
+        btn = QtWidgets.QPushButton("    ⋮ ")
         btn.setCursor(QtCore.Qt.CursorShape.PointingHandCursor)
         
         btn.setStyleSheet("text-align: center;")
@@ -229,7 +234,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         return btn
       
     def createOptionsButtonD(self, id):
-        btn = QtWidgets.QPushButton("   ⋮ ")
+        btn = QtWidgets.QPushButton("    ⋮ ")
         btn.setCursor(QtCore.Qt.CursorShape.PointingHandCursor)
         
         btn.setStyleSheet("""
@@ -311,10 +316,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             self.inventory_table.setRowCount(len(data))
             for row, item in enumerate(data):
-                self.inventory_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
-                self.inventory_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
-                self.inventory_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[2])))
-                self.inventory_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[3])))
+                self.inventory_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
+                self.inventory_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
+                self.inventory_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[2]}"))
+                self.inventory_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
                 
                 btn = self.createOptionsButtonED(item[0])
                 self.inventory_table.setCellWidget(row, 4, btn)
@@ -346,11 +351,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             self.borrow_table.setRowCount(len(data))
             for row, item in enumerate(data):
-                self.borrow_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
-                self.borrow_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
-                self.borrow_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[2])))
-                self.borrow_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[4])))
-                self.borrow_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[3])))
+                self.borrow_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
+                self.borrow_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
+                self.borrow_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[2]}"))
+                self.borrow_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
+                self.borrow_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
                 
                 key = (item[0], item[1], item[2])
                 btn = self.createOptionsButtonD(key)
@@ -387,11 +392,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             self.return_table.setRowCount(len(data))
             for row, item in enumerate(data):
-                self.return_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
-                self.return_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
-                self.return_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[2])))
-                self.return_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[4])))
-                self.return_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[3])))
+                self.return_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
+                self.return_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
+                self.return_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[2]}"))
+                self.return_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
+                self.return_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
                 
                 key = (item[0], item[1], item[2])
                 btn = self.createOptionsButtonD(key)
@@ -424,10 +429,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
             self.replace_table.setRowCount(len(data))
             for row, item in enumerate(data):
-                self.replace_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
-                self.replace_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
-                self.replace_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[2])))
-                self.replace_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[3])))
+                self.replace_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
+                self.replace_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
+                self.replace_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[2]}"))
+                self.replace_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
                 
                 key = (item[0], item[1], item[2])
                 btn = self.createOptionsButtonD(key)
@@ -459,12 +464,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
           
           self.Students_table.setRowCount(len(data))
           for row, item in enumerate(data):
-              self.Students_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
-              self.Students_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[2])))
-              self.Students_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[3])))
-              self.Students_table.setItem(row, 3, QtWidgets.QTableWidgetItem(str(item[4])))
-              self.Students_table.setItem(row, 4, QtWidgets.QTableWidgetItem(str(item[5])))
-              self.Students_table.setItem(row, 5, QtWidgets.QTableWidgetItem(str(item[1])))
+              self.Students_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
+              self.Students_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[2]}"))
+              self.Students_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
+              self.Students_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
+              self.Students_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}        {item[5]}"))
+              self.Students_table.setItem(row, 5, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
               
               btn = self.createOptionsButtonED(item[0])
               self.Students_table.setCellWidget(row, 6, btn)
@@ -496,9 +501,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
       
           self.Professors_table.setRowCount(len(data))
           for row, item in enumerate(data):
-              self.Professors_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
-              self.Professors_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
-              self.Professors_table.setItem(row, 2, QtWidgets.QTableWidgetItem(str(item[2])))
+              self.Professors_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
+              self.Professors_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
+              self.Professors_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[2]}"))
               
               btn = self.createOptionsButtonED(item[0])
               self.Professors_table.setCellWidget(row, 3, btn)
@@ -876,7 +881,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
       self.setItemTableValues()
       print("n done populating")
 
-    def update_UpageNumber(self):
+    def Uupdate_pageNumber(self):
       self.Page.setText(f"{self.UpageNum} of {self.UtotalPages}")  # page _ of _
       self.decrement.setEnabled(self.UpageNum > 1)
       self.increment.setEnabled(self.UpageNum < self.UtotalPages)
@@ -884,7 +889,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 #-----Add item-----#
     def setItemTableValues(self):
       try:
-        self.update_UpageNumber()
+        self.Uupdate_pageNumber()
         
         page =  self.UpageNum
         
@@ -896,15 +901,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.Item_table.clearContents()
             data, count = fetchData.fetchItemsInUse(self.idno_uinfo.text(), page, category, searchKeyword)
             
-            self.update_UpageNumber()
+            self.Uupdate_pageNumber()
             
             self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
             
             self.Item_table.setRowCount(len(data))
             row = 0
             for item in data:
-                self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
-                self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
+                self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
+                self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
                 
                 available_qty = int(item[1])
                 spinbox = self.createQuantitySpinBox(available_qty)
@@ -918,13 +923,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             
             self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
             
-            self.update_UpageNumber()
+            self.Uupdate_pageNumber()
             
             self.Item_table.setRowCount(len(data))
             row = 0
             for item in data:
-                self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
-                self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
+                self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
+                self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
                 
                 available_qty = int(item[1])
                 spinbox = self.createQuantitySpinBox(available_qty)
@@ -938,13 +943,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             
             self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
             
-            self.update_UpageNumber()
+            self.Uupdate_pageNumber()
             
             self.Item_table.setRowCount(len(data))
             row = 0
             for item in data:
-                self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
-                self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
+                self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
+                self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
                 
                 available_qty = int(item[1])
                 spinbox = self.createQuantitySpinBox(available_qty)

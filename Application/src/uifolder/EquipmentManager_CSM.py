@@ -98,7 +98,7 @@ class Ui_MainWindow(object):
                         third_to_last_col = table.columnCount() - 3
 
                         table.setColumnWidth(third_to_last_col, 150)
-                        table.setColumnWidth(last_col, 80)       
+                        table.setColumnWidth(last_col, 60)       
 
                         for col in range(table.columnCount()):
                                 if col != third_to_last_col and col != last_col:
@@ -106,7 +106,6 @@ class Ui_MainWindow(object):
                 elif table in [self.Item_table]:
                         header.setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
                         
-                        # set colmn 1 and 2 (last and 2nd to the last)
                         table.setColumnWidth(2, 60)
                         table.setColumnWidth(1, 150)
                         header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
@@ -116,7 +115,7 @@ class Ui_MainWindow(object):
                         header.setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
                         
                         last_col = table.columnCount() - 1
-                        table.setColumnWidth(last_col, 80)    
+                        table.setColumnWidth(last_col, 60)    
                         
                         for col in range(table.columnCount()):
                                 if col != last_col:
