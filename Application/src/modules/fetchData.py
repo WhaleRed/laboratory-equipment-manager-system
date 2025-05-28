@@ -71,6 +71,8 @@ def fetchCategory():
 #-----For getting items in use-----#
 def fetchItemsInUse(borrowerID, page, categoryidx=None, searched=None):
   mycursor = db.cursor()
+  searchFilter = ""
+  catFilter = ""
   
   offset = (page - 1) * PAGE_SIZE
   
@@ -114,6 +116,8 @@ def fetchItemsInUse(borrowerID, page, categoryidx=None, searched=None):
 #-----For getting damaged items-----#
 def fetchDamagedItems(borrowerID, page, categoryidx=None, searched=None):
     mycursor = db.cursor()
+    searchFilter= ""
+    catFilter = ""
 
     offset = (page - 1) * PAGE_SIZE
     
