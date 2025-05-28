@@ -88,9 +88,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         #Add item connections
         self.next_button_uinfo.clicked.connect(self.setItemTableValues)
-        self.borrow_button_user.clicked.connect(self.populateAddItemBorrow)
-        self.return_button_user.clicked.connect(self.populateAddItemReturn)
-        self.replace_button_user.clicked.connect(self.populateAddItemReplace)
+        self.borrow_button_user.clicked.connect(self.setModeBorrow)
+        self.return_button_user.clicked.connect(self.setModeReturn)
+        self.replace_button_user.clicked.connect(self.setModeReplace)
         self.addItemState = 2
         self.search_box.returnPressed.connect(self.setItemTableValues)
         self.category_box_additem.currentIndexChanged.connect(self.setItemTableValues)
@@ -230,9 +230,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
       
     def createQuantitySpinBox(self, max_quantity):
         spinbox = QtWidgets.QSpinBox()
-        spinbox.setMinimum(1)
+        spinbox.setMinimum(0)
         spinbox.setMaximum(max_quantity)
-        spinbox.setValue(1)  # default selected quantity
+        spinbox.setValue(0)  # default selected quantity
         return spinbox
       
     def createOptionsButtonED(self, id):
@@ -255,7 +255,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         return btn
 
+    def setModeBorrow(self):
+        self.addItemState = 2
+        self.setItemTableValues()
+    
+    def setModeReturn(self):
+        self.addItemState = 0
+        self.setItemTableValues()
         
+    def setModeReplace(self):
+        self.addItemState = 1
+        self.setItemTableValues()
+      
 #-----Populates admin tables-----#
 
     def populateEquipmentTable(self):
@@ -492,6 +503,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         current_SWPage = self.Admin_Page.currentIndex()
 
         match current_SWPage:
+            case 0:
+                field = "transaction"
+                current_tab_index = self.Dashboard_Frame.currentIndex()
+                match current_tab_index:
+                    case 0:
+                        res = delete.delBorrowedEquipment(id)
+                        self.populateBorrowTable()
+                    case 1:
+                        res = delete.delReturnedEquipment(id)
+                        self.populateReturnTable()
+                    case 2:
+                        res = delete.delReplacedEquipment(id)
+                        self.populateReplaceTable()
+            case 1:
+                field = "equipment"
+                res = delete.delEquipment(id)
+                self.populateEquipmentTable()
             case 2:
                 current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
                 match current_tab_index:
@@ -912,15 +940,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 row += 1
       except Exception as e:
             print(f"Failed to populate: {e}")
-    
-    def populateAddItemBorrow(self):
-        self.addItemState = 2
-    
-    def populateAddItemReturn(self):
-        self.addItemState = 0
-            
-    def populateAddItemReplace(self):
-        self.addItemState = 1
 
     #-----Add Professor-----#
     def openProfessor(self):
