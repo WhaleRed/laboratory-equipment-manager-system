@@ -47,14 +47,13 @@ class EditStudent_Dialog(QDialog):
         try:
             student_id = self.ui.ID_box.text().strip()
             program = self.ui.programComboBox.currentText().strip()
-            gender = self.ui.genderComboBox.currentText()
             professor = self.ui.comboBox.currentText().strip()
             fname = self.ui.firstName_box.text().strip()
             lname = self.ui.lastName_box.text().strip()
             block = self.ui.Yearlevel_Spinbox.value()
             current_id = self.student_data[0][0]
             # Validate inputs
-            if not student_id or not fname or not lname or not program or not gender or not professor or not block:
+            if not student_id or not fname or not lname or not program or not professor or not block:
                 QMessageBox.warning(self, "Input Error", "All fields are required.")
                 return
 
