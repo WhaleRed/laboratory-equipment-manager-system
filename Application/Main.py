@@ -94,6 +94,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.addItemState = 2
         self.search_box.returnPressed.connect(self.setItemTableValues)
         self.category_box_additem.currentIndexChanged.connect(self.setItemTableValues)
+        self.increment.clicked.connect(self.Ugo_to_next_page)
+        self.decrement.clicked.connect(self.Ugo_to_prev_page)
+        
         self.additem_button.clicked.connect(self.openAddItem)  # Add item button connection
 
         # Add professor connection
@@ -251,7 +254,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         return btn
 
         
-#-----Populates tables-----#
+#-----Populates admin tables-----#
 
     def populateEquipmentTable(self):
         try:
@@ -572,7 +575,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                                 f"This {field} has been deleted."
                             )
         
-#-----Page navigation for admin tables-----# 
+#-----Page navigation-----# 
     
     def go_to_next_page(self):
         try:
@@ -784,6 +787,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         except Exception as e:
             print(f"Error in update_button_state: {e}")
 
+    def Ugo_to_next_page(self):
+      current_page = self.UpageNum
+      current_page += 1
+      self.UpageNum = current_page
+      print(f"page: {self.UpageNum}")
+      
+      self.setItemTableValues()
+      print("n done populating")
+      
+    def Ugo_to_prev_page(self):
+      current_page = self.UpageNum
+      current_page -= 1
+      self.UpageNum = current_page
+      
+      print(f"page: {self.UpageNum}")
+      
+      self.setItemTableValues()
+      print("n done populating")
+
     def update_UpageNumber(self):
       self.Page.setText(f"{self.UpageNum} of {self.UtotalPages}")  # page _ of _
       self.decrement.setEnabled(self.UpageNum > 1)
@@ -792,16 +814,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 #-----Add item-----#
     def setItemTableValues(self):
       try:
-        print("Populating...")
+        self.update_UpageNumber()
+        
         data = fetchData.fetchCategory()
         page = self.UpageNum
         
         category = self.category_box_additem.currentIndex()
         
-        print(f"category index: {category}")
-        
         searchKeyword = self.search_box.text().strip()
-        print(f"searching: {searchKeyword}")
         
         for row in data:
             self.category_box_additem.addItem(str(row))
@@ -848,8 +868,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         elif  self.addItemState == 2:
             self.Item_table.clearContents()
             data, count = fetchData.fetchAvailableItems(page, category, searchKeyword)
-            
-            print(f"data: {data}")
             
             self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
             
