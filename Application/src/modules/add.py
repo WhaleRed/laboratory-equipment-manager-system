@@ -66,8 +66,8 @@ def addBorrowedEquipment(equipment):
   mycursor = db.cursor()
   try:
     mycursor.execute(
-            "INSERT INTO Borrowed_equipment (EquipmentID, BorrowerID, Borrow_date) "
-            "VALUES (%(equipId)s, %(borrowerId)s, NOW())", equipment
+            "INSERT INTO Borrowed_equipment (EquipmentID, BorrowerID, Borrow_date, State, Quantity) "
+            "VALUES (%(equipId)s, %(borrowerId)s, NOW(), %(state)s, %(quantity)s)", equipment
             )
     db.commit()
     return 0
@@ -81,8 +81,8 @@ def addReplacedEquipment(equipment):
   mycursor = db.cursor()
   try:
     mycursor.execute(
-            "INSERT INTO Replaced_equipment (EquipmentID, BorrowerID, Replacement_date) "
-            "VALUES (%(equipId)s, %(borrowerId)s, NOW())", equipment
+            "INSERT INTO Replaced_equipment (EquipmentID, BorrowerID, Replacement_date, Quantity) "
+            "VALUES (%(equipId)s, %(borrowerId)s, NOW(), %(quantity)s)", equipment
             )
     db.commit()
     return 0
@@ -96,8 +96,8 @@ def addReturnedEquipment(equipment):
   mycursor = db.cursor()
   try:
     mycursor.execute(
-            "INSERT INTO Returned_equipment (EquipmentID, BorrowerID ,Return_date , Status) "
-            "VALUES (%(equipId)s, %(borrowerId)s, NOW(), %(status)s)", equipment
+            "INSERT INTO Returned_equipment (EquipmentID, BorrowerID ,Return_date , State, Quantity) "
+            "VALUES (%(equipId)s, %(borrowerId)s, NOW(), %(state)s, %(quantity)s)", equipment
             )
     db.commit()
     return 0
