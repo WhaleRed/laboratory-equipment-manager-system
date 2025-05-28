@@ -13,7 +13,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.setupUi(self)
-        self.setupTableBehavior()
+        #self.setupTableBehavior()
         
         self.connector = Connector(self)
         self.logic = Confirmation(self)
@@ -286,7 +286,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setItemTableValues()
       
     def get_borrower_id(self):
-        self.borrower_id = self.idno_uinfo.text().strip()
+        self.borrower_id = self.input_idno_uinfo.text().strip()
       
     def get_item_id(self):
       try:

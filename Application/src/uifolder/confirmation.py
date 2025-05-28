@@ -9,28 +9,18 @@ class Confirmation:
         self.ui = ui
         self.parent_widget = self.ui.centralwidget
         self.ui.next_button_additem.clicked.connect(self.User_Table_Inputs)
-        self.populate_yearlevel_combo()
         self.ui.submit_confirmation.clicked.connect(self.submitConfirm)
         self.studentInfo = []
 
-    def populate_yearlevel_combo(self):
-        year_levels = ["YEAR LEVEL", "1st Year", "2nd Year", "3rd Year", "4th Year"]
-        self.ui.yearlevel_uinfo.clear()  # Clear existing items
-        self.ui.yearlevel_uinfo.addItems(year_levels)
-    
+
     def show_warning(self, title, message):
         QtWidgets.QMessageBox.warning(self.parent_widget, title, message)
     
     def user_input_fields(self):
-        student_id = self.ui.idno_uinfo.text().strip()
-        first_name = self.ui.first_name_uinfo.text().strip()
-        last_name = self.ui.last_name_uinfo.text().strip()
-        year_level = self.ui.yearlevel_uinfo.currentIndex()
-        year_level_text = self.ui.yearlevel_uinfo.currentText()
-        program = self.ui.program_uinfo.text().strip()
-        professor = self.ui.professor_uinfo.text().strip()
+        student_id = self.ui.input_idno_uinfo.text().strip()
+        professor = self.ui.input_professor_uinfo.text().strip()
 
-        if not student_id or not first_name or not last_name or year_level == 0 or not program or not professor:
+        if not student_id or not professor:
             self.show_warning("Input Error", "All fields must be filled out.")
             return False
 
@@ -38,23 +28,12 @@ class Confirmation:
             self.show_warning("Input Error", "Invalid Student ID format. Must be YYYY-NNNN.")
             return False
 
-        if not self.studentnameformat(first_name, last_name):
-            self.show_warning("Input Error", "First name and last name must contain only letters.")
-            return False
         
         self.ui.label_3.setText(student_id)
-        self.ui.label_7.setText(first_name)
-        self.ui.label_8.setText(last_name)
-        self.ui.label_5.setText(program)
         self.ui.label_4.setText(professor)
-        self.ui.label_6.setText(year_level_text)
-
+        
         self.studentInfo.append(student_id)
         self.studentInfo.append(professor)
-        self.studentInfo.append(first_name)
-        self.studentInfo.append(last_name)
-        self.studentInfo.append(program)
-        self.studentInfo.append(year_level)
 
         return True
     
