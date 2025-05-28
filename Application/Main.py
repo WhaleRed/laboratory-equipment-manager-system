@@ -98,6 +98,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # Add professor connection
         self.addProfessor_button.clicked.connect(self.openProfessor)
+        self.addborrower_button.clicked.connect(self.openBorrower)
 
 #-----Helper-----#
 

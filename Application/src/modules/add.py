@@ -18,8 +18,8 @@ def addBorrower(borrower):
   mycursor = db.cursor()
   try:
     mycursor.execute(
-            "INSERT INTO Borrower (BorrowerID, ProfessorID, FirstName, LastName, Program, Block) "
-            "VALUES (%(borrowerId)s, %(profId)s, %(fname)s, %(lname)s, %(program)s, %(block)s)",
+            "INSERT INTO Borrower (BorrowerID, ProfessorID, FirstName, LastName, Program, YearLevel) "
+            "VALUES (%(borrowerId)s, %(profId)s, %(fname)s, %(lname)s, %(program)s, %(yearlevel)s)",
             borrower
         )
     db.commit()
