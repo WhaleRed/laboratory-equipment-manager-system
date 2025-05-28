@@ -62,12 +62,13 @@ def addEquipment(equipment):
   finally:
     mycursor.close()
 
-def addBorrowedEquipment(equipmentID, borrowerID):
+def addBorrowedEquipment(equipmentID, borrowerID, state, qty):
   mycursor = db.cursor()
   try:
+    print("borrowing")
     mycursor.execute(
-            "INSERT INTO Borrowed_equipment (EquipmentID, BorrowerID, Borrow_date) "
-            "VALUES (%s, %s, NOW())", equipmentID, borrowerID
+            "INSERT INTO Borrowed_equipment (EquipmentID, BorrowerID, Borrow_date, State, Quantity) "
+            "VALUES (%s, %s, NOW(), %s, %s)", (equipmentID, borrowerID, state, qty)
             )
     db.commit()
     return 0
@@ -77,12 +78,14 @@ def addBorrowedEquipment(equipmentID, borrowerID):
   finally:
     mycursor.close()
 
-def addReplacedEquipment(equipmentID, borrowerID):
+def addReplacedEquipment(equipmentID, borrowerID, quantity):
   mycursor = db.cursor()
   try:
+    print("replacing")
+    print(f"Params: {equipmentID, borrowerID, quantity}")
     mycursor.execute(
-            "INSERT INTO Replaced_equipment (EquipmentID, BorrowerID, Replacement_date) "
-            "VALUES (%s, %s, NOW())", equipmentID, borrowerID
+            "INSERT INTO Replaced_equipment (EquipmentID, BorrowerID, Replacement_date, Quantity) "
+            "VALUES (%s, %s, NOW(), %s)", (equipmentID, borrowerID, quantity)
             )
     db.commit()
     return 0
@@ -92,12 +95,12 @@ def addReplacedEquipment(equipmentID, borrowerID):
   finally:
     mycursor.close()
 
-def addReturnedEquipment(equipmentID, borrowerId, status):
+def addReturnedEquipment(equipmentID, borrowerId, state, quantity):
   mycursor = db.cursor()
   try:
     mycursor.execute(
-            "INSERT INTO Returned_equipment (EquipmentID, BorrowerID ,Return_date , Status) "
-            "VALUES (%s, %s, NOW(), %s)", equipmentID, borrowerId, status
+            "INSERT INTO Returned_equipment (EquipmentID, BorrowerID ,Return_date , Status, Quantity) "
+            "VALUES (%s, %s, NOW(), %s, %s)", (equipmentID, borrowerId, state, quantity)
             )
     db.commit()
     return 0
