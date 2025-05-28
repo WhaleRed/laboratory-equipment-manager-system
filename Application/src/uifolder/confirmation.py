@@ -1,6 +1,8 @@
 from .EquipmentManager_CSM import Ui_MainWindow
 from PyQt6 import QtWidgets
 import re
+from ..modules.fetchData import fetchBorrower
+from ..modules.add import addBorrower
 
 class Confirmation:
     def __init__(self, ui: Ui_MainWindow):
@@ -8,6 +10,8 @@ class Confirmation:
         self.parent_widget = self.ui.centralwidget
         self.ui.next_button_additem.clicked.connect(self.User_Table_Inputs)
         self.populate_yearlevel_combo()
+        self.ui.submit_confirmation.clicked.connect(self.submitConfirm)
+        self.studentInfo = []
 
     def populate_yearlevel_combo(self):
         year_levels = ["YEAR LEVEL", "1st Year", "2nd Year", "3rd Year", "4th Year"]
@@ -47,6 +51,13 @@ class Confirmation:
         self.ui.label_4.setText(professor)
         self.ui.label_6.setText(year_level_text)
 
+        self.studentInfo.append(student_id)
+        self.studentInfo.append(professor)
+        self.studentInfo.append(first_name)
+        self.studentInfo.append(last_name)
+        self.studentInfo.append(program)
+        self.studentInfo.append(year_level)
+
         return True
     
     def User_Table_Inputs(self):
@@ -63,6 +74,26 @@ class Confirmation:
         item_summary = "\n".join(item_details) if item_details else "No items selected"
         self.ui.textEdit.setPlainText(item_summary)
     
+    def submitConfirm(self):
+        if self.studentInfo:
+            exist = fetchBorrower(self.studentInfo[0])
+            if exist:
+                print("Already Exists")
+            else:
+                student = {
+                    "borrowerId": self.studentInfo[0],
+                    "profId": self.studentInfo[1],
+                    "fname": self.studentInfo[2],
+                    "lname": self.studentInfo[3],
+                    "program": self.studentInfo[4],
+                    "yearlevel": self.studentInfo[5]
+                }
+                res = addBorrower(student)
+                if res == 1:
+                    print("Already Exists")
+                elif res == 0:
+                    print("Added Succesfully")
+
 
     def studentidformat(self, student_id):
         return bool(re.match(r'^\d{4}-\d{4}$', student_id))
