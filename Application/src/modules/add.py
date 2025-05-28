@@ -50,8 +50,8 @@ def addEquipment(equipment):
   mycursor = db.cursor()
   try:
     mycursor.execute(
-            "INSERT INTO Equipment (EquipmentId, Name, Quantity, Category)"
-            "VALUES (%(equipId)s, %(name)s, %(quantity)s, %(category)s)",
+            "INSERT INTO Equipment (EquipmentId, Equipment_name, Available, Category)"
+            "VALUES (%(EquipmentID)s, %(Equipment_name)s, %(Available)s, %(Category)s)",
             equipment
         )
     db.commit()

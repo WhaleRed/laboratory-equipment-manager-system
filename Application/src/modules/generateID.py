@@ -1,4 +1,4 @@
-from fetchData import fetchEquipmentIds, fetchEquipmentName
+from .fetchData import fetchEquipmentIds, fetchEquipmentName
 
 def generate_equipment_id(category_id_strip, equipment_name):
     
@@ -8,7 +8,7 @@ def generate_equipment_id(category_id_strip, equipment_name):
     
     existing_ids = fetchEquipmentIds()
     
-    category = category_id_strip.strip().upper()
+    category = category_id_strip.strip().upper()[:3]
     equipment_type = equipment_name.strip().upper()[:3]
      
     prefix = f"{category}-{equipment_type}"

@@ -486,21 +486,47 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         return
         
     def deleteRow(self, id):
+        res = None
         current_SWPage = self.Admin_Page.currentIndex()
 
         match current_SWPage:
             case 0:
+                field = "transaction"
                 current_tab_index = self.Dashboard_Frame.currentIndex()
                 match current_tab_index:
                     case 0:
-                        res = delete.delBorrowedEquipment(id)
-                        self.populateBorrowTable()
+                        confirm = QtWidgets.QMessageBox.question(
+                                self,
+                                "Confirm Deletion",
+                                f"Are you sure about deleting this {field}?",
+                                QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No,
+                                QtWidgets.QMessageBox.StandardButton.No
+                            )  
+                        if confirm == QtWidgets.QMessageBox.StandardButton.Yes:
+                            res = delete.delBorrowedEquipment(id)
+                            self.populateBorrowTable()
                     case 1:
-                        res = delete.delReturnedEquipment(id)
-                        self.populateReturnTable()
+                        confirm = QtWidgets.QMessageBox.question(
+                                self,
+                                "Confirm Deletion",
+                                f"Are you sure about deleting this {field}?",
+                                QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No,
+                                QtWidgets.QMessageBox.StandardButton.No
+                            )  
+                        if confirm == QtWidgets.QMessageBox.StandardButton.Yes:
+                            res = delete.delReturnedEquipment(id)
+                            self.populateReturnTable()
                     case 2:
-                        res = delete.delReplacedEquipment(id)
-                        self.populateReplaceTable()
+                        confirm = QtWidgets.QMessageBox.question(
+                                self,
+                                "Confirm Deletion",
+                                f"Are you sure about deleting this {field}?",
+                                QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No,
+                                QtWidgets.QMessageBox.StandardButton.No
+                            )  
+                        if confirm == QtWidgets.QMessageBox.StandardButton.Yes:
+                            res = delete.delReplacedEquipment(id)
+                            self.populateReplaceTable()
             case 1:
                 field = "equipment"
                 res = delete.delEquipment(id)
@@ -510,24 +536,41 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 match current_tab_index:
                     case 0:   #Delete for prof table
                         field = "professor"
-                        res = delete.delProfessor(id)
-                        self.populateProfTable()
+                        confirm = QtWidgets.QMessageBox.question(
+                                self,
+                                "Confirm Deletion",
+                                f"Are you sure about deleting this {field}?",
+                                QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No,
+                                QtWidgets.QMessageBox.StandardButton.No
+                            )  
+                        if confirm == QtWidgets.QMessageBox.StandardButton.Yes:
+                            res = delete.delProfessor(id)
+                            self.populateProfTable()
                     case 1:   #Delete for borrower table
                         field = "student"
-                        res = delete.delBorrower(id)
-                        self.populateBorrowerTable()
-        if res == 1:              
-            QtWidgets.QMessageBox.warning(
-                            self,
-                            "Delete Failed",
-                            f"This {field} cannot be deleted because it is referenced in another table."
-                        )
-        else:
-            QtWidgets.QMessageBox.information(
-                            self,
-                            "Delete Succesful",
-                            f"This {field} has been deleted."
-                        )
+                        confirm = QtWidgets.QMessageBox.question(
+                                self,
+                                "Confirm Deletion",
+                                f"Are you sure about deleting this {field}?",
+                                QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No,
+                                QtWidgets.QMessageBox.StandardButton.No
+                            )  
+                        if confirm == QtWidgets.QMessageBox.StandardButton.Yes:
+                            res = delete.delBorrower(id)
+                            self.populateBorrowerTable()
+        if res is not None:
+            if res == 1:              
+                QtWidgets.QMessageBox.warning(
+                                self,
+                                "Delete Failed",
+                                f"This {field} cannot be deleted because it is referenced in another table."
+                            )
+            else:
+                QtWidgets.QMessageBox.information(
+                                self,
+                                "Delete Succesful",
+                                f"This {field} has been deleted."
+                            )
         
 #-----Page navigation for admin tables-----# 
     
