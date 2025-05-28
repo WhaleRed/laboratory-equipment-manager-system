@@ -192,17 +192,34 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.populateBorrowerTable()
             
     def createOptionsButtonED(self, id):
-        btn = QtWidgets.QPushButton(" ⋮ ")
+        btn = QtWidgets.QPushButton("   ⋮ ")
         btn.setCursor(QtCore.Qt.CursorShape.PointingHandCursor)
         
         btn.setStyleSheet("text-align: center;")
-        #btn.setFixedSize(30, 30)
+        btn.setStyleSheet("""
+                          font-weight: bold;
+                          font-size: 12pt;
+                          padding: 0;
+                          """)
+        btn.setFixedSize(50, 50)
 
         menu = QtWidgets.QMenu(btn)
         edit_action = QtGui.QAction("Edit", self)
         delete_action = QtGui.QAction("Delete", self)
         menu.addAction(edit_action)
         menu.addAction(delete_action)
+        
+        menu.setStyleSheet("""
+                        QMenu {
+                            background-color: #f0f0f0;     
+                            border: 1px solid #b22222;    
+                            padding: 0px;                  
+                        }
+                        QMenu::item:selected {            
+                            background-color: #b22222;      
+                            color: white;
+                        }
+                        """)
 
         edit_action.triggered.connect(partial(self.editRow, id))
         delete_action.triggered.connect(partial(self.deleteRow, id))
@@ -212,15 +229,31 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         return btn
       
     def createOptionsButtonD(self, id):
-        btn = QtWidgets.QPushButton(" ⋮ ")
+        btn = QtWidgets.QPushButton("   ⋮ ")
         btn.setCursor(QtCore.Qt.CursorShape.PointingHandCursor)
         
-        btn.setStyleSheet("text-align: center;")
-        #btn.setFixedSize(30, 30)
+        btn.setStyleSheet("""
+                          font-weight: bold;
+                          font-size: 12pt;
+                          padding: 0;
+                          """)
+        btn.setFixedSize(50, 50)
 
         menu = QtWidgets.QMenu(btn)
         delete_action = QtGui.QAction("Delete", self)
         menu.addAction(delete_action)
+        
+        menu.setStyleSheet("""
+                        QMenu {
+                            background-color: #f0f0f0;     
+                            border: 1px solid #b22222;    
+                            padding: 0px;                  
+                        }
+                        QMenu::item:selected {            
+                            background-color: #b22222;      
+                            color: white;
+                        }
+                        """)
 
         delete_action.triggered.connect(partial(self.deleteRow, id))
 
@@ -234,26 +267,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         spinbox.setMaximum(max_quantity)
         spinbox.setValue(0)  # default selected quantity
         return spinbox
-      
-    def createOptionsButtonED(self, id):
-        btn = QtWidgets.QPushButton(" ⋮ ")
-        btn.setCursor(QtCore.Qt.CursorShape.PointingHandCursor)
-        
-        btn.setStyleSheet("text-align: center;")
-        #btn.setFixedSize(30, 30)
-
-        menu = QtWidgets.QMenu(btn)
-        edit_action = QtGui.QAction("Edit", self)
-        delete_action = QtGui.QAction("Delete", self)
-        menu.addAction(edit_action)
-        menu.addAction(delete_action)
-
-        edit_action.triggered.connect(partial(self.editRow, id))
-        delete_action.triggered.connect(partial(self.deleteRow, id))
-
-        btn.setMenu(menu)
-
-        return btn
 
     def setModeBorrow(self):
         self.addItemState = 2
