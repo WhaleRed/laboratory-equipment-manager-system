@@ -521,10 +521,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                             f"This {field} cannot be deleted because it is referenced in another table."
                         )
         else:
-            QtWidgets.QMessageBox.message(
+            QtWidgets.QMessageBox.information(
                             self,
-                            "Delete Failed",
-                            f"This {field} cannot be deleted because it is referenced in another table."
+                            "Delete Succesful",
+                            f"This {field} has been deleted."
                         )
         
 #-----Page navigation for admin tables-----# 
