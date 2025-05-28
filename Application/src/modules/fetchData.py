@@ -1369,3 +1369,14 @@ def searchProfessorMatch(page, sortStateidx, searched=None):
 
   mycursor.close()
   return arr, total_count
+
+
+def fetchProfID():
+  mycursor = db.cursor()
+  
+  mycursor.execute("SELECT ProfessorID FROM Professor ORDER BY ProfessorID")
+  results = mycursor.fetchall()
+  
+  mycursor.close()
+  
+  return [row[0] for row in results]

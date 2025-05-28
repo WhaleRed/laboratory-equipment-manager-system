@@ -101,7 +101,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.additem_button.clicked.connect(self.openAddItem)  # Add item button connection
 
         # Add professor connection
-        #self.addProfessor_button.clicked.connect(self.openProfessor)
+        self.addProfessor_button.clicked.connect(self.openProfessor)
+        self.addborrower_button.clicked.connect(self.openBorrower)
 
 #-----Helper-----#
 
@@ -909,6 +910,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         if dialog.exec():
             self.populateEquipmentTable()  # Refresh the equipment table after adding a new item
+
+    #-----Add Borrower-----#
+    def openBorrower(self):
+        from src.uifolder.Student_dialog import Students_Dialog
+        dialog = Students_Dialog(self)
+
+        if dialog.exec():
+            self.populateBorrowerTable()
 
 if __name__ == "__main__":
   app = QApplication(sys.argv)
