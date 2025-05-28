@@ -68,7 +68,7 @@
         <item row="0" column="0">
          <widget class="QStackedWidget" name="User_Interactive_Page">
           <property name="currentIndex">
-           <number>1</number>
+           <number>3</number>
           </property>
           <widget class="QWidget" name="Welcome_PAGE">
            <layout class="QGridLayout" name="gridLayout_21">
@@ -961,7 +961,7 @@ border-radius: 10px;</string>
                     <property name="font">
                      <font>
                       <family>Nunito</family>
-                      <pointsize>10</pointsize>
+                      <pointsize>18</pointsize>
                       <weight>75</weight>
                       <italic>false</italic>
                       <bold>true</bold>
@@ -978,8 +978,16 @@ border-radius: 10px;</string>
 
 QHeaderView::section {
     background-color: #A70000;
-    padding: 4px;
+	font-family: 'Nunito Extra Bold';
+	font-size: 20px;
+    font-weight: bold;
+    padding: 20px;
     border: 1px solid #d3d3d3;
+}
+
+QTableWidget::item {
+	margin: 5px;
+    padding: 5px;
 }
 
 QTableWidget::item:selected {
@@ -1008,11 +1016,11 @@ QTableWidget::item:selected {
                     <attribute name="horizontalHeaderCascadingSectionResizes">
                      <bool>false</bool>
                     </attribute>
-                    <attribute name="horizontalHeaderMinimumSectionSize">
-                     <number>50</number>
-                    </attribute>
                     <attribute name="horizontalHeaderDefaultSectionSize">
                      <number>252</number>
+                    </attribute>
+                    <attribute name="horizontalHeaderMinimumSectionSize">
+                     <number>20</number>
                     </attribute>
                     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
                      <bool>true</bool>
@@ -1023,11 +1031,11 @@ QTableWidget::item:selected {
                     <attribute name="verticalHeaderVisible">
                      <bool>false</bool>
                     </attribute>
-                    <attribute name="verticalHeaderMinimumSectionSize">
-                     <number>30</number>
-                    </attribute>
                     <attribute name="verticalHeaderDefaultSectionSize">
-                     <number>32</number>
+                     <number>55</number>
+                    </attribute>
+                    <attribute name="verticalHeaderMinimumSectionSize">
+                     <number>20</number>
                     </attribute>
                     <attribute name="verticalHeaderShowSortIndicator" stdset="0">
                      <bool>false</bool>
@@ -1035,6 +1043,31 @@ QTableWidget::item:selected {
                     <attribute name="verticalHeaderStretchLastSection">
                      <bool>false</bool>
                     </attribute>
+                    <row>
+                     <property name="text">
+                      <string>New Row</string>
+                     </property>
+                    </row>
+                    <row>
+                     <property name="text">
+                      <string>New Row</string>
+                     </property>
+                    </row>
+                    <row>
+                     <property name="text">
+                      <string>New Row</string>
+                     </property>
+                    </row>
+                    <row>
+                     <property name="text">
+                      <string>New Row</string>
+                     </property>
+                    </row>
+                    <row>
+                     <property name="text">
+                      <string>New Row</string>
+                     </property>
+                    </row>
                     <column>
                      <property name="text">
                       <string>Items</string>
@@ -1101,6 +1134,31 @@ QTableWidget::item:selected {
                       </brush>
                      </property>
                     </column>
+                    <item row="0" column="0">
+                     <property name="text">
+                      <string>1</string>
+                     </property>
+                    </item>
+                    <item row="1" column="0">
+                     <property name="text">
+                      <string>2</string>
+                     </property>
+                    </item>
+                    <item row="2" column="0">
+                     <property name="text">
+                      <string>3</string>
+                     </property>
+                    </item>
+                    <item row="3" column="0">
+                     <property name="text">
+                      <string>4</string>
+                     </property>
+                    </item>
+                    <item row="4" column="0">
+                     <property name="text">
+                      <string>5</string>
+                     </property>
+                    </item>
                    </widget>
                   </item>
                   <item row="8" column="0" colspan="2">
@@ -1465,8 +1523,8 @@ QPushButton#next_button_additem {
                   <property name="geometry">
                    <rect>
                     <x>38</x>
-                    <y>405</y>
-                    <width>131</width>
+                    <y>360</y>
+                    <width>161</width>
                     <height>51</height>
                    </rect>
                   </property>
@@ -1491,7 +1549,7 @@ QPushButton#next_button_additem {
                       <string notr="true">color: rgb(195, 25, 25);</string>
                      </property>
                      <property name="text">
-                      <string>Items to:</string>
+                      <string>Item List:</string>
                      </property>
                     </widget>
                    </item>
@@ -1592,8 +1650,8 @@ QPushButton#back_confirmation {
                    <rect>
                     <x>56</x>
                     <y>142</y>
-                    <width>401</width>
-                    <height>41</height>
+                    <width>511</width>
+                    <height>46</height>
                    </rect>
                   </property>
                   <property name="font">
@@ -1610,8 +1668,8 @@ QPushButton#back_confirmation {
                   <property name="frameShadow">
                    <enum>QFrame::Raised</enum>
                   </property>
-                  <layout class="QFormLayout" name="formLayout_12">
-                   <item row="0" column="0">
+                  <layout class="QHBoxLayout" name="horizontalLayout_5">
+                   <item>
                     <widget class="QLabel" name="Student_ID_text">
                      <property name="font">
                       <font>
@@ -1626,8 +1684,48 @@ QPushButton#back_confirmation {
                      </property>
                     </widget>
                    </item>
-                   <item row="0" column="1">
+                   <item>
                     <widget class="QLabel" name="label_3">
+                     <property name="font">
+                      <font>
+                       <pointsize>15</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>TextLabel</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_4">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="Program_text">
+                     <property name="font">
+                      <font>
+                       <family>Nunito ExtraBold</family>
+                       <pointsize>15</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Program:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_5">
                      <property name="font">
                       <font>
                        <pointsize>15</pointsize>
@@ -1799,64 +1897,11 @@ QPushButton#back_confirmation {
                    </item>
                   </layout>
                  </widget>
-                 <widget class="QFrame" name="Program_Frame">
-                  <property name="geometry">
-                   <rect>
-                    <x>56</x>
-                    <y>317</y>
-                    <width>401</width>
-                    <height>41</height>
-                   </rect>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <pointsize>7</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">color: rgb(195, 25, 25);</string>
-                  </property>
-                  <property name="frameShape">
-                   <enum>QFrame::NoFrame</enum>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Raised</enum>
-                  </property>
-                  <layout class="QFormLayout" name="formLayout_16">
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="Program_text">
-                     <property name="font">
-                      <font>
-                       <family>Nunito ExtraBold</family>
-                       <pointsize>15</pointsize>
-                       <weight>75</weight>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Program:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="1">
-                    <widget class="QLabel" name="label_5">
-                     <property name="font">
-                      <font>
-                       <pointsize>15</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>TextLabel</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
                  <widget class="QFrame" name="Professor_Frame">
                   <property name="geometry">
                    <rect>
                     <x>56</x>
-                    <y>360</y>
+                    <y>310</y>
                     <width>401</width>
                     <height>41</height>
                    </rect>
@@ -1909,7 +1954,7 @@ QPushButton#back_confirmation {
                   <property name="geometry">
                    <rect>
                     <x>30</x>
-                    <y>396</y>
+                    <y>350</y>
                     <width>561</width>
                     <height>21</height>
                    </rect>
@@ -1922,9 +1967,9 @@ QPushButton#back_confirmation {
                   <property name="geometry">
                    <rect>
                     <x>50</x>
-                    <y>460</y>
+                    <y>410</y>
                     <width>501</width>
-                    <height>111</height>
+                    <height>161</height>
                    </rect>
                   </property>
                   <property name="font">
@@ -2800,7 +2845,7 @@ QComboBox::hover {
                      <property name="font">
                       <font>
                        <family>Nunito</family>
-                       <pointsize>15</pointsize>
+                       <pointsize>12</pointsize>
                       </font>
                      </property>
                      <property name="styleSheet">
@@ -2843,10 +2888,13 @@ QTableWidget::item:selected {
                      <attribute name="horizontalHeaderDefaultSectionSize">
                       <number>181</number>
                      </attribute>
-                     <attribute name="verticalHeaderMinimumSectionSize">
-                      <number>56</number>
+                     <attribute name="horizontalHeaderMinimumSectionSize">
+                      <number>20</number>
                      </attribute>
                      <attribute name="verticalHeaderDefaultSectionSize">
+                      <number>56</number>
+                     </attribute>
+                     <attribute name="verticalHeaderMinimumSectionSize">
                       <number>56</number>
                      </attribute>
                      <column>
@@ -3272,7 +3320,7 @@ QComboBox::hover {
                      <property name="font">
                       <font>
                        <family>Nunito</family>
-                       <pointsize>15</pointsize>
+                       <pointsize>12</pointsize>
                       </font>
                      </property>
                      <property name="styleSheet">
@@ -3312,16 +3360,16 @@ QTableWidget::item:selected {
                      <property name="sortingEnabled">
                       <bool>true</bool>
                      </property>
-                     <attribute name="horizontalHeaderMinimumSectionSize">
-                      <number>20</number>
-                     </attribute>
                      <attribute name="horizontalHeaderDefaultSectionSize">
                       <number>180</number>
                      </attribute>
-                     <attribute name="verticalHeaderMinimumSectionSize">
-                      <number>56</number>
+                     <attribute name="horizontalHeaderMinimumSectionSize">
+                      <number>20</number>
                      </attribute>
                      <attribute name="verticalHeaderDefaultSectionSize">
+                      <number>56</number>
+                     </attribute>
+                     <attribute name="verticalHeaderMinimumSectionSize">
                       <number>56</number>
                      </attribute>
                      <column>
@@ -3443,7 +3491,7 @@ QTableWidget::item:selected {
                      </column>
                      <column>
                       <property name="text">
-                       <string>Option</string>
+                       <string/>
                       </property>
                       <property name="font">
                        <font>
@@ -3477,7 +3525,7 @@ QTableWidget::item:selected {
                      <property name="font">
                       <font>
                        <family>Nunito</family>
-                       <pointsize>15</pointsize>
+                       <pointsize>12</pointsize>
                       </font>
                      </property>
                      <property name="styleSheet">
@@ -3526,10 +3574,13 @@ QTableWidget::item:selected {
                      <attribute name="horizontalHeaderDefaultSectionSize">
                       <number>217</number>
                      </attribute>
-                     <attribute name="verticalHeaderMinimumSectionSize">
-                      <number>56</number>
+                     <attribute name="horizontalHeaderMinimumSectionSize">
+                      <number>20</number>
                      </attribute>
                      <attribute name="verticalHeaderDefaultSectionSize">
+                      <number>56</number>
+                     </attribute>
+                     <attribute name="verticalHeaderMinimumSectionSize">
                       <number>56</number>
                      </attribute>
                      <column>
@@ -3625,7 +3676,7 @@ QTableWidget::item:selected {
                      </column>
                      <column>
                       <property name="text">
-                       <string>Option</string>
+                       <string/>
                       </property>
                       <property name="font">
                        <font>
@@ -4096,7 +4147,7 @@ padding: 8px;
                     <property name="font">
                      <font>
                       <family>Nunito</family>
-                      <pointsize>15</pointsize>
+                      <pointsize>12</pointsize>
                      </font>
                     </property>
                     <property name="styleSheet">
@@ -4137,15 +4188,18 @@ QTableWidget::item:selected {
                      <number>5</number>
                     </property>
                     <attribute name="horizontalHeaderDefaultSectionSize">
-                     <number>273</number>
+                     <number>260</number>
+                    </attribute>
+                    <attribute name="horizontalHeaderMinimumSectionSize">
+                     <number>20</number>
                     </attribute>
                     <attribute name="verticalHeaderVisible">
                      <bool>false</bool>
                     </attribute>
-                    <attribute name="verticalHeaderMinimumSectionSize">
+                    <attribute name="verticalHeaderDefaultSectionSize">
                      <number>56</number>
                     </attribute>
-                    <attribute name="verticalHeaderDefaultSectionSize">
+                    <attribute name="verticalHeaderMinimumSectionSize">
                      <number>56</number>
                     </attribute>
                     <column>
@@ -4688,7 +4742,7 @@ background-color: rgb(255, 255, 255);</string>
                         </property>
                        </widget>
                       </item>
-                      <item row="0" column="10">
+                      <item row="0" column="8">
                        <widget class="QComboBox" name="Filter_box_Prof">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -4743,7 +4797,7 @@ QComboBox::hover {
                         </item>
                        </widget>
                       </item>
-                      <item row="0" column="9">
+                      <item row="0" column="7">
                        <widget class="QLabel" name="Filter_text_Prof">
                         <property name="font">
                          <font>
@@ -4755,24 +4809,6 @@ QComboBox::hover {
                         </property>
                         <property name="text">
                          <string>Sort:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="7">
-                       <widget class="QLabel" name="Date_text_Prof">
-                        <property name="font">
-                         <font>
-                          <family>Nunito ExtraBold</family>
-                          <pointsize>12</pointsize>
-                          <weight>75</weight>
-                          <bold>true</bold>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true"/>
-                        </property>
-                        <property name="text">
-                         <string>Date: </string>
                         </property>
                        </widget>
                       </item>
@@ -4788,89 +4824,6 @@ QComboBox::hover {
                          </size>
                         </property>
                        </spacer>
-                      </item>
-                      <item row="0" column="8">
-                       <widget class="QComboBox" name="Date_box_Prof">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>130</width>
-                          <height>30</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="font">
-                         <font>
-                          <family>Nunito ExtraBold</family>
-                          <pointsize>11</pointsize>
-                          <weight>75</weight>
-                          <bold>true</bold>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QComboBox {
-    border: 2px solid black;
-    border-radius: 5px;
-    padding: 5px;
-}
-
-QComboBox::hover {
-    border: 2px solid #cc0000;
-}
-
-
-</string>
-                        </property>
-                        <property name="currentText">
-                         <string>Please Select</string>
-                        </property>
-                        <property name="frame">
-                         <bool>false</bool>
-                        </property>
-                        <item>
-                         <property name="text">
-                          <string>Please Select</string>
-                         </property>
-                        </item>
-                       </widget>
-                      </item>
-                      <item row="0" column="0">
-                       <widget class="QToolButton" name="arrow_left_Prof">
-                        <property name="styleSheet">
-                         <string notr="true">#arrow_left_Prof {
-    border: none;
-    border-radius: 30px;        /* Makes it round (for 60x60 button) */
-    padding: 10px;
-}
-
-#arrow_left_Prof::pressed {
-    background-color:rgb(202, 202, 202);
-}</string>
-                        </property>
-                        <property name="text">
-                         <string/>
-                        </property>
-                        <property name="icon">
-                         <iconset>
-                          <normaloff>../compressed/arrowleft1.svg</normaloff>../compressed/arrowleft1.svg</iconset>
-                        </property>
-                        <property name="iconSize">
-                         <size>
-                          <width>32</width>
-                          <height>32</height>
-                         </size>
-                        </property>
-                       </widget>
                       </item>
                       <item row="0" column="4">
                        <widget class="QToolButton" name="arrow_right_Prof">
@@ -4915,17 +4868,35 @@ QComboBox::hover {
                         </property>
                        </widget>
                       </item>
-                      <item row="0" column="2">
-                       <widget class="QLineEdit" name="page_box_Prof">
-                        <property name="maximumSize">
+                      <item row="0" column="0">
+                       <widget class="QToolButton" name="arrow_left_Prof">
+                        <property name="styleSheet">
+                         <string notr="true">#arrow_left_Prof {
+    border: none;
+    border-radius: 30px;        /* Makes it round (for 60x60 button) */
+    padding: 10px;
+}
+
+#arrow_left_Prof::pressed {
+    background-color:rgb(202, 202, 202);
+}</string>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                        <property name="icon">
+                         <iconset>
+                          <normaloff>../compressed/arrowleft1.svg</normaloff>../compressed/arrowleft1.svg</iconset>
+                        </property>
+                        <property name="iconSize">
                          <size>
-                          <width>50</width>
-                          <height>16777215</height>
+                          <width>32</width>
+                          <height>32</height>
                          </size>
                         </property>
                        </widget>
                       </item>
-                      <item row="0" column="11">
+                      <item row="0" column="9">
                        <widget class="QToolButton" name="addProfessor_button">
                         <property name="font">
                          <font>
@@ -4966,6 +4937,16 @@ QComboBox::hover {
                         </property>
                        </widget>
                       </item>
+                      <item row="0" column="2">
+                       <widget class="QLineEdit" name="page_box_Prof">
+                        <property name="maximumSize">
+                         <size>
+                          <width>50</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
                      </layout>
                     </widget>
                    </item>
@@ -4974,7 +4955,7 @@ QComboBox::hover {
                      <property name="font">
                       <font>
                        <family>Nunito</family>
-                       <pointsize>15</pointsize>
+                       <pointsize>12</pointsize>
                       </font>
                      </property>
                      <property name="styleSheet">
@@ -5017,13 +4998,16 @@ QTableWidget::item:selected {
                      <attribute name="horizontalHeaderDefaultSectionSize">
                       <number>267</number>
                      </attribute>
+                     <attribute name="horizontalHeaderMinimumSectionSize">
+                      <number>20</number>
+                     </attribute>
                      <attribute name="verticalHeaderVisible">
                       <bool>false</bool>
                      </attribute>
-                     <attribute name="verticalHeaderMinimumSectionSize">
+                     <attribute name="verticalHeaderDefaultSectionSize">
                       <number>56</number>
                      </attribute>
-                     <attribute name="verticalHeaderDefaultSectionSize">
+                     <attribute name="verticalHeaderMinimumSectionSize">
                       <number>56</number>
                      </attribute>
                      <column>
@@ -5095,7 +5079,7 @@ QTableWidget::item:selected {
                      </column>
                      <column>
                       <property name="text">
-                       <string>Option</string>
+                       <string/>
                       </property>
                       <property name="font">
                        <font>
@@ -5129,7 +5113,7 @@ QTableWidget::item:selected {
                      <property name="font">
                       <font>
                        <family>Nunito</family>
-                       <pointsize>15</pointsize>
+                       <pointsize>12</pointsize>
                       </font>
                      </property>
                      <property name="styleSheet">
@@ -5170,19 +5154,19 @@ QTableWidget::item:selected {
                      <property name="sortingEnabled">
                       <bool>true</bool>
                      </property>
-                     <attribute name="horizontalHeaderMinimumSectionSize">
-                      <number>20</number>
-                     </attribute>
                      <attribute name="horizontalHeaderDefaultSectionSize">
                       <number>150</number>
+                     </attribute>
+                     <attribute name="horizontalHeaderMinimumSectionSize">
+                      <number>20</number>
                      </attribute>
                      <attribute name="verticalHeaderVisible">
                       <bool>false</bool>
                      </attribute>
-                     <attribute name="verticalHeaderMinimumSectionSize">
+                     <attribute name="verticalHeaderDefaultSectionSize">
                       <number>57</number>
                      </attribute>
-                     <attribute name="verticalHeaderDefaultSectionSize">
+                     <attribute name="verticalHeaderMinimumSectionSize">
                       <number>57</number>
                      </attribute>
                      <column>
@@ -5326,7 +5310,7 @@ QTableWidget::item:selected {
                      </column>
                      <column>
                       <property name="text">
-                       <string>Option</string>
+                       <string/>
                       </property>
                       <property name="font">
                        <font>
@@ -5369,31 +5353,6 @@ QTableWidget::item:selected {
                       <enum>QFrame::Raised</enum>
                      </property>
                      <layout class="QGridLayout" name="gridLayout_20">
-                      <item row="0" column="9">
-                       <widget class="QLabel" name="Filter_text_Students">
-                        <property name="font">
-                         <font>
-                          <family>Nunito ExtraBold</family>
-                          <pointsize>12</pointsize>
-                          <weight>75</weight>
-                          <bold>true</bold>
-                         </font>
-                        </property>
-                        <property name="text">
-                         <string>Sort:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="2">
-                       <widget class="QLineEdit" name="page_box_Students">
-                        <property name="maximumSize">
-                         <size>
-                          <width>50</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                       </widget>
-                      </item>
                       <item row="0" column="3">
                        <widget class="QLabel" name="ofTotal_Pages_Students">
                         <property name="font">
@@ -5409,7 +5368,45 @@ QTableWidget::item:selected {
                         </property>
                        </widget>
                       </item>
-                      <item row="0" column="10">
+                      <item row="0" column="2">
+                       <widget class="QLineEdit" name="page_box_Students">
+                        <property name="maximumSize">
+                         <size>
+                          <width>50</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="7">
+                       <widget class="QLabel" name="Filter_text_Students">
+                        <property name="font">
+                         <font>
+                          <family>Nunito ExtraBold</family>
+                          <pointsize>12</pointsize>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Sort:</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="5">
+                       <spacer name="horizontalSpacer_22">
+                        <property name="orientation">
+                         <enum>Qt::Horizontal</enum>
+                        </property>
+                        <property name="sizeHint" stdset="0">
+                         <size>
+                          <width>40</width>
+                          <height>20</height>
+                         </size>
+                        </property>
+                       </spacer>
+                      </item>
+                      <item row="0" column="8">
                        <widget class="QComboBox" name="Filter_box_Students">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -5464,19 +5461,6 @@ QComboBox::hover {
                         </item>
                        </widget>
                       </item>
-                      <item row="0" column="5">
-                       <spacer name="horizontalSpacer_22">
-                        <property name="orientation">
-                         <enum>Qt::Horizontal</enum>
-                        </property>
-                        <property name="sizeHint" stdset="0">
-                         <size>
-                          <width>40</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                       </spacer>
-                      </item>
                       <item row="0" column="0">
                        <widget class="QToolButton" name="arrow_left_Students">
                         <property name="styleSheet">
@@ -5502,79 +5486,6 @@ QComboBox::hover {
                           <width>32</width>
                           <height>32</height>
                          </size>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="8">
-                       <widget class="QComboBox" name="Date_box_Students">
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>130</width>
-                          <height>30</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>16777215</height>
-                         </size>
-                        </property>
-                        <property name="font">
-                         <font>
-                          <family>Nunito ExtraBold</family>
-                          <pointsize>11</pointsize>
-                          <weight>75</weight>
-                          <bold>true</bold>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QComboBox {
-    border: 2px solid black;
-    border-radius: 5px;
-    padding: 5px;
-}
-
-QComboBox::hover {
-    border: 2px solid #cc0000;
-}
-
-
-</string>
-                        </property>
-                        <property name="currentText">
-                         <string>Please Select</string>
-                        </property>
-                        <property name="frame">
-                         <bool>false</bool>
-                        </property>
-                        <item>
-                         <property name="text">
-                          <string>Please Select</string>
-                         </property>
-                        </item>
-                       </widget>
-                      </item>
-                      <item row="0" column="7">
-                       <widget class="QLabel" name="Date_text_Students">
-                        <property name="font">
-                         <font>
-                          <family>Nunito ExtraBold</family>
-                          <pointsize>12</pointsize>
-                          <weight>75</weight>
-                          <bold>true</bold>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true"/>
-                        </property>
-                        <property name="text">
-                         <string>Date: </string>
                         </property>
                        </widget>
                       </item>
@@ -5621,7 +5532,7 @@ QComboBox::hover {
                         </property>
                        </widget>
                       </item>
-                      <item row="0" column="11">
+                      <item row="0" column="9">
                        <widget class="QToolButton" name="addborrower_button">
                         <property name="font">
                          <font>
