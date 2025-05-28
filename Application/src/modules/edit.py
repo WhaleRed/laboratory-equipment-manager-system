@@ -95,13 +95,13 @@ def updateEquipmentQuantity(id, newQuantity, mode):
   if mode == 0 or mode == 1:
         query = """
             UPDATE equipment
-            SET available = available - %s
+            SET available = available + %s
             WHERE equipmentID = %s
         """
   elif mode == 2:
       query = """
           UPDATE equipment
-          SET available = available + %s
+          SET available = available - %s
           WHERE equipmentID = %s
       """
   else:
