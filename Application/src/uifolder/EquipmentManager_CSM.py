@@ -3051,7 +3051,7 @@ class Ui_MainWindow(object):
         self.label_7.setText(_translate("MainWindow", "TextLabel"))
         self.Last_Name_text.setText(_translate("MainWindow", "Last Name:"))
         self.label_8.setText(_translate("MainWindow", "TextLabel"))
-        self.Section_text.setText(_translate("MainWindow", "Section:"))
+        self.Section_text.setText(_translate("MainWindow", "Year Level:"))
         self.label_6.setText(_translate("MainWindow", "TextLabel"))
         self.Professor_text.setText(_translate("MainWindow", "Professor:"))
         self.label_4.setText(_translate("MainWindow", "TextLabel"))
