@@ -22,9 +22,13 @@ class AddDialog(QDialog):
         self.ui.comboBox_2.setEditable(True)
         self.ui.comboBox_2.setDuplicatesEnabled(False)  # Prevent duplicate entries
         
-        # Optional: Set placeholder text
-        self.ui.comboBox.lineEdit().setPlaceholderText("Select or enter equipment name")
-        self.ui.comboBox_2.lineEdit().setPlaceholderText("Select or enter category")
+        self.ui.comboBox.setCurrentIndex(-1)  # Set default index to the first item
+        self.ui.comboBox_2.setCurrentIndex(-1)  # Set default index to the first item
+    
+    def remove_duplicates(self, seq):
+        """Remove duplicates from a sequence while preserving order."""
+        seen = set()
+        return [x for x in seq if not (x in seen or seen.add(x))]
     
     def populateComboBoxes(self):
         try:
@@ -32,11 +36,13 @@ class AddDialog(QDialog):
             
             # Populate equipment name combo box
             equipment_names = fetchEquipmentName()
+            equipment_names = self.remove_duplicates(equipment_names)  # Remove duplicates
             self.ui.comboBox.clear()  # Clear existing items
             self.ui.comboBox.addItems(equipment_names)
             
             # Populate category combo box
             categories = fetchCategory()
+            categories = self.remove_duplicates(categories)  # Remove duplicates
             self.ui.comboBox_2.clear()  # Clear existing items
             self.ui.comboBox_2.addItems(categories)
             
