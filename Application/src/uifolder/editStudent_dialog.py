@@ -43,6 +43,7 @@ class EditStudent_Dialog(QDialog):
         self.ui.cancelButton.clicked.connect(self.close)
     
     def saveBorrower(self):
+        result = None
         try:
             student_id = self.ui.ID_box.text().strip()
             program = self.ui.programComboBox.currentText().strip()
@@ -77,18 +78,27 @@ class EditStudent_Dialog(QDialog):
                 "new_yearlvl": block,
                 "current_borrowerId": current_id
             }
-            # Call the addBorrower function
-            result = editBorrower(borrower)
+            # Call the editBorrower function
+            reply = QMessageBox.question(
+                self,
+                "Confirm Action",
+                "Do you want to proceed?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No  # Default button
+            )
 
-            if result == 0:
-                QMessageBox.information(self, "Success", "Borrower edited successfully.")
-                self.accept()
-            elif result == 1:
-                QMessageBox.warning(self, "Duplicate Error", "Borrower ID already exists.")
-            elif result == 2:
-                QMessageBox.warning(self, "Is being used", "Current Borrower is being used")
-            else:
-                QMessageBox.critical(self, "Error", "An unexpected error occurred.")
+            if reply == QMessageBox.StandardButton.Yes:
+                result = editBorrower(borrower)
+            if result is not None:
+                if result == 0:
+                    QMessageBox.information(self, "Success", "Borrower edited successfully.")
+                    self.accept()
+                elif result == 1:
+                    QMessageBox.warning(self, "Duplicate Error", "Borrower ID already exists.")
+                elif result == 2:
+                    QMessageBox.warning(self, "Is being used", "Current Borrower is being used")
+                else:
+                    QMessageBox.critical(self, "Error", "An unexpected error occurred.")
         except Exception as e:
             QMessageBox.critical(self, "Error", f"An error occurred while saving the borrower: {str(e)}")
             self.close()
