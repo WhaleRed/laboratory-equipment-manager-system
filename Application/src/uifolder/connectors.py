@@ -29,10 +29,9 @@ class Connector:
         # User Button
         self.ui.user_button_sidebar.clicked.connect(self.go_to_AdminBorrower_Page)
 
-        # Add Item Dialog Buttons
-        self.ui.addborrower_button.clicked.connect(self.Studentsdialog)
-        self.ui.additem_button.clicked.connect(self.AddItemDialog)
-
+        
+       
+       
     def connect_user_interactive_buttons(self):
         # Back Buttons
         self.ui.back_button_additem.clicked.connect(self.go_back_from_user_interactive)
@@ -106,12 +105,3 @@ class Connector:
         current_index = self.ui.User_Interactive_Page.currentIndex()
         if current_index < self.ui.User_Interactive_Page.count() - 1:
             self.ui.User_Interactive_Page.setCurrentIndex(current_index + 1)
-
-    # Student Professor and Add Item Dialog
-    def AddItemDialog(self):
-        add_dialog = AddDialog()
-        add_dialog.exec()
-
-    def Studentsdialog(self):
-        student_dialog = Students_Dialog()
-        student_dialog.exec()
