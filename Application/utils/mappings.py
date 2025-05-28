@@ -58,3 +58,13 @@ SORT_FIELDS_PROFESSOR = {
     2: "FirstName",
     3: "LastName"
 }
+
+CATEGORY_MAP = {
+    0: None,
+    1: "Measuring & Observation Tools",
+    2: "Glassware & Containers",
+    3: "Heating & Mixing Equipment",
+    4: "Biology-Specific Tools",
+    5: "Physics & Electronics",
+    6: "Miscellaneous Lab Tools"
+}

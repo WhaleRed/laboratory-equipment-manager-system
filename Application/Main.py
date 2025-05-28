@@ -97,6 +97,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.increment.clicked.connect(self.Ugo_to_next_page)
         self.decrement.clicked.connect(self.Ugo_to_prev_page)
         
+
         self.additem_button.clicked.connect(self.openAddItem)  # Add item button connection
 
         # Add professor connection
@@ -816,15 +817,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
       try:
         self.update_UpageNumber()
         
-        data = fetchData.fetchCategory()
-        page = self.UpageNum
+        page =  self.UpageNum
         
         category = self.category_box_additem.currentIndex()
         
         searchKeyword = self.search_box.text().strip()
         
-        for row in data:
-            self.category_box_additem.addItem(str(row))
         if self.addItemState == 0:
             self.Item_table.clearContents()
             data, count = fetchData.fetchItemsInUse(self.idno_uinfo.text(), page, category, searchKeyword)

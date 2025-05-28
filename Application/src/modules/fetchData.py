@@ -64,21 +64,9 @@ def fetchCategory():
   mycursor.execute("SELECT Category FROM Equipment ORDER BY Category")
   results = mycursor.fetchall()
   
-  print(f"vategory results: {results}")
-  
   mycursor.close()
   
   return [row[0] for row in results]
-
-def build_category_map():
-    categories = fetchCategory()
-    cat_map = {0: None}
-    for idx, cat in enumerate(categories, start=1):
-        cat_map[idx] = cat
-        
-    return cat_map
-
-CATEGORY_MAP = build_category_map()
 
 #-----For getting items in use-----#
 def fetchItemsInUse(borrowerID, page, categoryidx=None, searched=None):
@@ -88,12 +76,12 @@ def fetchItemsInUse(borrowerID, page, categoryidx=None, searched=None):
   
   catFilter = ""
   params = [borrowerID]
-  if categoryidx is not None:
-      category = CATEGORY_MAP.get(categoryidx)
+  if categoryidx != 0:
+      category = mappings.CATEGORY_MAP.get(categoryidx)
       if category:
           catFilter = "AND e.Category = %s"
           params.append(category)
-          
+                   
   if searched:
       searchFilter = "AND Equipment_name LIKE %s "
       params.insert(0, searched)
@@ -131,8 +119,8 @@ def fetchDamagedItems(borrowerID, page, categoryidx=None, searched=None):
     
     catFilter = ""
     params = [borrowerID]
-    if categoryidx is not None:
-        category = CATEGORY_MAP.get(categoryidx)
+    if categoryidx != 0:
+        category = mappings.CATEGORY_MAP.get(categoryidx)
         if category:
             catFilter = "AND e.Category = %s"
             params.append(category)
@@ -173,21 +161,17 @@ def fetchAvailableItems(page, categoryidx=None, searched=None):
     mycursor = db.cursor()
     
     offset = (page - 1) * PAGE_SIZE
-    
-    for key, value in CATEGORY_MAP.items():
-        print(f"Key: {key}, Value: {value}")
+
     
     catFilter = ""
     searchFilter = ""
     params = []
 
-    if categoryidx is not None:
-        category = CATEGORY_MAP.get(categoryidx)
+    if categoryidx != 0:
+        category = mappings.CATEGORY_MAP.get(categoryidx)
         if category:
             catFilter = "AND Category = %s"
             params.append(category)
-            
-    print(f"chosen category: {category}")
 
     if searched:
         searchFilter = "AND Equipment_name LIKE %s "
@@ -386,10 +370,7 @@ def sortDateBorrowedEquipment(page):
   offset = (page-1) * 10
   arr = []
 
-  print(f"Offset value: {offset}, type: {type(offset)}")
   mycursor.execute("SELECT * FROM borrowed_equipment ORDER BY Borrow_date DESC LIMIT 10 OFFSET %s", (offset,))
-  print("Query executed")
-
   for row in mycursor:
     arr.append(row)
   
@@ -1291,7 +1272,7 @@ def searchEquipmentMatch(page, sortStateidx, categoryidx, searched=None):
   if not sortState:
       return 1      #Attempt to inject
     
-  category = CATEGORY_MAP.get(categoryidx)
+  category = mappings.CATEGORY_MAP.get(categoryidx)
 
   catFilter = ""
   params = []

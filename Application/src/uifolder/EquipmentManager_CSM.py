@@ -67,6 +67,14 @@ class Ui_MainWindow(object):
         self.Filter_box_Students.addItem("Last Name")
         self.Filter_box_Students.addItem("Program")
         self.Filter_box_Students.addItem("Year Level")
+        
+        self.category_box_additem.addItem("Measuring & Observation Tools")
+        self.category_box_additem.addItem("Glassware & Containers")
+        self.category_box_additem.addItem("Heating & Mixing Equipment")
+        self.category_box_additem.addItem("Biology-Specific Tools")
+        self.category_box_additem.addItem("Physics & Electronics")
+        self.category_box_additem.addItem("Miscellaneous Lab Tools")
+            
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1440, 898)
