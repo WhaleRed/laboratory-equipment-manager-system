@@ -31,7 +31,7 @@ def editBorrower(borrower):
                 FirstName = %(new_fname)s,
                 LastName = %(new_lname)s,
                 Program = %(new_program)s,
-                Block = %(new_block)s
+                YearLevel = %(new_yearlvl)s
             WHERE BorrowerID = %(current_borrowerId)s
             """, borrower)
     db.commit()

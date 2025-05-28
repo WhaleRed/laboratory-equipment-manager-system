@@ -1380,3 +1380,12 @@ def fetchProfID():
   mycursor.close()
   
   return [row[0] for row in results]
+
+def fetchBorrower(idnum):
+  mycursor = db.cursor()
+  
+  mycursor.execute("SELECT * FROM borrower WHERE BorrowerID = %s",(idnum,))
+  results = mycursor.fetchall()
+  
+  mycursor.close()
+  return results

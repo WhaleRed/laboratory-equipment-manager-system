@@ -488,7 +488,51 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 #-----Edit and Delete functions-----#
 
     def editRow(self, id):
-        return
+        res = None
+        current_SWPage = self.Admin_Page.currentIndex()
+
+        match current_SWPage:
+            case 0:
+                field = "transaction"
+                current_tab_index = self.Dashboard_Frame.currentIndex()
+                match current_tab_index:
+                    case 0:
+                        res = delete.delBorrowedEquipment(id)
+                        self.populateBorrowTable()
+                    case 1:
+                        res = delete.delReturnedEquipment(id)
+                        self.populateReturnTable()
+                    case 2:
+                        res = delete.delReplacedEquipment(id)
+                        self.populateReplaceTable()
+            case 1:
+                field = "equipment"
+                res = delete.delEquipment(id)
+                self.populateEquipmentTable()
+            case 2:
+                current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
+                match current_tab_index:
+                    case 0:   #Delete for prof table
+                        field = "professor"
+                        res = delete.delProfessor(id)
+                        self.populateProfTable()
+                    case 1:   #Edit for borrower table
+                        field = "borrower"
+                        curDataBorrower = fetchData.fetchBorrower(id)
+                        self.editOpenBorrower(curDataBorrower)
+        if res is not None:
+            if res == 1:              
+                QtWidgets.QMessageBox.warning(
+                                self,
+                                "Edit Failed",
+                                f"This {field} cannot be edited because it is referenced in another table."
+                            )
+            else:
+                QtWidgets.QMessageBox.information(
+                                self,
+                                "Edit Succesful",
+                                f"This {field} has been edited."
+                            )
         
     def deleteRow(self, id):
         res = None
@@ -915,6 +959,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def openBorrower(self):
         from src.uifolder.Student_dialog import Students_Dialog
         dialog = Students_Dialog(self)
+
+        if dialog.exec():
+            self.populateBorrowerTable()
+
+    #-----Edit Borrower-----#
+    def editOpenBorrower(self, data):
+        from src.uifolder.editStudent_dialog import EditStudent_Dialog
+        dialog = EditStudent_Dialog(self, data)
 
         if dialog.exec():
             self.populateBorrowerTable()
