@@ -1494,3 +1494,11 @@ def fetchProfessor(idnum):
   
   mycursor.close()
   return results
+def fetch_EquipmentName(equipment_name):
+   mycursor = db.cursor()
+
+   mycursor.execute("SELECT * FROM equipment WHERE Equipment_name = %s", (equipment_name,))
+   results = mycursor.fetchall()
+
+   mycursor.close()
+   return results
