@@ -1050,7 +1050,7 @@ def searchReturnedEquipmentMatch(page, sortStateidx, dateState, searched=None):
     if dateState not in mappings.DATE_OPTIONS:
         return 1  # Attempt to inject
     unit, value = mappings.DATE_OPTIONS[dateState]
-    dateFilter = f"AND Borrow_date >= DATE_SUB(NOW(), INTERVAL {value} {unit})"
+    dateFilter = f"AND Return_date >= DATE_SUB(NOW(), INTERVAL {value} {unit})"
     
   if not searched:
         count_query = (
