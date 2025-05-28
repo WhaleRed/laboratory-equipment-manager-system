@@ -107,7 +107,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.addborrower_button.clicked.connect(self.openBorrower)
         
         self.next_button_uinfo.clicked.connect(self.get_borrower_id)
-        self.next_button_additem.clicked.connect(self.get_item_id)
+        self.submit_confirmation.clicked.connect(self.get_item_id)
 
 #-----Helper-----#
 
@@ -293,25 +293,31 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         item_names, quantities = self.logic.User_Table_Inputs()
         
         for name, qty in zip(item_names, quantities):
-            clean_name = name.strip(),
-            item_id = fetchData.fetch_itemID_from_name(clean_name)
+            clean_name = (name.strip(),)
+            item_id_tup = fetchData.fetch_itemID_from_name(clean_name)
+            item_id = item_id_tup[0]
+            print(f"id: {item_id}")
+            print(f"qty: {qty}")
             self.add_transaction_to_db(item_id, qty)
       except Exception as e:
         print(f"error grtting item id: {e}")
             
     def add_transaction_to_db(self, id, quantity):
       try:
-        print("Addiing transaction...☺")
+        print("Addiing transaction...")
         mode = self.addItemState
         
         if mode == 0:
             add.addReturnedEquipment(id, self.borrower_id, "Returned") #needs to change to accomodate multiple item state
+            edit.updateEquipmentQuantity(id, quantity, mode)
         elif mode == 1:
-            add.addReplacedEquipment(id, self.borrower_id)
+            print("adding")
+            add.addReplacedEquipment(id, self.borrower_id, quantity)
+            edit.updateEquipmentQuantity(id, quantity, mode) # change to update damaged in returned table
         elif mode == 2:
-            add.addBorrowedEquipment(id, self.borrower_id)
+            add.addBorrowedEquipment(id, self.borrower_id, 'In use', quantity)
+            edit.updateEquipmentQuantity(id, quantity, mode)
         
-        edit.updateEquipmentQuantity(id, quantity, mode)
       except Exception as e:
         print(f"Error in add_transaction_to_db: {e}")
             
@@ -551,10 +557,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         current_SWPage = self.Admin_Page.currentIndex()
 
         match current_SWPage:
+            case 0:
+                field = "transaction"
+                current_tab_index = self.Dashboard_Frame.currentIndex()
+                match current_tab_index:
+                    case 0:
+                        res = delete.delBorrowedEquipment(id)
+                        self.populateBorrowTable()
+                    case 1:
+                        res = delete.delReturnedEquipment(id)
+                        self.populateReturnTable()
+                    case 2:
+                        res = delete.delReplacedEquipment(id)
+                        self.populateReplaceTable()
             case 1:
                 field = "equipment"
-                curDataEquip = fetchData.fetchEquipmentData(id)
-                self.editOpenItem(curDataEquip)
+                res = delete.delEquipment(id)
+                self.populateEquipmentTable()
             case 2:
                 current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
                 match current_tab_index:
@@ -1015,14 +1034,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if dialog.exec():
             self.populateProfTable()
-
-    #----Edit item-----#
-    def editOpenItem(self, data):
-        from src.uifolder.edit_dialog import editDialog
-        dialog = editDialog(self, data)
-        
-        if dialog.exec():
-            self.populateEquipmentTable()
 
 if __name__ == "__main__":
   app = QApplication(sys.argv)
