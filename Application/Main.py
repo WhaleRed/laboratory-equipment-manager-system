@@ -514,8 +514,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 match current_tab_index:
                     case 0:   #Delete for prof table
                         field = "professor"
-                        res = delete.delProfessor(id)
-                        self.populateProfTable()
+                        curDataProf = fetchData.fetchProfessor(id)
+                        self.editOpenProfessor(curDataProf)
                     case 1:   #Edit for borrower table
                         field = "borrower"
                         curDataBorrower = fetchData.fetchBorrower(id)
@@ -970,6 +970,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if dialog.exec():
             self.populateBorrowerTable()
+
+    #-----Edit Professor-----#
+    def editOpenProfessor(self, data):
+        from src.uifolder.editProfessor_dialog import editProfessorDialog
+        dialog = editProfessorDialog(self, data)
+
+        if dialog.exec():
+            self.populateProfTable()
 
 if __name__ == "__main__":
   app = QApplication(sys.argv)
