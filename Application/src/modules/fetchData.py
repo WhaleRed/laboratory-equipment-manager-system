@@ -61,8 +61,10 @@ def fetchEquipmentName():
 def fetchCategory():
   mycursor = db.cursor()
   
-  mycursor.execute("SELECT DISTINCT Category FROM Equipment ORDER BY Category")
+  mycursor.execute("SELECT Category FROM Equipment ORDER BY Category")
   results = mycursor.fetchall()
+  
+  print(f"vategory results: {results}")
   
   mycursor.close()
   
@@ -79,29 +81,42 @@ def build_category_map():
 CATEGORY_MAP = build_category_map()
 
 #-----For getting items in use-----#
-def fetchItemsInUse(borrowerID, page):
+def fetchItemsInUse(borrowerID, page, categoryidx=None, searched=None):
   mycursor = db.cursor()
   
   offset = (page - 1) * PAGE_SIZE
   
-  count_query = """
-    SELECT COUNT(*)
-    FROM borrowed_equipment
-    WHERE borrowerID = %s
+  catFilter = ""
+  params = [borrowerID]
+  if categoryidx is not None:
+      category = CATEGORY_MAP.get(categoryidx)
+      if category:
+          catFilter = "AND e.Category = %s"
+          params.append(category)
+          
+  if searched:
+      searchFilter = "AND Equipment_name LIKE %s "
+      params.insert(0, searched)
+  
+  count_query = f"""
+        SELECT COUNT(*)
+        FROM borrowed_equipment b
+        INNER JOIN equipment e ON b.equipmentID = e.equipmentID
+        WHERE b.borrowerID = %s {searchFilter} {catFilter}
     """
     
-  mycursor.execute(count_query, (borrowerID,))
+  mycursor.execute(count_query, params)
   count = mycursor.fetchone()[0]
     
-  query = """
-    SELECT e.Equipment_name, b.Quantity
-    FROM equipment e
-    INNER JOIN borrowed_equipment b ON e.equipmentID = b.equipmentID
-    WHERE b.borrowerID = %s
-    LIMIT %s OFFSET %s
+  query = f"""
+        SELECT e.Equipment_name, b.Quantity
+        FROM equipment e
+        INNER JOIN borrowed_equipment b ON e.equipmentID = b.equipmentID
+        WHERE b.borrowerID = %s {searchFilter} {catFilter}
+        LIMIT %s OFFSET %s
     """
-    
-  mycursor.execute(query, (borrowerID, PAGE_SIZE, offset))
+  params += [PAGE_SIZE, offset]
+  mycursor.execute(query, params)
   results = mycursor.fetchall()
   
   mycursor.close()
@@ -109,27 +124,43 @@ def fetchItemsInUse(borrowerID, page):
   return results, count
 
 #-----For getting damaged items-----#
-def fetchDamagedItems(borrowerID, page):
+def fetchDamagedItems(borrowerID, page, categoryidx=None, searched=None):
     mycursor = db.cursor()
 
     offset = (page - 1) * PAGE_SIZE
+    
+    catFilter = ""
+    params = [borrowerID]
+    if categoryidx is not None:
+        category = CATEGORY_MAP.get(categoryidx)
+        if category:
+            catFilter = "AND e.Category = %s"
+            params.append(category)
+            
+    if searched:
+        searchFilter = "AND Equipment_name LIKE %s "
+        params.insert(0, searched)
 
-    count_query = """
-      SELECT COUNT(*)
-      FROM returned_equipment
-      WHERE BorrowerID = %s AND State = 'Damaged'
-      """
-    mycursor.execute(count_query, (borrowerID,))
+    count_query = f"""
+        SELECT COUNT(*)
+        FROM returned_equipment b
+        INNER JOIN equipment e ON b.equipmentID = e.equipmentID
+        WHERE b.BorrowerID = %s AND b.State = 'Damaged' {searchFilter} {catFilter}
+    """
+    
+    mycursor.execute(count_query, params)
     count = mycursor.fetchone()[0]
 
-    query = """
-      SELECT e.Equipment_name, b.Quantity
-      FROM equipment e
-      INNER JOIN returned_equipment b ON e.equipmentID = b.equipmentID
-      WHERE b.BorrowerID = %s AND b.State = 'Damaged'
-      LIMIT %s OFFSET %s
-      """
-    mycursor.execute(query, (borrowerID, PAGE_SIZE, offset))
+    query = f"""
+        SELECT e.Equipment_name, b.Quantity
+        FROM equipment e
+        INNER JOIN returned_equipment b ON e.equipmentID = b.equipmentID
+        WHERE b.BorrowerID = %s AND b.State = 'Damaged' {searchFilter} {catFilter}
+        LIMIT %s OFFSET %s
+    """
+    
+    params += [PAGE_SIZE, offset]
+    mycursor.execute(query, params)
     results = mycursor.fetchall()
 
     mycursor.close()
@@ -138,26 +169,46 @@ def fetchDamagedItems(borrowerID, page):
 
 #-----For getting available items-----#
 
-def fetchAvailableItems(page):
+def fetchAvailableItems(page, categoryidx=None, searched=None):
     mycursor = db.cursor()
     
     offset = (page - 1) * PAGE_SIZE
     
-    count_query = """
-      SELECT COUNT(*)
-      FROM equipment
-      WHERE Available > 0
-      """
-    mycursor.execute(count_query)
-    count = mycursor.fetchone()[0]
+    for key, value in CATEGORY_MAP.items():
+        print(f"Key: {key}, Value: {value}")
     
-    query = """
-      SELECT Equipment_name, Available
-      FROM equipment
-      WHERE Available > 0
-      LIMIT %s OFFSET %s
-      """
-    mycursor.execute(query, (PAGE_SIZE, offset))
+    catFilter = ""
+    searchFilter = ""
+    params = []
+
+    if categoryidx is not None:
+        category = CATEGORY_MAP.get(categoryidx)
+        if category:
+            catFilter = "AND Category = %s"
+            params.append(category)
+            
+    print(f"chosen category: {category}")
+
+    if searched:
+        searchFilter = "AND Equipment_name LIKE %s "
+        params.insert(0, searched)
+
+    count_query = f"""
+        SELECT COUNT(*)
+        FROM equipment
+        WHERE Available > 0 {searchFilter} {catFilter}
+    """
+    mycursor.execute(count_query, params)
+    count = mycursor.fetchone()[0]
+
+    query = f"""
+        SELECT Equipment_name, Available
+        FROM equipment
+        WHERE Available > 0 {searchFilter} {catFilter}
+        LIMIT %s OFFSET %s
+    """
+    params += [PAGE_SIZE, offset]
+    mycursor.execute(query, params)
     results = mycursor.fetchall()
     
     mycursor.close()

@@ -92,6 +92,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.return_button_user.clicked.connect(self.populateAddItemReturn)
         self.replace_button_user.clicked.connect(self.populateAddItemReplace)
         self.addItemState = 2
+        self.search_box.returnPressed.connect(self.setItemTableValues)
+        self.category_box_additem.currentIndexChanged.connect(self.setItemTableValues)
         self.additem_button.clicked.connect(self.openAddItem)  # Add item button connection
 
         # Add professor connection
@@ -747,18 +749,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 #-----Add item-----#
     def setItemTableValues(self):
       try:
+        print("Populating...")
         data = fetchData.fetchCategory()
         page = self.UpageNum
         
-        #for category, connect cat combobox. if indexchanged, trigger this function again. db func should accept cat as param
+        category = self.category_box_additem.currentIndex()
         
-        category = self.category_box_additem.currentIndex() #fetches current cat ids for cat map
+        print(f"category index: {category}")
+        
+        searchKeyword = self.search_box.text().strip()
+        print(f"searching: {searchKeyword}")
         
         for row in data:
             self.category_box_additem.addItem(str(row))
         if self.addItemState == 0:
             self.Item_table.clearContents()
-            data, count = fetchData.fetchItemsInUse(self.idno_uinfo.text(), page)
+            data, count = fetchData.fetchItemsInUse(self.idno_uinfo.text(), page, category, searchKeyword)
             
             self.update_UpageNumber()
             
@@ -770,7 +776,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
                 self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
                 
-                available_qty = int(item[2]) if len(item) > 2 else 1
+                available_qty = int(item[1])
                 spinbox = self.createQuantitySpinBox(available_qty)
                 self.Item_table.setCellWidget(row, 2, spinbox)
                 
@@ -778,7 +784,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         elif  self.addItemState == 1:
             self.Item_table.clearContents()
-            data, count = fetchData.fetchDamagedItems(self.idno_uinfo.text(), page)
+            data, count = fetchData.fetchDamagedItems(self.idno_uinfo.text(), page, category, searchKeyword)
             
             self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
             
@@ -790,7 +796,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
                 self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
                 
-                available_qty = int(item[2]) if len(item) > 2 else 1
+                available_qty = int(item[1])
                 spinbox = self.createQuantitySpinBox(available_qty)
                 self.Item_table.setCellWidget(row, 2, spinbox)
                 
@@ -798,7 +804,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         elif  self.addItemState == 2:
             self.Item_table.clearContents()
-            data, count = fetchData.fetchAvailableItems(page)
+            data, count = fetchData.fetchAvailableItems(page, category, searchKeyword)
+            
+            print(f"data: {data}")
             
             self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
             
@@ -810,7 +818,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(item[0])))
                 self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(item[1])))
                 
-                available_qty = int(item[2]) if len(item) > 2 else 1
+                available_qty = int(item[1])
                 spinbox = self.createQuantitySpinBox(available_qty)
                 self.Item_table.setCellWidget(row, 2, spinbox)
                 
