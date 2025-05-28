@@ -74,8 +74,8 @@ def editEquipment(equipment):
     mycursor.execute("""
             UPDATE equipment SET
                 EquipmentID = %(new_equipId)s,
-                Name = %(new_name)s,
-                Quantity = %(new_quantity)s,
+                Equipment_name = %(new_name)s,
+                Available = %(new_quantity)s,
                 Category = %(new_category)s
             WHERE EquipmentID = %(current_equipId)s
             """, equipment)
