@@ -24,10 +24,11 @@ class Confirmation:
         first_name = self.ui.first_name_uinfo.text().strip()
         last_name = self.ui.last_name_uinfo.text().strip()
         year_level = self.ui.yearlevel_uinfo.currentIndex()
+        year_level_text = self.ui.yearlevel_uinfo.currentText()
         program = self.ui.program_uinfo.text().strip()
         professor = self.ui.professor_uinfo.text().strip()
 
-        if not student_id or not first_name or not last_name or not year_level or not program or not professor:
+        if not student_id or not first_name or not last_name or year_level == 0 or not program or not professor:
             self.show_warning("Input Error", "All fields must be filled out.")
             return False
 
@@ -44,6 +45,7 @@ class Confirmation:
         self.ui.label_8.setText(last_name)
         self.ui.label_5.setText(program)
         self.ui.label_4.setText(professor)
+        self.ui.label_6.setText(year_level_text)
 
         return True
     
