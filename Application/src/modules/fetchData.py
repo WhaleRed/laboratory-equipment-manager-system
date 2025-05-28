@@ -1090,40 +1090,40 @@ def searchReturnedEquipmentMatch(page, sortStateidx, dateState, searched=None):
             f"WHERE 1=1 {dateFilter}"
         )
   else:
-    if is_valid_equipment_id(searched) or is_valid_id(searched):
-      count_query = (
-          f"SELECT COUNT(*) FROM returned_equipment "
-          f"WHERE (EquipmentID = %s OR BorrowerID = %s) {dateFilter}"
-      )
-      params = [searched, searched]       
-    else:
       count_query = (
           f"SELECT COUNT(*) FROM returned_equipment "
           f"WHERE MATCH(EquipmentID, BorrowerID, State) "
           f"AGAINST (%s IN BOOLEAN MODE) "
           f"{dateFilter}"
       )
-      params = [searched]
   
-  mycursor.execute(count_query, tuple(params))
+  mycursor.execute(count_query, (searched,) if searched else ())
   total_count = mycursor.fetchone()[0] 
   
   if not searched:  # if empty or None
+        if sortState == "Return_date":
+            query = (
+                f"SELECT * FROM returned_equipment "
+                f"WHERE 1=1 {dateFilter} "
+                f"ORDER BY Return_date DESC LIMIT 10 OFFSET %s"
+            )
+            mycursor.execute(query, (offset,))
+        else:
+            query = (
+                f"SELECT * FROM returned_equipment "
+                f"WHERE 1=1 {dateFilter} "
+                f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+            )
+            mycursor.execute(query, (offset,))
+  else:
+    if sortState == "Return_date":
       query = (
           f"SELECT * FROM returned_equipment "
-          f"WHERE 1=1 {dateFilter} "
-          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+          f"WHERE MATCH(EquipmentID, BorrowerID, State) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"{dateFilter} "
+          f"ORDER BY Return_date DESC LIMIT 10 OFFSET %s"      
       )
-      mycursor.execute(query, (offset,))
-  else:
-    if is_valid_equipment_id(searched) or is_valid_id(searched):
-      query = (
-            f"SELECT * FROM returned_equipment "
-            f"WHERE (EquipmentID = %s OR BorrowerID = %s) "
-            f"{dateFilter} "
-            f"ORDER BY Return_date DESC LIMIT 10 OFFSET %s"      
-        )
-      params = [searched, searched, offset]
     else:
       query = (
           f"SELECT * FROM returned_equipment "
@@ -1132,8 +1132,7 @@ def searchReturnedEquipmentMatch(page, sortStateidx, dateState, searched=None):
           f"{dateFilter} "
           f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
       )
-      params = [searched, offset]
-    mycursor.execute(query, tuple(params))
+    mycursor.execute(query, (searched, offset))
   
   arr = mycursor.fetchall()
 
@@ -1165,40 +1164,40 @@ def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
             f"WHERE 1=1 {dateFilter}"
         )
   else:
-    if is_valid_equipment_id(searched) or is_valid_id(searched):
-      count_query = (
-          f"SELECT COUNT(*) FROM replaced_equipment "
-          f"WHERE (EquipmentID = %s OR BorrowerID = %s) {dateFilter}"   
-      )
-      params = [searched, searched]
-    else:
       count_query = (
           f"SELECT COUNT(*) FROM replaced_equipment "
           f"WHERE MATCH(EquipmentID, BorrowerID) "
           f"AGAINST (%s IN BOOLEAN MODE) "
           f"{dateFilter}"
       )
-      params = [searched]
   
-  mycursor.execute(count_query, tuple(params))
+  mycursor.execute(count_query, (searched,) if searched else ())
   total_count = mycursor.fetchone()[0] 
   
   if not searched:  # if empty or None
+        if sortState == "Replacement_date":
+            query = (
+                f"SELECT * FROM replaced_equipment "
+                f"WHERE 1=1 {dateFilter} "
+                f"ORDER BY replacement_date DESC LIMIT 10 OFFSET %s"
+            )
+            mycursor.execute(query, (offset,))
+        else:
+            query = (
+                f"SELECT * FROM replaced_equipment "
+                f"WHERE 1=1 {dateFilter} "
+                f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+            )
+            mycursor.execute(query, (offset,))
+  else:
+    if sortState == "Replacement_date":
       query = (
           f"SELECT * FROM replaced_equipment "
-          f"WHERE 1=1 {dateFilter} "
-          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+          f"WHERE MATCH(EquipmentID, BorrowerID) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"{dateFilter} "
+          f"ORDER BY Replacement_date DESC LIMIT 10 OFFSET %s"      
       )
-      mycursor.execute(query, (offset,))
-  else:
-    if is_valid_equipment_id(searched) or is_valid_id(searched):
-      query = (
-            f"SELECT * FROM replaced_equipment "
-            f"WHERE (EquipmentID = %s OR BorrowerID = %s) "
-            f"{dateFilter} "
-            f"ORDER BY Replacement_date DESC LIMIT 10 OFFSET %s"      
-      )
-      params = [searched, searched, offset]
     else:
       query = (
           f"SELECT * FROM replaced_equipment "
@@ -1207,8 +1206,7 @@ def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
           f"{dateFilter} "
           f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
       )
-      params = [searched, offset]
-    mycursor.execute(query, tuple(params))
+    mycursor.execute(query, (searched, offset))
   
 
   arr = mycursor.fetchall()
@@ -1234,21 +1232,13 @@ def searchBorrowerMatch(page, sortStateidx, searched=None):
         )
         mycursor.execute(count_query)
   else:
-    if is_valid_equipment_id(searched) or is_valid_id(searched):
-      count_query = (
-          f"SELECT COUNT(*) FROM borrower "
-          f"WHERE (ProfessorID = %s OR BorrowerID = %s)"
-      )       
-      params = [searched, searched] 
-    else:
       count_query = (
           f"SELECT COUNT(*) FROM borrower "
           f"WHERE MATCH(ProfessorID, BorrowerID, FirstName, LastName, Program, YearLevel) "
           f"AGAINST (%s IN BOOLEAN MODE)"
-        )
-      params = [searched]
+      )
+      mycursor.execute(count_query, (searched,))
 
-  mycursor.execute(count_query, tuple(params))
   total_count = mycursor.fetchone()[0]
   
   if not searched:
@@ -1258,22 +1248,13 @@ def searchBorrowerMatch(page, sortStateidx, searched=None):
         )
         mycursor.execute(query, (offset,))
   else:
-    if is_valid_equipment_id(searched) or is_valid_id(searched):
-      query = (
-          f"SELECT * FROM borrower "
-          f"WHERE (ProfessorID = %s OR BorrowerID = %s) "
-          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
-      )
-      params = [searched, searched, offset]
-    else:
       query = (
           f"SELECT * FROM borrower "
           f"WHERE MATCH(ProfessorID, BorrowerID, FirstName, LastName, Program, YearLevel) "
           f"AGAINST (%s IN BOOLEAN MODE) "
           f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
-        )
-      params = [searched, offset]
-    mycursor.execute(query, tuple(params))
+      )
+      mycursor.execute(query, (searched, offset))
 
   arr = mycursor.fetchall()
 
@@ -1307,13 +1288,6 @@ def searchEquipmentMatch(page, sortStateidx, categoryidx, searched=None):
         )
         mycursor.execute(count_query, params)
   else:
-    if is_valid_equipment_id(searched) or is_valid_id(searched):
-      count_query = (
-          f"SELECT COUNT(*) FROM equipment "
-          f"WHERE (EquipmentID = %s) "
-          f"{catFilter}"
-      )
-    else:
       count_query = (
           f"SELECT COUNT(*) FROM equipment "
           f"WHERE MATCH(EquipmentID, Equipment_name, Category) AGAINST (%s IN BOOLEAN MODE) "
@@ -1334,20 +1308,14 @@ def searchEquipmentMatch(page, sortStateidx, categoryidx, searched=None):
         mycursor.execute(query, params)
   else:
     if searched.isdigit():
-      if is_valid_equipment_id(searched) or is_valid_id(searched):
-        query = (
-            f"SELECT * FROM equipment "
-            f"WHERE (EquipmentID = %s) "
-            f"{catFilter}"
-            f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
-        )       
-      else:
-        query = (
-            f"SELECT * FROM equipment "
-            f"WHERE MATCH(EquipmentID, Equipment_name, Category) AGAINST (%s IN BOOLEAN MODE) "
-            f"{catFilter}"
-            f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
-        )
+      
+      
+      query = (
+          f"SELECT * FROM equipment "
+          f"WHERE MATCH(EquipmentID, Equipment_name, Category) AGAINST (%s IN BOOLEAN MODE) "
+          f"{catFilter}"
+          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+      )
       params = [searched] + params + [offset]
       mycursor.execute(query, params)
 
@@ -1374,16 +1342,10 @@ def searchProfessorMatch(page, sortStateidx, searched=None):
         )
         mycursor.execute(count_query)
   else: 
-      if is_valid_equipment_id(searched) or is_valid_id(searched):
-        count_query = (
-            f"SELECT COUNT(*) FROM professor "
-            f"WHERE (ProfessorID = %s)"
-        )   
-      else:
-        count_query = (
-            f"SELECT COUNT(*) FROM professor "
-            f"WHERE MATCH(ProfessorID, FirstName, LastName) AGAINST (%s IN BOOLEAN MODE)"
-        )
+      count_query = (
+          f"SELECT COUNT(*) FROM professor "
+          f"WHERE MATCH(ProfessorID, FirstName, LastName) AGAINST (%s IN BOOLEAN MODE)"
+      )
       mycursor.execute(count_query, (searched,))
 
   total_count = mycursor.fetchone()[0]
@@ -1395,19 +1357,12 @@ def searchProfessorMatch(page, sortStateidx, searched=None):
         )
         mycursor.execute(query, (offset,))
   else:
-      if is_valid_equipment_id(searched) or is_valid_id(searched):
-        query = (
-            f"SELECT * FROM professor "
-            f"WHERE (ProfessorID = %s) "
-            f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
-        )        
-      else:
-        query = (
-            f"SELECT * FROM professor "
-            f"WHERE MATCH(ProfessorID, FirstName, LastName) "
-            f"AGAINST (%s IN BOOLEAN MODE) "
-            f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
-        )
+      query = (
+          f"SELECT * FROM professor "
+          f"WHERE MATCH(ProfessorID, FirstName, LastName) "
+          f"AGAINST (%s IN BOOLEAN MODE) "
+          f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
+      )
       mycursor.execute(query, (searched, offset))
 
   arr = mycursor.fetchall()
