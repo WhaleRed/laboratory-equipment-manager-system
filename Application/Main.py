@@ -437,9 +437,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             for row, item in enumerate(data):
                 self.return_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
                 self.return_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
-                self.return_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[2]}"))
-                self.return_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
-                self.return_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
+                self.return_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{item[2]}"))
+                self.return_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
+                self.return_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
                 
                 key = (item[0], item[1], item[2])
                 btn = self.createOptionsButtonD(key)
