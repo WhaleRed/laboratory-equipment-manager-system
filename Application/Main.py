@@ -286,7 +286,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         elif mode == 1:
             print("adding")
             add.addReplacedEquipment(id, self.borrower_id, quantity)
-            edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode) # change to update damaged in returned table
+            edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
         elif mode == 2:
             add.addBorrowedEquipment(id, self.borrower_id, 'In use', quantity)
             edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
@@ -324,6 +324,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     font-family: 'Nunito Extra Bold';
                     font-size: 20px;
                     font-weight: bold;
+                    color: white;
                     padding: 20px;
                     border: 1px solid #d3d3d3;
                 }
@@ -996,20 +997,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     spinbox_returned = self.createQuantitySpinBox(available_qty)
                     spinbox_damaged = self.createQuantitySpinBox(available_qty)
                     
-                    def on_spinbox1_changed(value, s2=spinbox_returned, max_qty=available_qty):
-                        s2.setMaximum(max_qty - value)
-                        if s2.value() > s2.maximum():
-                            s2.setValue(s2.maximum())
+                    def on_returned_changed(value):
+                        remaining = available_qty - value
+                        spinbox_damaged.setMaximum(remaining)
+                        if spinbox_damaged.value() > remaining:
+                            spinbox_damaged.setValue(remaining)
                     
-                    def on_spinbox2_changed(value, s1=spinbox_damaged, max_qty=available_qty):
-                        s1.setMaximum(max_qty - value)
-                        if s1.value() > s1.maximum():
-                            s1.setValue(s1.maximum())
+                    def on_damaged_changed(value):
+                        remaining = available_qty - value
+                        spinbox_returned.setMaximum(remaining)
+                        if spinbox_returned.value() > remaining:
+                            spinbox_returned.setValue(remaining)
                             
                         self.addItemState = 3
                             
-                    spinbox_returned.valueChanged.connect(on_spinbox1_changed)
-                    spinbox_damaged.valueChanged.connect(on_spinbox2_changed)
+                    spinbox_returned.valueChanged.connect(on_returned_changed)
+                    spinbox_damaged.valueChanged.connect(on_damaged_changed)
                     
                     self.Item_table.setCellWidget(row, 2, spinbox_returned)
                     self.Item_table.setCellWidget(row, 3, spinbox_damaged)
