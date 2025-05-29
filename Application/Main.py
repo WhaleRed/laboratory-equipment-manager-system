@@ -312,17 +312,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
       try:
         print("Addiing transaction...")
         mode = self.addItemState
+        print(f"mode: {mode}")
         
         if mode == 0:
             add.addReturnedEquipment(id, self.borrower_id, "Returned", quantity) #needs to change to accomodate multiple item state
-            edit.updateEquipmentQuantity(id, quantity, mode)
+            edit.updateEquipmentQuantityState(id, quantity, mode)
         elif mode == 1:
             print("adding")
             add.addReplacedEquipment(id, self.borrower_id, quantity)
-            edit.updateEquipmentQuantity(id, quantity, mode) # change to update damaged in returned table
+            edit.updateEquipmentQuantityState(id, quantity, mode) # change to update damaged in returned table
         elif mode == 2:
             add.addBorrowedEquipment(id, self.borrower_id, 'In use', quantity)
-            edit.updateEquipmentQuantity(id, quantity, mode)
+            edit.updateEquipmentQuantityState(id, quantity, mode)
         
       except Exception as e:
         print(f"Error in add_transaction_to_db: {e}")
@@ -395,9 +396,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             for row, item in enumerate(data):
                 self.borrow_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
                 self.borrow_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
-                self.borrow_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[2]}"))
-                self.borrow_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
-                self.borrow_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
+                self.borrow_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{item[2]}"))
+                self.borrow_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
+                self.borrow_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
                 
                 key = (item[0], item[1], item[2])
                 btn = self.createOptionsButtonD(key)
@@ -436,9 +437,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             for row, item in enumerate(data):
                 self.return_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
                 self.return_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
-                self.return_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[2]}"))
-                self.return_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
-                self.return_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
+                self.return_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{item[2]}"))
+                self.return_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
+                self.return_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
                 
                 key = (item[0], item[1], item[2])
                 btn = self.createOptionsButtonD(key)
@@ -473,8 +474,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             for row, item in enumerate(data):
                 self.replace_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
                 self.replace_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
-                self.replace_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[2]}"))
-                self.replace_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
+                self.replace_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"     {item[2]}"))
+                self.replace_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"                     {item[3]}"))
                 
                 key = (item[0], item[1], item[2])
                 btn = self.createOptionsButtonD(key)
@@ -930,90 +931,91 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 #-----Add item-----#
     def setItemTableValues(self):
-      try:
+        try:
             self.Uupdate_pageNumber()
 
             page = self.UpageNum
             category = self.category_box_additem.currentIndex()
             searchKeyword = self.search_box.text().strip()
-            
-        if self.addItemState == 0: # suggestion: add mode 3 for returning damaged equipment
-            self.Item_table.clearContents()
-            self.Item_table.setColumnCount(4)
-            self.Item_table.setHorizontalHeaderLabels(['Item', 'In use', 'Returned', 'Damaged'])
-            
-            header = self.Item_table.horizontalHeader()
-
-            header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.Stretch)
-            header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeMode.Stretch)
-
-            header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeMode.Fixed)
-            header.resizeSection(2, 100) 
-
-            header.setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeMode.Fixed)
-            header.resizeSection(3, 100)
-            
-            data, count = fetchData.fetchItemsInUse(self.input_idno_uinfo.text(), page, category, searchKeyword)
-            
-            self.Uupdate_pageNumber()
-            
-            self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
-            
-            self.Item_table.setRowCount(len(data))
-            row = 0
-            for item in data:
-                self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
-                self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
                 
-                available_qty = int(item[1])
+            if self.addItemState == 0: # suggestion: add mode 3 for returning damaged equipment
+                self.Item_table.clearContents()
+                self.Item_table.setColumnCount(4)
+                self.Item_table.setHorizontalHeaderLabels(['Item', 'In use', 'Returned', 'Damaged'])
                 
-                spinbox_returned = self.createQuantitySpinBox(available_qty)
-                self.Item_table.setCellWidget(row, 2, spinbox)
-                
-                spinbox_damaged = self.createQuantitySpinBox(available_qty)
-                self.Item_table.setCellWidget(row, 3, spinbox)
-                
-                row += 1
+                header = self.Item_table.horizontalHeader()
 
-        elif  self.addItemState == 1:
-            self.Item_table.clearContents()
-            data, count = fetchData.fetchDamagedItems(self.input_idno_uinfo.text(), page, category, searchKeyword)
-            
-            self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
-            
-            self.Uupdate_pageNumber()
-            
-            self.Item_table.setRowCount(len(data))
-            row = 0
-            for item in data:
-                self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
-                self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
+                header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.Stretch)
+                header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeMode.Stretch)
+
+                header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeMode.Fixed)
+                header.resizeSection(2, 100) 
+
+                header.setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeMode.Fixed)
+                header.resizeSection(3, 100)
                 
-                available_qty = int(item[1])
-                spinbox = self.createQuantitySpinBox(available_qty)
-                self.Item_table.setCellWidget(row, 2, spinbox)
+                data, count = fetchData.fetchItemsInUse(self.input_idno_uinfo.text(), page, category, searchKeyword)
                 
-                row += 1
+                self.Uupdate_pageNumber()
+                
+                self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
+                
+                self.Item_table.setRowCount(len(data))
+                row = 0
+                
+                for item in data:
+                    self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
+                    self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
+                    
+                    available_qty = int(item[1])
+                    
+                    spinbox_returned = self.createQuantitySpinBox(available_qty)
+                    self.Item_table.setCellWidget(row, 2, spinbox)
+                    
+                    spinbox_damaged = self.createQuantitySpinBox(available_qty)
+                    self.Item_table.setCellWidget(row, 3, spinbox)
+                    
+                    row += 1
 
-        elif  self.addItemState == 2:
-            self.Item_table.clearContents()
-            data, count = fetchData.fetchAvailableItems(page, category, searchKeyword)
-            
-            self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
-            
-            self.Uupdate_pageNumber()
-            
-            self.Item_table.setRowCount(len(data))
-            for row, item in enumerate(data):
-                self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
-                self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
+            elif  self.addItemState == 1:
+                self.Item_table.clearContents()
+                data, count = fetchData.fetchDamagedItems(self.input_idno_uinfo.text(), page, category, searchKeyword)
+                
+                self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
+                
+                self.Uupdate_pageNumber()
+                
+                self.Item_table.setRowCount(len(data))
+                row = 0
+                for item in data:
+                    self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
+                    self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
+                    
+                    available_qty = int(item[1])
+                    spinbox = self.createQuantitySpinBox(available_qty)
+                    self.Item_table.setCellWidget(row, 2, spinbox)
+                    
+                    row += 1
 
-                available_qty = int(item[1])
-                spinbox = self.createQuantitySpinBox(available_qty)
-                self.Item_table.setCellWidget(row, 2, spinbox)
+            elif  self.addItemState == 2:
+                self.Item_table.clearContents()
+                data, count = fetchData.fetchAllAvailableItems(category, searchKeyword)
+                
+                self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
+                
+                self.Uupdate_pageNumber()
+                
+                self.Item_table.setRowCount(len(data))
+                for row, item in enumerate(data):
+                    self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
+                    self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
 
-      except Exception as e:
-            print(f"Failed to populate: {e}")
+                    available_qty = int(item[1])
+                    spinbox = self.createQuantitySpinBox(available_qty)
+                    self.Item_table.setCellWidget(row, 2, spinbox)
+
+        except Exception as e:
+                print(f"Failed to populate: {e}")
 
 
     #-----Add Professor-----#
