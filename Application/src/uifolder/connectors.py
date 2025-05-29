@@ -2,13 +2,16 @@ from .EquipmentManager_CSM import Ui_MainWindow
 from .confirmation import Confirmation
 from .Student_dialog import Students_Dialog
 from .add_dialog import AddDialog
+from .login_Dialog import LoginDialog
+from PyQt6.QtWidgets import QDialog
+
 class Connector:
     def __init__(self, ui: Ui_MainWindow):
         self.ui = ui
         self.confirmation = Confirmation(self.ui)
         self.connect_admin_buttons()
         self.connect_user_interactive_buttons()
-
+        self.admin_authenticated = False  # Track admin login status
 
     
     # Connector for Buttons
@@ -57,13 +60,27 @@ class Connector:
 
     # Admin User
     def go_to_admin_user_page(self):
+        if not self.admin_authenticated:
+            login_dialog = LoginDialog()
+            if login_dialog.exec() == QDialog.DialogCode.Accepted and login_dialog.success:
+                self.admin_authenticated = True
+            else:
+                return
+
         index = self.ui.Admin_User_Page.indexOf(self.ui.page)
         if index != -1:
             self.ui.Admin_User_Page.setCurrentIndex(index)
     
     # User Interactive Page to Admin User Page 
     def go_to_admin_user(self):
-        # Goes to page 2 (index 1) of the parent stacked widget
+        if not self.admin_authenticated:
+            login_dialog = LoginDialog()
+            if login_dialog.exec() == QDialog.DialogCode.Accepted and login_dialog.success:
+                self.admin_authenticated = True
+            else:
+                return  # Cancel if login failed
+
+        # Navigate if already authenticated
         self.ui.Admin_User_Page.setCurrentIndex(1)
     
     # Inventory Page Function
