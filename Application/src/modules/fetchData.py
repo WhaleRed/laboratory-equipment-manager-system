@@ -168,13 +168,9 @@ def fetchDamagedItems(borrowerID, page, categoryidx=None, searched=None):
     return results, count
 
 #-----For getting available items-----#
-
-def fetchAvailableItems(page, categoryidx=None, searched=None):
+def fetchAllAvailableItems(categoryidx=None, searched=None):
     mycursor = db.cursor()
-    
-    offset = (page - 1) * PAGE_SIZE
 
-    
     catFilter = ""
     searchFilter = ""
     params = []
@@ -186,30 +182,20 @@ def fetchAvailableItems(page, categoryidx=None, searched=None):
             params.append(category)
 
     if searched:
-        searchFilter = "AND Equipment_name LIKE %s "
+        searchFilter = "AND Equipment_name LIKE %s"
         params.insert(0, searched)
-
-    count_query = f"""
-        SELECT COUNT(*)
-        FROM equipment
-        WHERE Available > 0 {searchFilter} {catFilter}
-    """
-    mycursor.execute(count_query, params)
-    count = mycursor.fetchone()[0]
 
     query = f"""
         SELECT Equipment_name, Available
         FROM equipment
         WHERE Available > 0 {searchFilter} {catFilter}
-        LIMIT %s OFFSET %s
+        ORDER BY EquipmentID
     """
-    params += [PAGE_SIZE, offset]
     mycursor.execute(query, params)
     results = mycursor.fetchall()
-    
     mycursor.close()
-    
-    return results, count
+    return results
+
 
 
 #-----For search with pagination-----#

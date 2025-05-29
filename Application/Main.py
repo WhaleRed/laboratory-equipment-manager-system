@@ -1,6 +1,7 @@
 import sys
 from src.modules import delete, edit, add, fetchData
 from datetime import datetime    #Need ni siya for delete
+from PyQt6.QtCore import Qt
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QApplication
 from src.uifolder.EquipmentManager_CSM import Ui_MainWindow
@@ -13,7 +14,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.setupUi(self)
-        #self.setupTableBehavior()
+        self.setupTableBehavior()
         
         self.connector = Connector(self)
         self.logic = Confirmation(self)
@@ -22,6 +23,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.total_pages = 1 # initial
         self.per_page = 10
         self.borrower_id = ""
+
+        # For Scrollbar
+        self.Item_table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.Item_table.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+
         
         #for users page
         self.UpageNum = 1
@@ -925,15 +931,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 #-----Add item-----#
     def setItemTableValues(self):
       try:
-        self.Uupdate_pageNumber()
-        
-        page =  self.UpageNum
-        
-        category = self.category_box_additem.currentIndex()
-        
-        searchKeyword = self.search_box.text().strip()
-        
-        if self.addItemState == 0:
+            self.Uupdate_pageNumber()
+
+            page = self.UpageNum
+            category = self.category_box_additem.currentIndex()
+            searchKeyword = self.search_box.text().strip()
+            
+        if self.addItemState == 0: # suggestion: add mode 3 for returning damaged equipment
             self.Item_table.clearContents()
             self.Item_table.setColumnCount(4)
             self.Item_table.setHorizontalHeaderLabels(['Item', 'In use', 'Returned', 'Damaged'])
@@ -1000,18 +1004,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.Uupdate_pageNumber()
             
             self.Item_table.setRowCount(len(data))
-            row = 0
-            for item in data:
+            for row, item in enumerate(data):
                 self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
                 self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
-                
+
                 available_qty = int(item[1])
                 spinbox = self.createQuantitySpinBox(available_qty)
                 self.Item_table.setCellWidget(row, 2, spinbox)
-                
-                row += 1
+
       except Exception as e:
             print(f"Failed to populate: {e}")
+
 
     #-----Add Professor-----#
     def openProfessor(self):
