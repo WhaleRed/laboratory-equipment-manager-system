@@ -78,6 +78,7 @@ def fetchCategory():
 
 #-----For getting items in use-----#
 def fetchItemsInUse(borrowerID, page, categoryidx=None, searched=None):
+  db.commit()
   mycursor = db.cursor()
   searchFilter = ""
   catFilter = ""
@@ -123,6 +124,7 @@ def fetchItemsInUse(borrowerID, page, categoryidx=None, searched=None):
 
 #-----For getting damaged items-----#
 def fetchDamagedItems(borrowerID, page, categoryidx=None, searched=None):
+    db.commit()
     mycursor = db.cursor()
     searchFilter= ""
     catFilter = ""
@@ -169,6 +171,7 @@ def fetchDamagedItems(borrowerID, page, categoryidx=None, searched=None):
 
 #-----For getting available items-----#
 def fetchAllAvailableItems(categoryidx=None, searched=None):
+    db.commit()
     mycursor = db.cursor()
 
     catFilter = ""
