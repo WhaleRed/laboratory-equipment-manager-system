@@ -57,6 +57,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.Date_box_return.currentIndexChanged.connect(lambda _: self.populateReturnTable())
         self.Date_box_replace.currentIndexChanged.connect(lambda _: self.populateReplaceTable())
         
+        self.Filter_box_borrow.currentIndexChanged.connect(lambda _: self.populateBorrowTable())
+        self.Filter_box_return.currentIndexChanged.connect(lambda _: self.populateReturnTable())
+        self.Filter_box_replace.currentIndexChanged.connect(lambda _: self.populateReplaceTable())
+        
         self.arrow_right_borrow.clicked.connect(self.go_to_next_page)
         self.arrow_right_return.clicked.connect(self.go_to_next_page)
         self.arrow_right_replace.clicked.connect(self.go_to_next_page)
@@ -380,8 +384,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def populateBorrowTable(self):
         try:
-            sortState = self.Filter_box_borrow.currentIndex() or 0
-            dateState = self.Date_box_borrow.currentIndex() or 0
+            sortState = self.Filter_box_borrow.currentIndex()
+            dateState = self.Date_box_borrow.currentIndex()
+            
+            print(f"filter box borrow: {sortState}" )
             
             searchKeyword = self.searchbox_transaction.text().strip()
             
