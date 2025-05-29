@@ -90,16 +90,42 @@ class Ui_MainWindow(object):
                         ]
         
         for table in self.table_widgets:
-                if table in [self.borrow_table, self.return_table, self.Students_table, self.inventory_table]:
+                if table in [self.borrow_table, self.return_table, self.Students_table]:
+                        header = table.horizontalHeader()
+                        header.setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
+
+                        last_col = table.columnCount() - 1
+                        third_to_last_col = table.columnCount() - 2
+
+                        table.setColumnWidth(third_to_last_col, 100)
+                        table.setColumnWidth(last_col, 60)       
+
+                        for col in range(table.columnCount()):
+                                if col != third_to_last_col and col != last_col:
+                                        header.setSectionResizeMode(col, QHeaderView.ResizeMode.Stretch)
+                elif table in [self.inventory_table]:
                         header = table.horizontalHeader()
                         header.setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
 
                         last_col = table.columnCount() - 1
                         third_to_last_col = table.columnCount() - 3
 
-                        table.setColumnWidth(third_to_last_col, 150)
-                        table.setColumnWidth(last_col, 60)       
+                        table.setColumnWidth(third_to_last_col, 100)
+                        table.setColumnWidth(last_col, 60)   
+                        
+                        for col in range(table.columnCount()):
+                                if col != third_to_last_col and col != last_col:
+                                        header.setSectionResizeMode(col, QHeaderView.ResizeMode.Stretch)
+                elif table in [self.replace_table]:
+                        header = table.horizontalHeader()
+                        header.setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
 
+                        last_col = table.columnCount() - 1
+                        third_to_last_col = table.columnCount() - 2
+
+                        table.setColumnWidth(third_to_last_col, 100)
+                        table.setColumnWidth(last_col, 60)  
+                        
                         for col in range(table.columnCount()):
                                 if col != third_to_last_col and col != last_col:
                                         header.setSectionResizeMode(col, QHeaderView.ResizeMode.Stretch)
