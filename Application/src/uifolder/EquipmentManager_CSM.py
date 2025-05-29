@@ -351,22 +351,8 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         self.userinf_uinfo.setObjectName("userinf_uinfo")
-        self.input_professor_uinfo = QtWidgets.QLineEdit(parent=self.mainframe)
-        self.input_professor_uinfo.setGeometry(QtCore.QRect(110, 332, 381, 61))
-        font = QtGui.QFont()
-        font.setFamily("Nunito")
-        font.setPointSize(18)
-        self.input_professor_uinfo.setFont(font)
-        self.input_professor_uinfo.setStyleSheet("QLineEdit {\n"
-"    border: 2px solid #a80000;\n"
-"    border-radius: 30px;\n"
-"    padding: 6px 12px;\n"
-"    background-color:rgb(248, 242, 242)\n"
-"}\n"
-"")
-        self.input_professor_uinfo.setObjectName("input_professor_uinfo")
         self.input_idno_uinfo = QtWidgets.QLineEdit(parent=self.mainframe)
-        self.input_idno_uinfo.setGeometry(QtCore.QRect(110, 200, 381, 61))
+        self.input_idno_uinfo.setGeometry(QtCore.QRect(110, 209, 381, 61))
         font = QtGui.QFont()
         font.setFamily("Nunito")
         font.setPointSize(18)
@@ -380,7 +366,7 @@ class Ui_MainWindow(object):
 "")
         self.input_idno_uinfo.setObjectName("input_idno_uinfo")
         self.back_button_uinfo = QtWidgets.QPushButton(parent=self.mainframe)
-        self.back_button_uinfo.setGeometry(QtCore.QRect(110, 500, 151, 51))
+        self.back_button_uinfo.setGeometry(QtCore.QRect(108, 523, 151, 51))
         font = QtGui.QFont()
         font.setFamily("Nunito ExtraBold")
         font.setPointSize(20)
@@ -405,7 +391,7 @@ class Ui_MainWindow(object):
 "")
         self.back_button_uinfo.setObjectName("back_button_uinfo")
         self.next_button_uinfo = QtWidgets.QPushButton(parent=self.mainframe)
-        self.next_button_uinfo.setGeometry(QtCore.QRect(329, 500, 151, 51))
+        self.next_button_uinfo.setGeometry(QtCore.QRect(329, 523, 151, 51))
         font = QtGui.QFont()
         font.setFamily("Nunito ExtraBold")
         font.setPointSize(20)
@@ -430,6 +416,40 @@ class Ui_MainWindow(object):
 "    color: rgb(255, 255, 255);\n"
 "}")
         self.next_button_uinfo.setObjectName("next_button_uinfo")
+        self.input_professor_uinfo = QtWidgets.QComboBox(parent=self.mainframe)
+        self.input_professor_uinfo.setGeometry(QtCore.QRect(111, 377, 381, 61))
+        font = QtGui.QFont()
+        font.setFamily("Nunito")
+        font.setPointSize(19)
+        font.setBold(False)
+        font.setItalic(False)
+        font.setWeight(50)
+        self.input_professor_uinfo.setFont(font)
+        self.input_professor_uinfo.setStyleSheet("QComboBox {\n"
+"    border: 2px solid #990000;\n"
+"    border-radius: 15px;\n"
+"    padding: 5px;\n"
+"       background-color:rgb(248, 242, 242);\n"
+"    color:rgb(0, 0, 0);\n"
+"    font: 19pt \"Nunito\";\n"
+"}\n"
+"\n"
+"QComboBox:hover {\n"
+"    border: 2px solid #cc0000;\n"
+"}\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    background-color: rgb(248, 242, 242);               \n"
+"    border: none;                          /* Remove boxy border */\n"
+"    border-top-right-radius: 15px;         /* Match rounded corners */\n"
+"    border-bottom-right-radius: 15px;\n"
+"    width: 30px;\n"
+"    margin-right: 5px;\n"
+"}\n"
+"")
+        self.input_professor_uinfo.setObjectName("input_professor_uinfo")
+        self.input_professor_uinfo.addItem("")
         self.gridLayout_8.addWidget(self.mainframe, 1, 0, 1, 1)
         self.gridLayout_22.addWidget(self.uinfof_frame, 0, 0, 1, 1)
         self.User_Interactive_Page.addWidget(self.User_Information_PAGE)
@@ -2898,7 +2918,7 @@ class Ui_MainWindow(object):
         self.return_button_user.setText(_translate("MainWindow", "Return"))
         self.borrow_button_user.setText(_translate("MainWindow", "Borrow"))
         self.userinf_uinfo.setText(_translate("MainWindow", "User Information"))
-        self.input_professor_uinfo.setPlaceholderText(_translate("MainWindow", "INPUT PROFESSOR NAME"))
+        self.input_professor_uinfo.setItemText(0, _translate("MainWindow", "PROFESSOR"))
         self.input_idno_uinfo.setPlaceholderText(_translate("MainWindow", "INPUT ID NUMBER"))
         self.back_button_uinfo.setText(_translate("MainWindow", "BACK"))
         self.next_button_uinfo.setText(_translate("MainWindow", "NEXT"))
