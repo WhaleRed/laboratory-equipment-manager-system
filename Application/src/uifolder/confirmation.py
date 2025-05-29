@@ -120,8 +120,13 @@ class Confirmation:
                 if spinbox_default and spinbox_default.value() > 0:
                     item_names.append(item_name)
                     quantities.append(spinbox_default.value())
-                    states.append(0 if has_damaged_column else None)
-                    item_details.append(f"{item_name} (Returned): {spinbox_default.value()}")
+                    if has_damaged_column:
+                        states.append(0)      
+                        item_details.append(f"{item_name} (Returned): {spinbox_default.value()}")
+                    else:
+                        states.append(None)      
+                        item_details.append(f"{item_name}: {spinbox_default.value()}")
+                
                     
                 if has_damaged_column and spinbox_damaged and spinbox_damaged.value() > 0:
                     item_names.append(item_name)
