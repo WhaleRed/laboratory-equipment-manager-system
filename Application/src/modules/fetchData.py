@@ -39,6 +39,7 @@ db = mysql.connector.connect(
 
 #-----For adding items to database-----#
 def fetch_itemID_from_name(name):
+  db.commit()
   mycursor = db.cursor()
   
   mycursor.execute("SELECT EquipmentID FROM Equipment WHERE Equipment_name = %s", (name))
@@ -57,6 +58,7 @@ def fetchEquipmentIds():
   return [row[0] for row in results]
 
 def fetchEquipmentName():
+  db.commit()
   mycursor = db.cursor()
   
   mycursor.execute("SELECT Equipment_name FROM Equipment ORDER BY EquipmentID")
@@ -67,6 +69,7 @@ def fetchEquipmentName():
   return [row[0] for row in results]
 
 def fetchCategory():
+  db.commit()
   mycursor = db.cursor()
   
   mycursor.execute("SELECT Category FROM Equipment ORDER BY Category")
@@ -1502,6 +1505,7 @@ def fetch_EquipmentName(equipment_name):
    return results
 
 def fetchEquipmentData(idnum):
+  db.commit()
   mycursor = db.cursor()
   
   mycursor.execute("SELECT * FROM equipment WHERE EquipmentID = %s",(idnum,))
@@ -1511,6 +1515,7 @@ def fetchEquipmentData(idnum):
   return results  
 
 def fetch_all_professor_names():
+    db.commit()
     mycursor = db.cursor()
     mycursor.execute("SELECT ProfessorId, CONCAT(FirstName, ' ', LastName) FROM professor")
     results = mycursor.fetchall()
