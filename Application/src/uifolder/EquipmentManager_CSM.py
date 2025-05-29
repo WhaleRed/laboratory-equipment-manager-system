@@ -2368,48 +2368,9 @@ class Ui_MainWindow(object):
         self.Filter_text_Prof.setFont(font)
         self.Filter_text_Prof.setObjectName("Filter_text_Prof")
         self.gridLayout_16.addWidget(self.Filter_text_Prof, 0, 9, 1, 1)
-        self.Date_text_Prof = QtWidgets.QLabel(parent=self.button_frame_Professors)
-        font = QtGui.QFont()
-        font.setFamily("Nunito ExtraBold")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.Date_text_Prof.setFont(font)
-        self.Date_text_Prof.setStyleSheet("")
-        self.Date_text_Prof.setObjectName("Date_text_Prof")
-        self.gridLayout_16.addWidget(self.Date_text_Prof, 0, 7, 1, 1)
         spacerItem17 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Minimum)
         self.gridLayout_16.addItem(spacerItem17, 0, 5, 1, 1)
-        self.Date_box_Prof = QtWidgets.QComboBox(parent=self.button_frame_Professors)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.Date_box_Prof.sizePolicy().hasHeightForWidth())
-        self.Date_box_Prof.setSizePolicy(sizePolicy)
-        self.Date_box_Prof.setMinimumSize(QtCore.QSize(130, 30))
-        self.Date_box_Prof.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        font = QtGui.QFont()
-        font.setFamily("Nunito ExtraBold")
-        font.setPointSize(11)
-        font.setBold(True)
-        font.setWeight(75)
-        self.Date_box_Prof.setFont(font)
-        self.Date_box_Prof.setStyleSheet("QComboBox {\n"
-"    border: 2px solid black;\n"
-"    border-radius: 5px;\n"
-"    padding: 5px;\n"
-"}\n"
-"\n"
-"QComboBox::hover {\n"
-"    border: 2px solid #cc0000;\n"
-"}\n"
-"\n"
-"\n"
-"")
-        self.Date_box_Prof.setFrame(False)
-        self.Date_box_Prof.setObjectName("Date_box_Prof")
-        self.Date_box_Prof.addItem("")
-        self.gridLayout_16.addWidget(self.Date_box_Prof, 0, 8, 1, 1)
+
         self.arrow_left_Prof = QtWidgets.QToolButton(parent=self.button_frame_Professors)
         self.arrow_left_Prof.setStyleSheet("#arrow_left_Prof {\n"
 "    border: none;\n"
@@ -2767,46 +2728,7 @@ class Ui_MainWindow(object):
         self.arrow_left_Students.setIconSize(QtCore.QSize(32, 32))
         self.arrow_left_Students.setObjectName("arrow_left_Students")
         self.gridLayout_20.addWidget(self.arrow_left_Students, 0, 0, 1, 1)
-        self.Date_box_Students = QtWidgets.QComboBox(parent=self.button_frame_Students)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.Date_box_Students.sizePolicy().hasHeightForWidth())
-        self.Date_box_Students.setSizePolicy(sizePolicy)
-        self.Date_box_Students.setMinimumSize(QtCore.QSize(130, 30))
-        self.Date_box_Students.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        font = QtGui.QFont()
-        font.setFamily("Nunito ExtraBold")
-        font.setPointSize(11)
-        font.setBold(True)
-        font.setWeight(75)
-        self.Date_box_Students.setFont(font)
-        self.Date_box_Students.setStyleSheet("QComboBox {\n"
-"    border: 2px solid black;\n"
-"    border-radius: 5px;\n"
-"    padding: 5px;\n"
-"}\n"
-"\n"
-"QComboBox::hover {\n"
-"    border: 2px solid #cc0000;\n"
-"}\n"
-"\n"
-"\n"
-"")
-        self.Date_box_Students.setFrame(False)
-        self.Date_box_Students.setObjectName("Date_box_Students")
-        self.Date_box_Students.addItem("")
-        self.gridLayout_20.addWidget(self.Date_box_Students, 0, 8, 1, 1)
-        self.Date_text_Students = QtWidgets.QLabel(parent=self.button_frame_Students)
-        font = QtGui.QFont()
-        font.setFamily("Nunito ExtraBold")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.Date_text_Students.setFont(font)
-        self.Date_text_Students.setStyleSheet("")
-        self.Date_text_Students.setObjectName("Date_text_Students")
-        self.gridLayout_20.addWidget(self.Date_text_Students, 0, 7, 1, 1)
+        
         self.arrow_right_Students = QtWidgets.QToolButton(parent=self.button_frame_Students)
         self.arrow_right_Students.setStyleSheet("#arrow_right_Students {\n"
 "    border: none;\n"
@@ -3008,9 +2930,7 @@ class Ui_MainWindow(object):
         self.Filter_box_Prof.setCurrentText(_translate("MainWindow", "Please Select"))
         self.Filter_box_Prof.setItemText(0, _translate("MainWindow", "Please Select"))
         self.Filter_text_Prof.setText(_translate("MainWindow", "Sort:"))
-        self.Date_text_Prof.setText(_translate("MainWindow", "Date: "))
-        self.Date_box_Prof.setCurrentText(_translate("MainWindow", "Please Select"))
-        self.Date_box_Prof.setItemText(0, _translate("MainWindow", "Please Select"))
+        
         self.Page_text_Prof.setText(_translate("MainWindow", "Page"))
         self.addProfessor_button.setText(_translate("MainWindow", "Add Professor"))
         self.Professors_table.setSortingEnabled(True)
@@ -3042,9 +2962,6 @@ class Ui_MainWindow(object):
         self.ofTotal_Pages_Students.setText(_translate("MainWindow", "of Total Pages"))
         self.Filter_box_Students.setCurrentText(_translate("MainWindow", "Please Select"))
         self.Filter_box_Students.setItemText(0, _translate("MainWindow", "Please Select"))
-        self.Date_box_Students.setCurrentText(_translate("MainWindow", "Please Select"))
-        self.Date_box_Students.setItemText(0, _translate("MainWindow", "Please Select"))
-        self.Date_text_Students.setText(_translate("MainWindow", "Date: "))
         self.Page_text_Students.setText(_translate("MainWindow", "Page"))
         self.addborrower_button.setText(_translate("MainWindow", "Add Borrower"))
         self.Dashboard_Frame_Borrowers.setTabText(self.Dashboard_Frame_Borrowers.indexOf(self.Students_Page), _translate("MainWindow", "Students"))
