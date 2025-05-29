@@ -28,10 +28,3 @@ def generate_equipment_id(category_id_strip, equipment_name):
     
     new_id = f"{prefix}-{max_num + 1:03d}"
     return new_id
-
-# testing
-existing_names = fetchEquipmentName()
-print("Existing names:", existing_names)
-
-id = generate_equipment_id("GLA", "Graduated Cylinder 10mL")
-print(id)
