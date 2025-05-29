@@ -23,6 +23,7 @@ class Confirmation:
             self.ui.input_professor_uinfo.setEditable(True)
             professors = fetch_all_professor_names()  # list of tuples (id, full_name)
             self.ui.input_professor_uinfo.clear()
+            self.ui.input_professor_uinfo.addItem("")
             self.professor_id_map = {}
 
             for prof_id, full_name in professors:
@@ -125,38 +126,12 @@ class Confirmation:
     
     def submitConfirm(self):
         if self.studentInfo:
-            selected_text = self.ui.input_professor_uinfo.currentText()
             index = self.ui.input_professor_uinfo.currentIndex()
             professor_id = self.ui.input_professor_uinfo.itemData(index)
 
             if professor_id is None:
                 self.show_warning("Selection Error", "Please select a valid professor.")
                 return
-
-            # Now you have professor_id; continue your logic
-            exist = fetchBorrower(self.studentInfo[0])
-            if exist:
-                print("Already Exists")
-            else:
-                student = {
-                    "borrowerId": self.studentInfo[0],
-                    "profId": professor_id,
-                    "fname": self.studentInfo[2],
-                    "lname": self.studentInfo[3],
-                    "program": self.studentInfo[4],
-                    "yearlevel": self.studentInfo[5]
-                }
-                res = addBorrower(student)
-                if res == 1:
-                    print("Already Exists")
-                elif res == 0:
-                    print("Added Successfully")
-
-
-
-
-    
-
 
     def studentidformat(self, student_id):
         return bool(re.match(r'^\d{4}-\d{4}$', student_id))

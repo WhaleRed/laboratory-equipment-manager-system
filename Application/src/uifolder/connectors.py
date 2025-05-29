@@ -12,9 +12,8 @@ class Connector:
         self.connect_admin_buttons()
         self.connect_user_interactive_buttons()
         self.admin_authenticated = False  # Track admin login status
-
-    
-    # Connector for Buttons
+        
+          
     def connect_admin_buttons(self):
         
         # Admin User Buttons

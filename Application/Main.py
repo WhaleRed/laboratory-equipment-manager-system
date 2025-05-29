@@ -31,6 +31,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         font.setPointSize(15)
         self.Item_table.setFont(font)
         
+        self.Ucurrent_index = self.User_Interactive_Page.currentIndex()
+        
         #for users page
         self.UpageNum = 1
         self.UtotalPages = 1
@@ -107,7 +109,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.increment.clicked.connect(self.Ugo_to_next_page)
         self.decrement.clicked.connect(self.Ugo_to_prev_page)
         
-
+        self.User_Interactive_Page.currentChanged.connect(self.on_user_index_change)
+        
         self.additem_button.clicked.connect(self.openAddItem)  # Add item button connection
 
         # Add professor connection
@@ -118,6 +121,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.submit_confirmation.clicked.connect(self.get_item_id)
 
 #-----Helper-----#
+
+    def on_user_index_change(self, new_index):
+        print("CHanging")
+        print(f"current index = {self.Ucurrent_index}")
+        
+        print(f"new_index {new_index}")
+        
+        change = new_index - self.Ucurrent_index 
+        print(f"change {change}")
+        
+        if change < 0:
+            if new_index == 0:
+                self.input_idno_uinfo.clear()
+                self.input_professor_uinfo.setCurrentIndex(0)
+            elif new_index == 1:
+                self.Item_table.clear()
+                
+        self.Ucurrent_index = new_index
+            
 
     def onIndexChanged(self):
       
