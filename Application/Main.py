@@ -566,23 +566,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         current_SWPage = self.Admin_Page.currentIndex()
 
         match current_SWPage:
-            case 0:
-                field = "transaction"
-                current_tab_index = self.Dashboard_Frame.currentIndex()
-                match current_tab_index:
-                    case 0:
-                        res = delete.delBorrowedEquipment(id)
-                        self.populateBorrowTable()
-                    case 1:
-                        res = delete.delReturnedEquipment(id)
-                        self.populateReturnTable()
-                    case 2:
-                        res = delete.delReplacedEquipment(id)
-                        self.populateReplaceTable()
             case 1:
                 field = "equipment"
-                res = delete.delEquipment(id)
-                self.populateEquipmentTable()
+                curDataEquip = fetchData.fetchEquipmentData(id)
+                self.editOpenItem(curDataEquip)
             case 2:
                 current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
                 match current_tab_index:
@@ -1003,7 +990,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.Item_table.clearContents()
                 data = fetchData.fetchAllAvailableItems(category, searchKeyword)
                 
-                self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
+                #self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
                 
                 self.Uupdate_pageNumber()
                 
@@ -1059,6 +1046,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if dialog.exec():
             self.populateProfTable()
+
+    #----Edit item-----#
+    def editOpenItem(self, data):
+        from src.uifolder.edit_dialog import editDialog
+        dialog = editDialog(self, data)
+        
+        if dialog.exec():
+            self.populateEquipmentTable()
 
 if __name__ == "__main__":
   app = QApplication(sys.argv)
