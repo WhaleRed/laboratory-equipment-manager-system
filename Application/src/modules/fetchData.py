@@ -100,10 +100,11 @@ def fetchItemsInUse(borrowerID, categoryidx=None, searched=None):
     filter_clause = " AND ".join(filters)
 
     query = f"""
-        SELECT e.Equipment_name, b.Quantity
+        SELECT e.Equipment_name, SUM(b.Quantity) as total_quantity
         FROM equipment e
         INNER JOIN borrowed_equipment b ON e.equipmentID = b.equipmentID
-        WHERE {filter_clause}
+        WHERE {filter_clause} AND state = 'In use'
+        GROUP BY e.Equipment_name
     """
 
     mycursor.execute(query, params)
@@ -132,12 +133,14 @@ def fetchDamagedItems(borrowerID, categoryidx=None, searched=None):
         searchFilter = "AND Equipment_name LIKE %s "
         params.insert(0, searched)
 
-    query = f"""
-        SELECT e.Equipment_name, b.Quantity
-        FROM equipment e
-        INNER JOIN returned_equipment b ON e.equipmentID = b.equipmentID
+    query = f""" 
+        SELECT e.Equipment_name, SUM(b.Quantity) as Total_Quantity
+        FROM equipment e 
+        INNER JOIN returned_equipment b ON e.equipmentID = b.equipmentID 
         WHERE b.BorrowerID = %s AND b.State = 'Damaged' {searchFilter} {catFilter}
-    """
+        GROUP BY e.Equipment_name
+        ORDER BY e.Equipment_name
+    """ 
 
     mycursor.execute(query, params)
     results = mycursor.fetchall()
