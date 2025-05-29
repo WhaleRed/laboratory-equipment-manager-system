@@ -70,6 +70,20 @@ class Ui_MainWindow(object):
         self.Filter_box_Students.addItem("Program")
         self.Filter_box_Students.addItem("Year Level")
         
+        self.category_box_additem.addItem("Measuring & Observation Tools")
+        self.category_box_additem.addItem("Glassware & Containers")
+        self.category_box_additem.addItem("Heating & Mixing Equipment")
+        self.category_box_additem.addItem("Biology-Specific Tools")
+        self.category_box_additem.addItem("Physics & Electronics")
+        self.category_box_additem.addItem("Miscellaneous Lab Tools")
+        
+        self.category_box_inventory.addItem("Measuring & Observation Tools")
+        self.category_box_inventory.addItem("Glassware & Containers")
+        self.category_box_inventory.addItem("Heating & Mixing Equipment")
+        self.category_box_inventory.addItem("Biology-Specific Tools")
+        self.category_box_inventory.addItem("Physics & Electronics")
+        self.category_box_inventory.addItem("Miscellaneous Lab Tools")
+        
         self.table_widgets = [self.borrow_table, self.return_table, self.replace_table, 
                               self.Students_table, self.Professors_table, 
                               self.inventory_table, self.Item_table

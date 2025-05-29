@@ -94,6 +94,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.page_box_Students.returnPressed.connect(self.go_to_page)
         
         # ui updates
+        self.Admin_User_Page.currentChanged.connect(self.onIndexChanged)
         self.Admin_Page.currentChanged.connect(self.onIndexChanged)
         self.Dashboard_Frame.currentChanged.connect(self.onIndexChanged)
         self.Dashboard_Frame_Borrowers.currentChanged.connect(self.onIndexChanged)
