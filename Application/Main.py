@@ -280,6 +280,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         spinbox.setMaximum(max_quantity)
         spinbox.setValue(0)  # default selected quantity
         return spinbox
+    
+    def link_spinboxes(spinbox1, spinbox2, max_qty):
+        def on_spinbox1_changed(value):
+            spinbox2.setMaximum(max_qty - value)
+            if spinbox2.value() > spinbox2.maximum():
+                spinbox2.setValue(spinbox2.maximum())
+
+        def on_spinbox2_changed(value):
+            spinbox1.setMaximum(max_qty - value)
+            if spinbox1.value() > spinbox1.maximum():
+                spinbox1.setValue(spinbox1.maximum())
+
+        spinbox1.valueChanged.connect(on_spinbox1_changed)
+        spinbox2.valueChanged.connect(on_spinbox2_changed)
 
     def setModeBorrow(self):
         self.addItemState = 2
@@ -298,26 +312,34 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
       
     def get_item_id(self):
       try:
-        item_names, quantities = self.logic.User_Table_Inputs()
+        item_names, quantities, states = self.logic.User_Table_Inputs()
         
-        for name, qty in zip(item_names, quantities):
+        for name, qty, state in zip(item_names, quantities, states):
             clean_name = (name.strip(),)
             item_id_tup = fetchData.fetch_itemID_from_name(clean_name)
             item_id = item_id_tup[0]
             print(f"id: {item_id}")
             print(f"qty: {qty}")
-            self.add_transaction_to_db(item_id, qty)
+            self.add_transaction_to_db(item_id, qty, state)
       except Exception as e:
         print(f"error grtting item id: {e}")
             
-    def add_transaction_to_db(self, id, quantity):
+    def add_transaction_to_db(self, id, quantity, state):
       try:
-        print("Addiing transaction...")
-        mode = self.addItemState
-        print(f"mode: {mode}")
+        print("Adding transaction...")
         
-        if mode == 0:
-            add.addReturnedEquipment(id, self.borrower_id, "Returned", quantity) #needs to change to accomodate multiple item state
+        if state is None:
+            mode = self.addItemState
+        else: 
+            mode = state
+            
+        print(f"mode: {mode}")
+
+        if mode == 0:  # returned
+            add.addReturnedEquipment(id, self.borrower_id, "Returned", quantity)
+            edit.updateEquipmentQuantityState(id, quantity, mode)
+        elif mode == 3:  # damaged
+            add.addReturnedEquipment(id, self.borrower_id, "Damaged", quantity)
             edit.updateEquipmentQuantityState(id, quantity, mode)
         elif mode == 1:
             print("adding")
@@ -947,7 +969,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 
                 self.Uupdate_pageNumber()
                 
-                self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
+                #self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
                 
                 self.Item_table.setRowCount(len(data))
                 row = 0
@@ -959,18 +981,33 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     available_qty = int(item[1])
                     
                     spinbox_returned = self.createQuantitySpinBox(available_qty)
-                    self.Item_table.setCellWidget(row, 2, spinbox)
-                    
                     spinbox_damaged = self.createQuantitySpinBox(available_qty)
-                    self.Item_table.setCellWidget(row, 3, spinbox)
                     
+                    def on_spinbox1_changed(value, s2=spinbox_returned, max_qty=available_qty):
+                        s2.setMaximum(max_qty - value)
+                        if s2.value() > s2.maximum():
+                            s2.setValue(s2.maximum())
+                    
+                    def on_spinbox2_changed(value, s1=spinbox_damaged, max_qty=available_qty):
+                        s1.setMaximum(max_qty - value)
+                        if s1.value() > s1.maximum():
+                            s1.setValue(s1.maximum())
+                            
+                        self.addItemState = 3
+                            
+                    spinbox_returned.valueChanged.connect(on_spinbox1_changed)
+                    spinbox_damaged.valueChanged.connect(on_spinbox2_changed)
+                    
+                    self.Item_table.setCellWidget(row, 3, spinbox)
+                    self.Item_table.setCellWidget(row, 2, spinbox)
+
                     row += 1
 
             elif  self.addItemState == 1:
                 self.Item_table.clearContents()
                 data, count = fetchData.fetchDamagedItems(self.input_idno_uinfo.text(), page, category, searchKeyword)
                 
-                self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
+                #self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
                 
                 self.Uupdate_pageNumber()
                 
@@ -989,8 +1026,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             elif  self.addItemState == 2:
                 self.Item_table.clearContents()
                 data = fetchData.fetchAllAvailableItems(category, searchKeyword)
-                
-                #self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
                 
                 self.Uupdate_pageNumber()
                 
