@@ -935,7 +935,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         if self.addItemState == 0:
             self.Item_table.clearContents()
-            data, count = fetchData.fetchItemsInUse(self.idno_uinfo.text(), page, category, searchKeyword)
+            self.Item_table.setColumnCount(4)
+            self.Item_table.setHorizontalHeaderLabels(['Item', 'In use', 'Returned', 'Damaged'])
+            
+            header = self.Item_table.horizontalHeader()
+
+            header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.Stretch)
+            header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeMode.Stretch)
+
+            header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeMode.Fixed)
+            header.resizeSection(2, 100) 
+
+            header.setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeMode.Fixed)
+            header.resizeSection(3, 100)
+            
+            data, count = fetchData.fetchItemsInUse(self.input_idno_uinfo.text(), page, category, searchKeyword)
             
             self.Uupdate_pageNumber()
             
@@ -948,14 +962,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
                 
                 available_qty = int(item[1])
-                spinbox = self.createQuantitySpinBox(available_qty)
+                
+                spinbox_returned = self.createQuantitySpinBox(available_qty)
                 self.Item_table.setCellWidget(row, 2, spinbox)
+                
+                spinbox_damaged = self.createQuantitySpinBox(available_qty)
+                self.Item_table.setCellWidget(row, 3, spinbox)
                 
                 row += 1
 
         elif  self.addItemState == 1:
             self.Item_table.clearContents()
-            data, count = fetchData.fetchDamagedItems(self.idno_uinfo.text(), page, category, searchKeyword)
+            data, count = fetchData.fetchDamagedItems(self.input_idno_uinfo.text(), page, category, searchKeyword)
             
             self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
             
