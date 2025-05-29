@@ -32,17 +32,24 @@ class editDialog(QDialog):
         self.ui.comboBox.lineEdit().setPlaceholderText("Select or enter equipment name")
         self.ui.comboBox_2.lineEdit().setPlaceholderText("Select or enter category")
     
+    def remove_duplicates(self, seq):
+        """Remove duplicates from a sequence while preserving order."""
+        seen = set()
+        return [x for x in seq if not (x in seen or seen.add(x))]
+    
     def populateComboBoxes(self):
         try:
             from src.modules.fetchData import fetchEquipmentName, fetchCategory
             
             # Populate equipment name combo box
             equipment_names = fetchEquipmentName()
+            equipment_names = self.remove_duplicates(equipment_names)  # Remove duplicates
             self.ui.comboBox.clear()  # Clear existing items
             self.ui.comboBox.addItems(equipment_names)
             
             # Populate category combo box
             categories = fetchCategory()
+            categories = self.remove_duplicates(categories)  # Remove duplicates
             self.ui.comboBox_2.clear()  # Clear existing items
             self.ui.comboBox_2.addItems(categories)
             
