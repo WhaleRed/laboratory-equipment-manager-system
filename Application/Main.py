@@ -23,6 +23,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.total_pages = 1 # initial
         self.per_page = 10
         self.borrower_id = ""
+        self.prof_id = ""
 
         # For Scrollbar
         self.Item_table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
@@ -121,7 +122,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.addborrower_button.clicked.connect(self.openBorrower)
         
         self.next_button_uinfo.clicked.connect(self.get_borrower_id)
-        self.submit_confirmation.clicked.connect(self.get_item_id)
+        self.submit_confirmation.clicked.connect(self.get_ids)
 
 #-----Helper-----#
 
@@ -255,8 +256,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def get_borrower_id(self):
         self.borrower_id = self.input_idno_uinfo.text().strip()
       
-    def get_item_id(self):
+    def get_ids(self):
       try:
+        self.prof_id = self.logic.get_selected_prof_id()
         item_names, quantities, states = self.logic.User_Table_Inputs()
         
         for name, qty, state in zip(item_names, quantities, states):
@@ -408,7 +410,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             self.borrow_table.setRowCount(len(data))
             for row, item in enumerate(data):
-                self.borrow_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
+                self.borrow_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"     {item[0]}"))
                 self.borrow_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
                 self.borrow_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{item[2]}"))
                 self.borrow_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
@@ -491,8 +493,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.replace_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
                 self.replace_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
                 self.replace_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"     {item[2]}"))
-                self.replace_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
-                self.replace_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"                     {item[4]}"))
+                self.replace_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{item[3]}"))
+                self.replace_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"         {item[4]}"))
                 
                 key = (item[0], item[1], item[2])
                 btn = self.createOptionsButtonD(key)

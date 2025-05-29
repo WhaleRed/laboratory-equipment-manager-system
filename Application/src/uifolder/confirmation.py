@@ -67,14 +67,12 @@ class Confirmation:
 
         except Exception as e:
             QMessageBox.critical(self.parent_widget, "Error", f"Failed to load professors: {str(e)}")
-
-    def on_professor_text_changed(self, text):
-        # Try to find the first item that contains the text (case insensitive)
-        for i in range(self.ui.input_professor_uinfo.count()):
-            item_text = self.ui.input_professor_uinfo.itemText(i)
-            if text.lower() in item_text.lower():
-                self.ui.input_professor_uinfo.setCurrentIndex(i)
-                return
+            
+    def get_selected_prof_id(self):
+        prof_id = self.ui.input_professor_uinfo.currentData()
+        print(f"profID: {prof_id}")
+        return prof_id
+        
 
     def show_warning(self, title, message):
         QtWidgets.QMessageBox.warning(self.parent_widget, title, message)
