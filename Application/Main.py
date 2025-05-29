@@ -106,8 +106,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.addItemState = 2
         self.search_box.returnPressed.connect(self.setItemTableValues)
         self.category_box_additem.currentIndexChanged.connect(self.setItemTableValues)
-        self.increment.clicked.connect(self.Ugo_to_next_page)
-        self.decrement.clicked.connect(self.Ugo_to_prev_page)
         
         self.User_Interactive_Page.currentChanged.connect(self.on_user_index_change)
         
@@ -121,86 +119,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.submit_confirmation.clicked.connect(self.get_item_id)
 
 #-----Helper-----#
-
-    def on_user_index_change(self, new_index):
-        print("CHanging")
-        print(f"current index = {self.Ucurrent_index}")
-        
-        print(f"new_index {new_index}")
-        
-        change = new_index - self.Ucurrent_index 
-        print(f"change {change}")
-        
-        if change < 0:
-            if new_index == 0:
-                self.input_idno_uinfo.clear()
-                self.input_professor_uinfo.setCurrentIndex(0)
-            elif new_index == 1:
-                self.Item_table.clear()
-                
-        self.Ucurrent_index = new_index
-            
-
-    def onIndexChanged(self):
-      
-      self.pageNum = "1"
-      current_SWPage = self.Admin_Page.currentIndex()
-      
-      buttons = self.sidebar_buttons.findChildren(QtWidgets.QPushButton)
-      desired_btn_index = {
-          'borrow_button_sidebar': 0,
-          'inventory_button_sidebar': 1,
-          'user_button_sidebar': 2
-      }
-      
-      for btn in buttons:
-        btn_index = desired_btn_index.get(btn.objectName())
-        if btn_index == current_SWPage:
-            btn.setStyleSheet("""
-                color: white;
-                border-top-left-radius: 18px;
-                border-bottom-left-radius: 18px;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                background-color: #7a0000;  /* Dark red */
-            """)
-        else:
-            btn.setStyleSheet("""
-                color: white;
-                border-top-left-radius: 18px;
-                border-bottom-left-radius: 18px;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                background-color: #A70000;  /* Default red */
-            """)
-    
-      
-      match current_SWPage:
-          case 0:
-              current_tab_index = self.Dashboard_Frame.currentIndex()
-              
-              match current_tab_index:
-                  case 0:  # borrow table
-                      self.populateBorrowTable()
-                  case 1:  # return table
-                      self.populateReturnTable()
-                  case 2:  # replace table
-                      self.populateReplaceTable()
-                  case _:
-                      print("Unknown table index")
-          case 1:
-              self.populateEquipmentTable()
-          case 2:
-              current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
-              match current_tab_index:
-                case 0:
-                  self.populateProfTable()
-                case 1:
-                  self.populateBorrowerTable()
-          case _:
-              print(f"Unknown admin page index: {current_SWPage}")
-              
-      self.update_button_state()
 
     def populateCurrentTable(self):
       
@@ -938,40 +856,94 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         except Exception as e:
             print(f"Error in update_button_state: {e}")
 
-    def Ugo_to_next_page(self):
-      current_page = self.UpageNum
-      current_page += 1
-      self.UpageNum = current_page
-      print(f"page: {self.UpageNum}")
-      
-      self.setItemTableValues()
-      print("n done populating")
-      
-    def Ugo_to_prev_page(self):
-      current_page = self.UpageNum
-      current_page -= 1
-      self.UpageNum = current_page
-      
-      print(f"page: {self.UpageNum}")
-      
-      self.setItemTableValues()
-      print("n done populating")
+    def on_user_index_change(self, new_index):
+        print("CHanging")
+        print(f"current index = {self.Ucurrent_index}")
+        
+        print(f"new_index {new_index}")
+        
+        change = new_index - self.Ucurrent_index 
+        print(f"change {change}")
+        
+        if change < 0:
+            if new_index == 0:
+                self.input_idno_uinfo.clear()
+                self.input_professor_uinfo.setCurrentIndex(0)
+            elif new_index == 1:
+                self.Item_table.clear()
+                
+        self.Ucurrent_index = new_index
+            
 
-    def Uupdate_pageNumber(self):
-      self.Page.setText(f"{self.UpageNum} of {self.UtotalPages}")  # page _ of _
-      self.decrement.setEnabled(self.UpageNum > 1)
-      self.increment.setEnabled(self.UpageNum < self.UtotalPages)
+    def onIndexChanged(self):
+      
+      self.pageNum = "1"
+      current_SWPage = self.Admin_Page.currentIndex()
+      
+      buttons = self.sidebar_buttons.findChildren(QtWidgets.QPushButton)
+      desired_btn_index = {
+          'borrow_button_sidebar': 0,
+          'inventory_button_sidebar': 1,
+          'user_button_sidebar': 2
+      }
+      
+      for btn in buttons:
+        btn_index = desired_btn_index.get(btn.objectName())
+        if btn_index == current_SWPage:
+            btn.setStyleSheet("""
+                color: white;
+                border-top-left-radius: 18px;
+                border-bottom-left-radius: 18px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                background-color: #7a0000;  /* Dark red */
+            """)
+        else:
+            btn.setStyleSheet("""
+                color: white;
+                border-top-left-radius: 18px;
+                border-bottom-left-radius: 18px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                background-color: #A70000;  /* Default red */
+            """)
+    
+      
+      match current_SWPage:
+          case 0:
+              current_tab_index = self.Dashboard_Frame.currentIndex()
+              
+              match current_tab_index:
+                  case 0:  # borrow table
+                      self.populateBorrowTable()
+                  case 1:  # return table
+                      self.populateReturnTable()
+                  case 2:  # replace table
+                      self.populateReplaceTable()
+                  case _:
+                      print("Unknown table index")
+          case 1:
+              self.populateEquipmentTable()
+          case 2:
+              current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
+              match current_tab_index:
+                case 0:
+                  self.populateProfTable()
+                case 1:
+                  self.populateBorrowerTable()
+          case _:
+              print(f"Unknown admin page index: {current_SWPage}")
+              
+      self.update_button_state()
 
 #-----Add item-----#
     def setItemTableValues(self):
         try:
-            self.Uupdate_pageNumber()
-
             page = self.UpageNum
             category = self.category_box_additem.currentIndex()
             searchKeyword = self.search_box.text().strip()
                 
-            if self.addItemState == 0: # suggestion: add mode 3 for returning damaged equipment
+            if self.addItemState == 0:
                 self.Item_table.clearContents()
                 self.Item_table.setColumnCount(4)
                 self.Item_table.setHorizontalHeaderLabels(['Item', 'In use', 'Returned', 'Damaged'])
@@ -987,11 +959,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 header.setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeMode.Fixed)
                 header.resizeSection(3, 100)
                 
-                data, count = fetchData.fetchItemsInUse(self.input_idno_uinfo.text(), page, category, searchKeyword)
-                
-                self.Uupdate_pageNumber()
-                
-                #self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
+                data = fetchData.fetchItemsInUse(self.input_idno_uinfo.text(), category, searchKeyword)
                 
                 self.Item_table.setRowCount(len(data))
                 row = 0
