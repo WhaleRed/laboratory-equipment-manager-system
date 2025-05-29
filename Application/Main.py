@@ -302,13 +302,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             header = self.Item_table.horizontalHeader()
 
             header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.Stretch)
-            header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeMode.Stretch)
 
-            header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeMode.Fixed)
-            header.resizeSection(2, 100) 
+            header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeMode.Fixed)
+            header.resizeSection(1, 125)  
+
+            header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeMode.Fixed) 
+            header.resizeSection(2, 150)
 
             header.setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeMode.Fixed)
-            header.resizeSection(3, 100)
+            header.resizeSection(3, 150)
             
         elif self.addItemState == 1: #replace
             self.Item_table.setColumnCount(3)

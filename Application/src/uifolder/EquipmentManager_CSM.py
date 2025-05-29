@@ -92,10 +92,18 @@ class Ui_MainWindow(object):
                 elif table in [self.Item_table]:
                         header.setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
                         
-                        # set colmn 1 and 2 (last and 2nd to the last)
-                        table.setColumnWidth(2, 60)
-                        table.setColumnWidth(1, 150)
-                        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+                        header = self.Item_table.horizontalHeader()
+
+                        header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.Stretch)
+
+                        header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeMode.Fixed)
+                        header.resizeSection(1, 125)  
+
+                        header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeMode.Fixed) 
+                        header.resizeSection(2, 150)
+
+                        header.setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeMode.Fixed)
+                        header.resizeSection(3, 150)
                         
                 else:
                         header = table.horizontalHeader()
@@ -2825,7 +2833,7 @@ class Ui_MainWindow(object):
         self.next_button_additem.setText(_translate("MainWindow", "NEXT"))
         self.confirmation_text.setText(_translate("MainWindow", "Confirmation"))
         self.userinfo_text.setText(_translate("MainWindow", "User Information:"))
-        self.items_to_text.setText(_translate("MainWindow", "Items to:"))
+        self.items_to_text.setText(_translate("MainWindow", "Item list:"))
         self.submit_confirmation.setText(_translate("MainWindow", "Submit"))
         self.back_confirmation.setText(_translate("MainWindow", "Back"))
         self.Section_text.setText(_translate("MainWindow", "Section:"))
