@@ -995,11 +995,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             elif  self.addItemState == 1:
                 self.Item_table.clearContents()
-                data, count = fetchData.fetchDamagedItems(self.input_idno_uinfo.text(), page, category, searchKeyword)
+                data = fetchData.fetchDamagedItems(self.input_idno_uinfo.text(), category, searchKeyword)
                 
                 #self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
                 
-                self.Uupdate_pageNumber()
+                #self.Uupdate_pageNumber()
                 
                 self.Item_table.setRowCount(len(data))
                 row = 0
@@ -1017,7 +1017,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.Item_table.clearContents()
                 data = fetchData.fetchAllAvailableItems(category, searchKeyword)
                 
-                self.Uupdate_pageNumber()
+                #self.Uupdate_pageNumber()
                 
                 self.Item_table.setRowCount(len(data))
                 for row, item in enumerate(data):
