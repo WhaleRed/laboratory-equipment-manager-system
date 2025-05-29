@@ -15,6 +15,8 @@ class editDialog(QDialog):
         self.ui.comboBox.setCurrentText(str(self.item_data[0][1]))
         self.ui.comboBox_2.setCurrentText(str(self.item_data[0][3]))
         self.ui.Quantity_spinbox_4.setValue(int(self.item_data[0][2]))
+        self.ui.Add_item_button_newitem.setText("Edit")
+        self.ui.Add_New_Item_Text_4.setText("Edit Item")
 
 
 
