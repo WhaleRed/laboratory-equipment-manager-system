@@ -95,11 +95,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.Dashboard_Frame_Borrowers.currentChanged.connect(self.onIndexChanged)
         
         #Add item connections
-        self.addItemState = 2
         self.next_button_uinfo.clicked.connect(self.setItemTableValues)
         self.borrow_button_user.clicked.connect(self.setModeBorrow)
         self.return_button_user.clicked.connect(self.setModeReturn)
         self.replace_button_user.clicked.connect(self.setModeReplace)
+        self.addItemState = 2
         self.search_box.returnPressed.connect(self.setItemTableValues)
         self.category_box_additem.currentIndexChanged.connect(self.setItemTableValues)
         self.increment.clicked.connect(self.Ugo_to_next_page)
@@ -930,79 +930,34 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 #-----Add item-----#
     def setItemTableValues(self):
-      try:
+        try:
             self.Uupdate_pageNumber()
 
             page = self.UpageNum
             category = self.category_box_additem.currentIndex()
             searchKeyword = self.search_box.text().strip()
-            
-        if self.addItemState == 0: # suggestion: add mode 3 for returning damaged equipment
+
             self.Item_table.clearContents()
-            self.Item_table.setColumnCount(4)
-            self.Item_table.setHorizontalHeaderLabels(['Item', 'In use', 'Returned', 'Damaged'])
-            
-            header = self.Item_table.horizontalHeader()
 
-            header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.Stretch)
-            header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeMode.Stretch)
+            if self.addItemState == 0:
+                data, count = fetchData.fetchItemsInUse(self.input_idno_uinfo.text(), page, category, searchKeyword)
+                self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
+                self.Uupdate_pageNumber()
 
-            header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeMode.Fixed)
-            header.resizeSection(2, 100) 
+            elif self.addItemState == 1:
+                data, count = fetchData.fetchDamagedItems(self.input_idno_uinfo.text(), page, category, searchKeyword)
+                self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
+                self.Uupdate_pageNumber()
 
-            header.setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeMode.Fixed)
-            header.resizeSection(3, 100)
-            
-            data, count = fetchData.fetchItemsInUse(self.input_idno_uinfo.text(), page, category, searchKeyword)
-            
-            self.Uupdate_pageNumber()
-            
-            self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
-            
-            self.Item_table.setRowCount(len(data))
-            row = 0
-            for item in data:
-                self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
-                self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
-                
-                available_qty = int(item[1])
-                
-                spinbox_returned = self.createQuantitySpinBox(available_qty)
-                self.Item_table.setCellWidget(row, 2, spinbox)
-                
-                spinbox_damaged = self.createQuantitySpinBox(available_qty)
-                self.Item_table.setCellWidget(row, 3, spinbox)
-                
-                row += 1
+            elif self.addItemState == 2:
+                # Use updated version without pagination
+                data = fetchData.fetchAllAvailableItems(category, searchKeyword)
 
-        elif  self.addItemState == 1:
-            self.Item_table.clearContents()
-            data, count = fetchData.fetchDamagedItems(self.input_idno_uinfo.text(), page, category, searchKeyword)
-            
-            self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
-            
-            self.Uupdate_pageNumber()
-            
-            self.Item_table.setRowCount(len(data))
-            row = 0
-            for item in data:
-                self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
-                self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
-                
-                available_qty = int(item[1])
-                spinbox = self.createQuantitySpinBox(available_qty)
-                self.Item_table.setCellWidget(row, 2, spinbox)
-                
-                row += 1
+                # No count, no pagination
+                self.UtotalPages = 1
+                self.UpageNum = 1
+                # Skip self.Uupdate_pageNumber()
 
-        elif  self.addItemState == 2:
-            self.Item_table.clearContents()
-            data, count = fetchData.fetchAvailableItems(page, category, searchKeyword)
-            
-            self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
-            
-            self.Uupdate_pageNumber()
-            
             self.Item_table.setRowCount(len(data))
             for row, item in enumerate(data):
                 self.Item_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
@@ -1012,7 +967,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 spinbox = self.createQuantitySpinBox(available_qty)
                 self.Item_table.setCellWidget(row, 2, spinbox)
 
-      except Exception as e:
+        except Exception as e:
             print(f"Failed to populate: {e}")
 
 
