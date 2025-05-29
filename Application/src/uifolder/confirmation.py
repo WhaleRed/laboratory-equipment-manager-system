@@ -3,6 +3,7 @@ from PyQt6 import QtWidgets
 import re
 from ..modules.fetchData import fetchBorrower
 from ..modules.add import addBorrower
+from ..modules.fetchData import fetchBorrower
 
 class Confirmation:
     def __init__(self, ui: Ui_MainWindow):
@@ -27,7 +28,11 @@ class Confirmation:
         if not self.studentidformat(student_id):
             self.show_warning("Input Error", "Invalid Student ID format. Must be YYYY-NNNN.")
             return False
-
+        
+        student = fetchBorrower(student_id)
+        if not student:
+            self.show_warning("Does not Exist", "Student Does not Exist")
+            return False
         
         self.ui.label_3.setText(student_id)
         self.ui.label_4.setText(professor)
