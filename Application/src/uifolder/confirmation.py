@@ -14,39 +14,32 @@ class Confirmation:
         self.ui.submit_confirmation.clicked.connect(self.submitConfirm)
         self.studentInfo = []
         self.populate_professor_combobox()
+        
+
 
     def populate_professor_combobox(self):
         from ..modules.fetchData import fetch_all_professor_names
         try:
-            # Step 1: Get [(name, id), ...]
-            professors = fetch_all_professor_names()
-
-            # Step 2: Clear previous items
+            self.ui.input_professor_uinfo.setEditable(True)
+            professors = fetch_all_professor_names()  # list of tuples (id, full_name)
             self.ui.input_professor_uinfo.clear()
+            self.professor_id_map = {}
 
-            # Step 3: Create a mapping from name → ID
-            self.professor_id_map = {}  
-
-            # Step 4: Populate combobox and map
             for prof_id, full_name in professors:
                 display_text = f"{prof_id} - {full_name}"
                 self.ui.input_professor_uinfo.addItem(display_text, userData=prof_id)
+                self.professor_id_map[display_text] = prof_id
 
-
-            # Step 5: Setup completer
-            completer = QCompleter([name for name, _ in professors])
-            print("pogi")
+            # Use the full combo box item texts for completer
+            completer_strings = [f"{prof_id} - {full_name}" for prof_id, full_name in professors]
+            completer = QCompleter(completer_strings)
             completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
-            print("pogi2")
             completer.setFilterMode(Qt.MatchFlag.MatchContains)
-            print("pogi3")
-            print("pogi4")
-            self.ui.input_professor_uinfo.setEditable(True)
-            print("pogi5")
-            self.ui.input_professor_uinfo.setInsertPolicy(QComboBox.InsertPolicy.InsertAtTop)
-            print("pogi6")
+            
+            self.ui.input_professor_uinfo.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
+            self.ui.input_professor_uinfo.lineEdit().setPlaceholderText("Search Professor by Name or ID")
             self.ui.input_professor_uinfo.setCompleter(completer)
-            self.ui.input_professor_uinfo.currentTextChanged.connect(lambda text: self.ui.input_professor_uinfo.setCurrentText(text))
+
             self.ui.input_professor_uinfo.setStyleSheet("""
                 QComboBox {
                     border: 2px solid #990000;
@@ -74,13 +67,20 @@ class Confirmation:
         except Exception as e:
             QMessageBox.critical(self.parent_widget, "Error", f"Failed to load professors: {str(e)}")
 
+    def on_professor_text_changed(self, text):
+        # Try to find the first item that contains the text (case insensitive)
+        for i in range(self.ui.input_professor_uinfo.count()):
+            item_text = self.ui.input_professor_uinfo.itemText(i)
+            if text.lower() in item_text.lower():
+                self.ui.input_professor_uinfo.setCurrentIndex(i)
+                return
 
     def show_warning(self, title, message):
         QtWidgets.QMessageBox.warning(self.parent_widget, title, message)
     
     def user_input_fields(self):
         student_id = self.ui.input_idno_uinfo.text().strip()
-        professor = self.ui.input_professor_uinfo.currentText()
+        professor = self.ui.input_professor_uinfo.currentText().strip()
 
         if not student_id or not professor:
             self.show_warning("Input Error", "All fields must be filled out.")
@@ -103,52 +103,37 @@ class Confirmation:
         item_details = []
         item_names = []
         quantities = []
-        states = []
-        
-        has_damaged_column = self.ui.Item_table.columnCount() > 3
         
         for row in range(self.ui.Item_table.rowCount()):
             item_item = self.ui.Item_table.item(row, 0)
-            
-            spinbox_default = self.ui.Item_table.cellWidget(row, 2)
-            spinbox_damaged = self.ui.Item_table.cellWidget(row, 3) if has_damaged_column else None
-            
-            if item_item:
-                item_name = item_item.text().strip()
-                
-                if spinbox_default and spinbox_default.value() > 0:
+            qty_widget = self.ui.Item_table.cellWidget(row, 2)
+            if item_item and qty_widget and isinstance(qty_widget, QtWidgets.QSpinBox):
+                item_name = item_item.text()
+                quantity = qty_widget.value()
+                if quantity > 0:
+                    item_details.append(f"{item_name}: {quantity}")
                     item_names.append(item_name)
-                    quantities.append(spinbox_default.value())
-                    states.append(0 if has_damaged_column else None)
-                    item_details.append(f"{item_name} (Returned): {spinbox_default.value()}")
-                    
-                if has_damaged_column and spinbox_damaged and spinbox_damaged.value() > 0:
-                    item_names.append(item_name)
-                    quantities.append(spinbox_damaged.value())
-                    states.append(3)
-                    item_details.append(f"{item_name} (Damaged): {spinbox_damaged.value()}")
+                    quantities.append(quantity)
 
         item_summary = "\n".join(item_details) if item_details else "No items selected"
         self.ui.textEdit.setPlainText(item_summary)
         
         print(f"Extracted names: {item_names}")
         print(f"Quantities: {quantities}")
-        print(f"States: {states}")
         
-        return item_names, quantities, states
+        return item_names, quantities
     
     def submitConfirm(self):
         if self.studentInfo:
-            # Get the selected professor name from combo box
-            selected_name = self.ui.input_professor_uinfo.currentText().strip()
-
-            # Retrieve the professor ID from the mapping
-            professor_id = self.professor_id_map.get(selected_name)
+            selected_text = self.ui.input_professor_uinfo.currentText()
+            index = self.ui.input_professor_uinfo.currentIndex()
+            professor_id = self.ui.input_professor_uinfo.itemData(index)
 
             if professor_id is None:
-                self.show_warning("Format Error", "Could not find professor ID for the selected name.")
+                self.show_warning("Selection Error", "Please select a valid professor.")
                 return
 
+            # Now you have professor_id; continue your logic
             exist = fetchBorrower(self.studentInfo[0])
             if exist:
                 print("Already Exists")
@@ -166,6 +151,7 @@ class Confirmation:
                     print("Already Exists")
                 elif res == 0:
                     print("Added Successfully")
+
 
 
 
