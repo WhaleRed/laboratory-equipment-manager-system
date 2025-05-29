@@ -7,6 +7,8 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QHeaderView
 import os
 
 class Ui_MainWindow(object):
@@ -67,6 +69,45 @@ class Ui_MainWindow(object):
         self.Filter_box_Students.addItem("Last Name")
         self.Filter_box_Students.addItem("Program")
         self.Filter_box_Students.addItem("Year Level")
+        
+        self.table_widgets = [self.borrow_table, self.return_table, self.replace_table, 
+                              self.Students_table, self.Professors_table, 
+                              self.inventory_table, self.Item_table
+                        ]
+        
+        for table in self.table_widgets:
+                if table in [self.borrow_table, self.return_table, self.Students_table, self.inventory_table]:
+                        header = table.horizontalHeader()
+                        header.setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
+
+                        last_col = table.columnCount() - 1
+                        third_to_last_col = table.columnCount() - 3
+
+                        table.setColumnWidth(third_to_last_col, 150)
+                        table.setColumnWidth(last_col, 60)       
+
+                        for col in range(table.columnCount()):
+                                if col != third_to_last_col and col != last_col:
+                                        header.setSectionResizeMode(col, QHeaderView.ResizeMode.Stretch)
+                elif table in [self.Item_table]:
+                        header.setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
+                        
+                        # set colmn 1 and 2 (last and 2nd to the last)
+                        table.setColumnWidth(2, 60)
+                        table.setColumnWidth(1, 150)
+                        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+                        
+                else:
+                        header = table.horizontalHeader()
+                        header.setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
+                        
+                        last_col = table.columnCount() - 1
+                        table.setColumnWidth(last_col, 60)    
+                        
+                        for col in range(table.columnCount()):
+                                if col != last_col:
+                                        header.setSectionResizeMode(col, QHeaderView.ResizeMode.Stretch)
+        
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1440, 898)
@@ -1311,6 +1352,7 @@ class Ui_MainWindow(object):
         self.gridLayout_9.addWidget(self.Date_text_borrow, 0, 7, 1, 1)
         self.gridLayout_10.addWidget(self.button_frame_borrow, 2, 0, 1, 1)
         self.borrow_table = QtWidgets.QTableWidget(parent=self.BorrowPage)
+        self.borrow_table.verticalHeader().setVisible(False)
         font = QtGui.QFont()
         font.setFamily("Nunito")
         font.setPointSize(15)
@@ -1563,6 +1605,7 @@ class Ui_MainWindow(object):
         self.gridLayout_12.addWidget(self.Date_text_return, 1, 6, 1, 1)
         self.gridLayout_13.addWidget(self.button_frame_return, 1, 0, 1, 1)
         self.return_table = QtWidgets.QTableWidget(parent=self.ReturnPage)
+        self.return_table.verticalHeader().setVisible(False)
         font = QtGui.QFont()
         font.setFamily("Nunito")
         font.setPointSize(15)
@@ -1674,6 +1717,7 @@ class Ui_MainWindow(object):
         self.gridLayout_15 = QtWidgets.QGridLayout(self.ReplacePage)
         self.gridLayout_15.setObjectName("gridLayout_15")
         self.replace_table = QtWidgets.QTableWidget(parent=self.ReplacePage)
+        self.replace_table.verticalHeader().setVisible(False)
         font = QtGui.QFont()
         font.setFamily("Nunito")
         font.setPointSize(15)
@@ -2911,7 +2955,7 @@ class Ui_MainWindow(object):
         item = self.borrow_table.horizontalHeaderItem(4)
         item.setText(_translate("MainWindow", "State"))
         item = self.borrow_table.horizontalHeaderItem(5)
-        item.setText(_translate("MainWindow", "Option"))
+        item.setText(_translate("MainWindow", ""))
         self.Dashboard_Frame.setTabText(self.Dashboard_Frame.indexOf(self.BorrowPage), _translate("MainWindow", "Borrows"))
         self.Page_text_return.setText(_translate("MainWindow", "Page"))
         self.Filter_text_return.setText(_translate("MainWindow", "Sort:"))
@@ -2933,7 +2977,7 @@ class Ui_MainWindow(object):
         item = self.return_table.horizontalHeaderItem(4)
         item.setText(_translate("MainWindow", "State"))
         item = self.return_table.horizontalHeaderItem(5)
-        item.setText(_translate("MainWindow", "Option"))
+        item.setText(_translate("MainWindow", ""))
         self.Dashboard_Frame.setTabText(self.Dashboard_Frame.indexOf(self.ReturnPage), _translate("MainWindow", "Returns"))
         self.replace_table.setSortingEnabled(True)
         item = self.replace_table.horizontalHeaderItem(0)
@@ -2945,7 +2989,7 @@ class Ui_MainWindow(object):
         item = self.replace_table.horizontalHeaderItem(3)
         item.setText(_translate("MainWindow", "Quantity"))
         item = self.replace_table.horizontalHeaderItem(4)
-        item.setText(_translate("MainWindow", "Option"))
+        item.setText(_translate("MainWindow", ""))
         self.Filter_text_replace.setText(_translate("MainWindow", "Sort:"))
         self.Date_box_replace.setCurrentText(_translate("MainWindow", "Please Select"))
         self.Date_box_replace.setItemText(0, _translate("MainWindow", "Please Select"))
@@ -2991,7 +3035,7 @@ class Ui_MainWindow(object):
         item = self.Professors_table.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Last Name"))
         item = self.Professors_table.horizontalHeaderItem(3)
-        item.setText(_translate("MainWindow", "Option"))
+        item.setText(_translate("MainWindow", ""))
         self.Dashboard_Frame_Borrowers.setTabText(self.Dashboard_Frame_Borrowers.indexOf(self.Professors_Page), _translate("MainWindow", "Professors"))
         self.Students_table.setSortingEnabled(True)
         item = self.Students_table.horizontalHeaderItem(0)
@@ -3007,7 +3051,7 @@ class Ui_MainWindow(object):
         item = self.Students_table.horizontalHeaderItem(5)
         item.setText(_translate("MainWindow", "Professor ID"))
         item = self.Students_table.horizontalHeaderItem(6)
-        item.setText(_translate("MainWindow", "Option"))
+        item.setText(_translate("MainWindow", ""))
         self.Filter_text_Students.setText(_translate("MainWindow", "Sort:"))
         self.ofTotal_Pages_Students.setText(_translate("MainWindow", "of Total Pages"))
         self.Filter_box_Students.setCurrentText(_translate("MainWindow", "Please Select"))

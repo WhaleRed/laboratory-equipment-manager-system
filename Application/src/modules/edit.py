@@ -89,7 +89,7 @@ def editEquipment(equipment):
   finally:
     mycursor.close()
     
-def updateEquipmentQuantity(id, newQuantity, mode):
+def updateEquipmentQuantityState(id, newQuantity, mode):
   mycursor = db.cursor()
   try:
     print("editing")
@@ -111,32 +111,32 @@ def updateEquipmentQuantity(id, newQuantity, mode):
         """
         mycursor.execute(query, (newQuantity, id))
         
-    elif mode == 1: # replace
-      
+    elif mode == 1:  # replace
+        remaining = newQuantity
         mycursor.execute("""
-            SELECT id, quantity FROM returned_equipment
+            SELECT equipmentID, quantity FROM returned_equipment
             WHERE equipmentID = %s AND state = 'Damaged'
-            ORDER BY borrow_date ASC
+            ORDER BY return_date ASC
         """, (id,))
-        rows = mycursor.fetchall()
         
+        rows = mycursor.fetchall()
+
         for row in rows:
             returned_id, qty = row
             if remaining <= 0:
                 break
 
             to_subtract = min(remaining, qty)
-            new_qty = qty - to_subtract
-            
-            mycursor.execute("""
-                UPDATE returned_equipment
-                SET quantity = %s
-                WHERE id = %s
-            """, (new_qty, returned_id))
-
             remaining -= to_subtract
-        
-        
+
+            if qty - to_subtract == 0:
+               
+                mycursor.execute("""
+                    UPDATE returned_equipment
+                    SET state = 'Returned'
+                    WHERE equipmentID = %s
+                """, (returned_id,))
+
         mycursor.execute("""
             UPDATE equipment
             SET available = available + %s
