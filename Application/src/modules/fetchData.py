@@ -1511,10 +1511,10 @@ def fetchEquipmentData(idnum):
   return results  
 
 def fetch_all_professor_names():
-   mycursor = db.cursor()
+    mycursor = db.cursor()
+    mycursor.execute("SELECT ProfessorId, CONCAT(FirstName, ' ', LastName) FROM professor")
+    results = mycursor.fetchall()
+    mycursor.close()
+    return results  # this will be list of tuples (id, full_name)
 
-   mycursor.execute("SELECT CONCAT(FirstName, ' ', LastName) FROM professor")
-   results = mycursor.fetchall()
 
-   mycursor.close()
-   return [row[0] for row in results]  # list of names
