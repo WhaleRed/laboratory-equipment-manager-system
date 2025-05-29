@@ -19,7 +19,7 @@ class Confirmation:
     
     def user_input_fields(self):
         student_id = self.ui.input_idno_uinfo.text().strip()
-        professor = self.ui.input_professor_uinfo.text().strip()
+        professor = self.ui.input_professor_uinfo.currentText()
 
         if not student_id or not professor:
             self.show_warning("Input Error", "All fields must be filled out.")

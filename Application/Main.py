@@ -337,17 +337,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if mode == 0:  # returned
             add.addReturnedEquipment(id, self.borrower_id, "Returned", quantity)
-            edit.updateEquipmentQuantityState(id, quantity, mode)
+            edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
         elif mode == 3:  # damaged
             add.addReturnedEquipment(id, self.borrower_id, "Damaged", quantity)
-            edit.updateEquipmentQuantityState(id, quantity, mode)
+            edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
         elif mode == 1:
             print("adding")
             add.addReplacedEquipment(id, self.borrower_id, quantity)
-            edit.updateEquipmentQuantityState(id, quantity, mode) # change to update damaged in returned table
+            edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode) # change to update damaged in returned table
         elif mode == 2:
             add.addBorrowedEquipment(id, self.borrower_id, 'In use', quantity)
-            edit.updateEquipmentQuantityState(id, quantity, mode)
+            edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
         
       except Exception as e:
         print(f"Error in add_transaction_to_db: {e}")
@@ -998,8 +998,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     spinbox_returned.valueChanged.connect(on_spinbox1_changed)
                     spinbox_damaged.valueChanged.connect(on_spinbox2_changed)
                     
-                    self.Item_table.setCellWidget(row, 3, spinbox)
-                    self.Item_table.setCellWidget(row, 2, spinbox)
+                    self.Item_table.setCellWidget(row, 3, spinbox_damaged)
+                    self.Item_table.setCellWidget(row, 2, spinbox_returned)
 
                     row += 1
 
