@@ -137,10 +137,6 @@ class Confirmation:
         item_summary = "\n".join(item_details) if item_details else "No items selected"
         self.ui.textEdit.setPlainText(item_summary)
         
-        print(f"Extracted names: {item_names}")
-        print(f"Quantities: {quantities}")
-        print(f"States: {states}")
-        
         return item_names, quantities, states
     
     def submitConfirm(self):
