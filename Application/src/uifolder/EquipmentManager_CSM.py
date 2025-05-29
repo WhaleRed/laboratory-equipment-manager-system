@@ -40,18 +40,21 @@ class Ui_MainWindow(object):
         self.Filter_box_borrow.addItem("Borrow Date")
         self.Filter_box_borrow.addItem("Equipment ID")
         self.Filter_box_borrow.addItem("Borrower ID")
+        self.Filter_box_borrow.addItem("Professor ID")
         self.Filter_box_borrow.addItem("State")
         self.Filter_box_borrow.addItem("Quantity")
         
         self.Filter_box_return.addItem("Return Date")
         self.Filter_box_return.addItem("Equipment ID")
         self.Filter_box_return.addItem("Borrower ID")
+        self.Filter_box_return.addItem("Professor ID")
         self.Filter_box_return.addItem("State")
         self.Filter_box_return.addItem("Quantity")
         
         self.Filter_box_replace.addItem("Replacement Date")
         self.Filter_box_replace.addItem("Equipment ID")
         self.Filter_box_replace.addItem("Borrower ID")
+        self.Filter_box_replace.addItem("Professor ID")
         self.Filter_box_replace.addItem("Quantity")
         
         self.sort_box_inventory.addItem("Equipment ID")

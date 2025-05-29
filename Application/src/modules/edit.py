@@ -27,7 +27,6 @@ def editBorrower(borrower):
     mycursor.execute("""
             UPDATE borrower SET 
                 BorrowerID = %(new_borrowerId)s,
-                ProfessorID = %(new_profId)s,
                 FirstName = %(new_fname)s,
                 LastName = %(new_lname)s,
                 Program = %(new_program)s,

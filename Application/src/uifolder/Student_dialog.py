@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QDialog, QMessageBox
 from .StudentDialog import Ui_Dialog
 from src.modules.add import addBorrower
-from src.modules.fetchData import fetchProfID
 
 class Students_Dialog(QDialog):
     def __init__(self, parent=None):
@@ -9,7 +8,6 @@ class Students_Dialog(QDialog):
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
         self.addButtons()
-        self.populateProfessorComboBox()
         self.populateProgramComboBox()
     
     def populateProgramComboBox(self):
@@ -23,12 +21,6 @@ class Students_Dialog(QDialog):
         self.ui.programComboBox.clear()
         self.ui.programComboBox.addItems(programs)
 
-    def populateProfessorComboBox(self):
-        prof_ids = fetchProfID()
-        self.ui.comboBox.clear()
-        self.ui.comboBox.addItems(prof_ids)
-
-
     def addButtons(self):
         self.ui.saveButton.clicked.connect(self.saveBorrower)
         self.ui.cancelButton.clicked.connect(self.close)
@@ -37,12 +29,11 @@ class Students_Dialog(QDialog):
         try:
             student_id = self.ui.ID_box.text().strip()
             program = self.ui.programComboBox.currentText().strip()
-            professor = self.ui.comboBox.currentText().strip()
             fname = self.ui.firstName_box.text().strip()
             lname = self.ui.lastName_box.text().strip()
             block = self.ui.Yearlevel_Spinbox.value()
             # Validate inputs
-            if not student_id or not fname or not lname or not program or not professor or not block:
+            if not student_id or not fname or not lname or not program or not block:
                 QMessageBox.warning(self, "Input Error", "All fields are required.")
                 return
 
@@ -59,7 +50,6 @@ class Students_Dialog(QDialog):
 
             borrower = {
                 "borrowerId": student_id,
-                "profId": professor,
                 "fname": fname,
                 "lname": lname,
                 "program": program,

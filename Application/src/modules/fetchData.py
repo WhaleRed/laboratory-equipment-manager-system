@@ -1001,13 +1001,13 @@ def searchBorrowedEquipmentMatch(page, sortStateidx, dateState, searched=None):
     if is_valid_equipment_id(searched) or is_valid_id(searched):
       count_query = (
           f"SELECT COUNT(*) FROM borrowed_equipment "
-          f"WHERE (EquipmentID = %s OR BorrowerID = %s) {dateFilter}"
+          f"WHERE (EquipmentID = %s OR BorrowerID = %s OR ProfessorID = %s) {dateFilter}"
       )
-      params = [searched, searched]
+      params = [searched, searched, searched]
     else:
       count_query = (
           f"SELECT COUNT(*) FROM borrowed_equipment "
-          f"WHERE MATCH(EquipmentID, BorrowerID, State) "
+          f"WHERE MATCH(EquipmentID, BorrowerID, ProfessorID, State) "
           f"AGAINST (%s IN BOOLEAN MODE) "
           f"{dateFilter}"
       )
@@ -1027,14 +1027,14 @@ def searchBorrowedEquipmentMatch(page, sortStateidx, dateState, searched=None):
     if is_valid_equipment_id(searched) or is_valid_id(searched):
       query = (
           f"SELECT * FROM borrowed_equipment "
-          f"WHERE (EquipmentID = %s OR BorrowerID = %s) {dateFilter}"
+          f"WHERE (EquipmentID = %s OR BorrowerID = %s OR ProfessorID = %s) {dateFilter}"
           f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
       )
-      params = [searched, searched, offset]
+      params = [searched, searched, searched, offset]
     else:
       query = (
           f"SELECT * FROM borrowed_equipment "
-          f"WHERE MATCH(EquipmentID, BorrowerID, State) "
+          f"WHERE MATCH(EquipmentID, BorrowerID, ProfessorID, State) "
           f"AGAINST (%s IN BOOLEAN MODE) "
           f"{dateFilter} "
           f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
@@ -1075,13 +1075,13 @@ def searchReturnedEquipmentMatch(page, sortStateidx, dateState, searched=None):
     if is_valid_equipment_id(searched) or is_valid_id(searched):
       count_query = (
           f"SELECT COUNT(*) FROM returned_equipment "
-          f"WHERE (EquipmentID = %s OR BorrowerID = %s) {dateFilter}"
+          f"WHERE (EquipmentID = %s OR BorrowerID = %s OR ProfessorID = %s) {dateFilter}"
       )
-      params = [searched, searched]
+      params = [searched, searched, searched]
     else:
       count_query = (
           f"SELECT COUNT(*) FROM returned_equipment "
-          f"WHERE MATCH(EquipmentID, BorrowerID, State) "
+          f"WHERE MATCH(EquipmentID, BorrowerID, ProfessorID, State) "
           f"AGAINST (%s IN BOOLEAN MODE) "
           f"{dateFilter}"
       )
@@ -1109,14 +1109,14 @@ def searchReturnedEquipmentMatch(page, sortStateidx, dateState, searched=None):
     if is_valid_equipment_id(searched) or is_valid_id(searched):
       query = (
           f"SELECT * FROM returned_equipment "
-          f"WHERE (EquipmentID = %s OR BorrowerID = %s) {dateFilter}"
+          f"WHERE (EquipmentID = %s OR BorrowerID = %s OR ProfessorID = %s) {dateFilter}"
           f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
       )
-      params = [searched, searched, offset]
+      params = [searched, searched, searched, offset]
     else:
       query = (
           f"SELECT * FROM returned_equipment "
-          f"WHERE MATCH(EquipmentID, BorrowerID, State) "
+          f"WHERE MATCH(EquipmentID, BorrowerID, ProfessorID, State) "
           f"AGAINST (%s IN BOOLEAN MODE) "
           f"{dateFilter} "
           f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
@@ -1158,13 +1158,13 @@ def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
     if is_valid_equipment_id(searched) or is_valid_id(searched):
       count_query = (
           f"SELECT COUNT(*) FROM replaced_equipment "
-          f"WHERE (EquipmentID = %s OR BorrowerID = %s) {dateFilter}"
+          f"WHERE (EquipmentID = %s OR BorrowerID = %s OR ProfessorID = %s) {dateFilter}"
       )
-      params = [searched, searched]
+      params = [searched, searched, searched]
     else:
       count_query = (
           f"SELECT COUNT(*) FROM replaced_equipment "
-          f"WHERE MATCH(EquipmentID, BorrowerID) "
+          f"WHERE MATCH(EquipmentID, BorrowerID, ProfessorID) "
           f"AGAINST (%s IN BOOLEAN MODE) "
           f"{dateFilter}"
       )
@@ -1192,14 +1192,14 @@ def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
     if is_valid_equipment_id(searched) or is_valid_id(searched):
       query = (
           f"SELECT * FROM replaced_equipment "
-          f"WHERE (EquipmentID = %s OR BorrowerID = %s) {dateFilter}"
+          f"WHERE (EquipmentID = %s OR BorrowerID = %s OR ProfessorID = %s) {dateFilter}"
           f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
       )
-      params = [searched, searched, offset]
+      params = [searched, searched, searched, offset]
     else:
       query = (
           f"SELECT * FROM replaced_equipment "
-          f"WHERE MATCH(EquipmentID, BorrowerID) "
+          f"WHERE MATCH(EquipmentID, BorrowerID, ProfessorID) "
           f"AGAINST (%s IN BOOLEAN MODE) "
           f"{dateFilter} "
           f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
@@ -1216,16 +1216,14 @@ def searchReplacedEquipmentMatch(page, sortStateidx, dateState, searched=None):
 def searchBorrowerMatch(page, sortStateidx, searched=None):
     db.commit()
     
-    # Create cursor with try-finally to ensure cleanup
     mycursor = db.cursor()
     
     try:
-        # Clear any existing unread results first
         try:
             while mycursor.nextset():
                 pass
         except:
-            pass  # No more results to clear
+            pass 
             
         offset = (page-1) * 10
         params = []
@@ -1245,7 +1243,7 @@ def searchBorrowerMatch(page, sortStateidx, searched=None):
             else:
                 count_query = (
                     "SELECT COUNT(*) FROM borrower "
-                    "WHERE MATCH(ProfessorID, BorrowerID, FirstName, LastName, Program, YearLevel) "
+                    "WHERE MATCH(BorrowerID, FirstName, LastName, Program, YearLevel) "
                     "AGAINST (%s IN BOOLEAN MODE)"
                 )
                 params = [searched]
@@ -1281,7 +1279,7 @@ def searchBorrowerMatch(page, sortStateidx, searched=None):
             else:
                 query = (
                     f"SELECT * FROM borrower "
-                    f"WHERE MATCH(ProfessorID, BorrowerID, FirstName, LastName, Program, YearLevel) "
+                    f"WHERE MATCH(BorrowerID, FirstName, LastName, Program, YearLevel) "
                     f"AGAINST (%s IN BOOLEAN MODE) "
                     f"ORDER BY {sortState} ASC LIMIT 10 OFFSET %s"
                 )

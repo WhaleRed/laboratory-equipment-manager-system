@@ -411,12 +411,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.borrow_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
                 self.borrow_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
                 self.borrow_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{item[2]}"))
-                self.borrow_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
-                self.borrow_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
+                self.borrow_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
+                self.borrow_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
+                self.borrow_table.setItem(row, 5, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[5]}"))
                 
                 key = (item[0], item[1], item[2])
                 btn = self.createOptionsButtonD(key)
-                self.borrow_table.setCellWidget(row, 5, btn)
+                self.borrow_table.setCellWidget(row, 6, btn)
                 
         except Exception as e:
             print(f"Error in populateBorrowTable: {e}")
@@ -452,12 +453,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.return_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
                 self.return_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
                 self.return_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{item[2]}"))
-                self.return_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
-                self.return_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
+                self.return_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
+                self.return_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
+                self.return_table.setItem(row, 5, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[5]}"))
                 
                 key = (item[0], item[1], item[2])
                 btn = self.createOptionsButtonD(key)
-                self.return_table.setCellWidget(row, 5, btn)
+                self.return_table.setCellWidget(row, 6, btn)
                 
         except Exception as e:
             print(f"Error in populateReturnTable: {e}")
@@ -489,11 +491,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.replace_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
                 self.replace_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
                 self.replace_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"     {item[2]}"))
-                self.replace_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"                     {item[3]}"))
+                self.replace_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
+                self.replace_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"                     {item[4]}"))
                 
                 key = (item[0], item[1], item[2])
                 btn = self.createOptionsButtonD(key)
-                self.replace_table.setCellWidget(row, 4, btn)
+                self.replace_table.setCellWidget(row, 5, btn)
             
         except Exception as e:
             print(f"Error in populateReplaceTable: {e}")
@@ -522,14 +525,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
           self.Students_table.setRowCount(len(data))
           for row, item in enumerate(data):
               self.Students_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
-              self.Students_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[2]}"))
-              self.Students_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
-              self.Students_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
-              self.Students_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}        {item[5]}"))
-              self.Students_table.setItem(row, 5, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
+              self.Students_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
+              self.Students_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[2]}"))
+              self.Students_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
+              self.Students_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}        {item[4]}"))
               
               btn = self.createOptionsButtonED(item[0])
-              self.Students_table.setCellWidget(row, 6, btn)
+              self.Students_table.setCellWidget(row, 5, btn)
               
       except Exception as e:
             print(f"Error in populateBorrowerTable: {e}")
