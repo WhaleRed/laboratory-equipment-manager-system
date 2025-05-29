@@ -80,59 +80,45 @@ def fetchCategory():
   return [row[0] for row in results]
 
 #-----For getting items in use-----#
-def fetchItemsInUse(borrowerID, page, categoryidx=None, searched=None):
-  db.commit()
-  mycursor = db.cursor()
-  searchFilter = ""
-  catFilter = ""
-  
-  offset = (page - 1) * PAGE_SIZE
-  
-  catFilter = ""
-  params = [borrowerID]
-  if categoryidx != 0:
-      category = mappings.CATEGORY_MAP.get(categoryidx)
-      if category:
-          catFilter = "AND e.Category = %s"
-          params.append(category)
-                   
-  if searched:
-      searchFilter = "AND Equipment_name LIKE %s "
-      params.insert(0, searched)
-  
-  count_query = f"""
-        SELECT COUNT(*)
-        FROM borrowed_equipment b
-        INNER JOIN equipment e ON b.equipmentID = e.equipmentID
-        WHERE b.borrowerID = %s {searchFilter} {catFilter}
-    """
+def fetchItemsInUse(borrowerID, categoryidx=None, searched=None):
+    db.commit()
+    mycursor = db.cursor()
     
-  mycursor.execute(count_query, params)
-  count = mycursor.fetchone()[0]
+    filters = ["b.borrowerID = %s"]
+    params = [borrowerID]
+
+    if searched:
+        filters.append("e.Equipment_name LIKE %s")
+        params.append(f"%{searched}%")
+
+    if categoryidx != 0:
+        category = mappings.CATEGORY_MAP.get(categoryidx)
+        if category:
+            filters.append("e.Category = %s")
+            params.append(category)
     
-  query = f"""
+    filter_clause = " AND ".join(filters)
+
+    query = f"""
         SELECT e.Equipment_name, b.Quantity
         FROM equipment e
         INNER JOIN borrowed_equipment b ON e.equipmentID = b.equipmentID
-        WHERE b.borrowerID = %s {searchFilter} {catFilter}
-        LIMIT %s OFFSET %s
+        WHERE {filter_clause}
     """
-  params += [PAGE_SIZE, offset]
-  mycursor.execute(query, params)
-  results = mycursor.fetchall()
-  
-  mycursor.close()
-  
-  return results, count
+
+    mycursor.execute(query, params)
+    results = mycursor.fetchall()
+    
+    mycursor.close()
+    return results
+
 
 #-----For getting damaged items-----#
-def fetchDamagedItems(borrowerID, page, categoryidx=None, searched=None):
+def fetchDamagedItems(borrowerID, categoryidx=None, searched=None):
     db.commit()
     mycursor = db.cursor()
     searchFilter= ""
     catFilter = ""
-
-    offset = (page - 1) * PAGE_SIZE
     
     catFilter = ""
     params = [borrowerID]
@@ -146,31 +132,19 @@ def fetchDamagedItems(borrowerID, page, categoryidx=None, searched=None):
         searchFilter = "AND Equipment_name LIKE %s "
         params.insert(0, searched)
 
-    count_query = f"""
-        SELECT COUNT(*)
-        FROM returned_equipment b
-        INNER JOIN equipment e ON b.equipmentID = e.equipmentID
-        WHERE b.BorrowerID = %s AND b.State = 'Damaged' {searchFilter} {catFilter}
-    """
-    
-    mycursor.execute(count_query, params)
-    count = mycursor.fetchone()[0]
-
     query = f"""
         SELECT e.Equipment_name, b.Quantity
         FROM equipment e
         INNER JOIN returned_equipment b ON e.equipmentID = b.equipmentID
         WHERE b.BorrowerID = %s AND b.State = 'Damaged' {searchFilter} {catFilter}
-        LIMIT %s OFFSET %s
     """
-    
-    params += [PAGE_SIZE, offset]
+
     mycursor.execute(query, params)
     results = mycursor.fetchall()
 
     mycursor.close()
 
-    return results, count
+    return results
 
 #-----For getting available items-----#
 def fetchAllAvailableItems(categoryidx=None, searched=None):
