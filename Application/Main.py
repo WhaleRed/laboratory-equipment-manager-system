@@ -27,7 +27,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # For Scrollbar
         self.Item_table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.Item_table.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.Item_table.setFont(font)
         
         #for users page
         self.UpageNum = 1
