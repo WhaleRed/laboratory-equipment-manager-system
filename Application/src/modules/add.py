@@ -99,7 +99,7 @@ def addReturnedEquipment(equipmentID, borrowerId, state, quantity):
   mycursor = db.cursor()
   try:
     mycursor.execute(
-            "INSERT INTO Returned_equipment (EquipmentID, BorrowerID ,Return_date , Status, Quantity) "
+            "INSERT INTO Returned_equipment (EquipmentID, BorrowerID ,Return_date , State, Quantity) "
             "VALUES (%s, %s, NOW(), %s, %s)", (equipmentID, borrowerId, state, quantity)
             )
     db.commit()
