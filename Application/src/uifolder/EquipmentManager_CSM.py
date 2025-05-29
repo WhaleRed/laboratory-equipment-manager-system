@@ -1328,6 +1328,7 @@ class Ui_MainWindow(object):
         icon7_path = os.path.join(os.path.dirname(__file__), "icons & fonts", "arrowleft1.svg")
         icon7 = QtGui.QIcon()
         icon7.addPixmap(QtGui.QPixmap(str(icon7_path)), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        self.arrow_left_borrow.setIcon(icon7)
         self.arrow_left_borrow.setIconSize(QtCore.QSize(32, 32))
         self.arrow_left_borrow.setObjectName("arrow_left_borrow")
         self.gridLayout_9.addWidget(self.arrow_left_borrow, 0, 0, 1, 1)
