@@ -112,20 +112,22 @@ def updateEquipmentQuantityState(eid, bid,newQuantity, mode):
 
             to_subtract = min(remaining, qty)
             remaining -= to_subtract
-
+            print(f"updating borrowen equiment...")
             if mode == 0:
                 mycursor.execute("""
                     UPDATE borrowed_equipment
                     SET state = 'Returned' 
-                    WHERE equipmentID = %s AND borrowerID = %s
+                    WHERE state = "In use" AND equipmentID = %s AND borrowerID = %s
+                    ORDER BY borrow_date ASC
                 """, (eid, bid))
         
-        if mode == 0:    
+        if mode == 0:
+            print("updating equipment")    
             mycursor.execute("""
                 UPDATE equipment
                 SET available = available + %s
-                WHERE equipmentID = %s AND borrowerID = %s
-            """, (newQuantity, eid, bid))
+                WHERE equipmentID = %s
+            """, (newQuantity, eid))
             
     elif mode == 1:  # replace
         remaining = newQuantity
@@ -151,7 +153,8 @@ def updateEquipmentQuantityState(eid, bid,newQuantity, mode):
                 mycursor.execute("""
                     UPDATE returned_equipment
                     SET state = 'Returned'
-                    WHERE equipmentID = %s and borrowerID = %s
+                    WHERE state = "Damaged" AND equipmentID = %s and borrowerID = %s
+                    ORDER BY return_date ASC
                 """, (eid, bid))
 
         mycursor.execute("""
