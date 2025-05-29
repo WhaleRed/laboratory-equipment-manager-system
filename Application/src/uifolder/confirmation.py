@@ -104,25 +104,39 @@ class Confirmation:
         item_details = []
         item_names = []
         quantities = []
+        states = []
+        
+        has_damaged_column = self.ui.Item_table.columnCount() > 3
         
         for row in range(self.ui.Item_table.rowCount()):
             item_item = self.ui.Item_table.item(row, 0)
-            qty_widget = self.ui.Item_table.cellWidget(row, 2)
-            if item_item and qty_widget and isinstance(qty_widget, QtWidgets.QSpinBox):
-                item_name = item_item.text()
-                quantity = qty_widget.value()
-                if quantity > 0:
-                    item_details.append(f"{item_name}: {quantity}")
+            
+            spinbox_default = self.ui.Item_table.cellWidget(row, 2)
+            spinbox_damaged = self.ui.Item_table.cellWidget(row, 3) if has_damaged_column else None
+            
+            if item_item:
+                item_name = item_item.text().strip()
+                
+                if spinbox_default and spinbox_default.value() > 0:
                     item_names.append(item_name)
-                    quantities.append(quantity)
+                    quantities.append(spinbox_default.value())
+                    states.append(0 if has_damaged_column else None)
+                    item_details.append(f"{item_name} (Returned): {spinbox_default.value()}")
+                    
+                if has_damaged_column and spinbox_damaged and spinbox_damaged.value() > 0:
+                    item_names.append(item_name)
+                    quantities.append(spinbox_damaged.value())
+                    states.append(3)
+                    item_details.append(f"{item_name} (Damaged): {spinbox_damaged.value()}")
 
         item_summary = "\n".join(item_details) if item_details else "No items selected"
         self.ui.textEdit.setPlainText(item_summary)
         
         print(f"Extracted names: {item_names}")
         print(f"Quantities: {quantities}")
+        print(f"States: {states}")
         
-        return item_names, quantities
+        return item_names, quantities, states
     
     def submitConfirm(self):
         if self.studentInfo:
