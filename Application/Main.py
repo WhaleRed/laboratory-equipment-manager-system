@@ -95,11 +95,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.Dashboard_Frame_Borrowers.currentChanged.connect(self.onIndexChanged)
         
         #Add item connections
-        self.addItemState = 2
         self.next_button_uinfo.clicked.connect(self.setItemTableValues)
         self.borrow_button_user.clicked.connect(self.setModeBorrow)
         self.return_button_user.clicked.connect(self.setModeReturn)
         self.replace_button_user.clicked.connect(self.setModeReplace)
+        self.addItemState = 2
         self.search_box.returnPressed.connect(self.setItemTableValues)
         self.category_box_additem.currentIndexChanged.connect(self.setItemTableValues)
         self.increment.clicked.connect(self.Ugo_to_next_page)
@@ -437,9 +437,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             for row, item in enumerate(data):
                 self.return_table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[0]}"))
                 self.return_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
-                self.return_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{item[2]}"))
-                self.return_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
-                self.return_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
+                self.return_table.setItem(row, 2, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[2]}"))
+                self.return_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[3]}"))
+                self.return_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
                 
                 key = (item[0], item[1], item[2])
                 btn = self.createOptionsButtonD(key)
@@ -999,7 +999,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             elif  self.addItemState == 2:
                 self.Item_table.clearContents()
-                data, count = fetchData.fetchAllAvailableItems(category, searchKeyword)
+                data = fetchData.fetchAllAvailableItems(category, searchKeyword)
                 
                 self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
                 
