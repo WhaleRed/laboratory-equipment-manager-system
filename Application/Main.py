@@ -255,6 +255,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         item_names, quantities, states = self.logic.User_Table_Inputs()
         
         for name, qty, state in zip(item_names, quantities, states):
+                
             clean_name = (name.strip(),)
             item_id_tup = fetchData.fetch_itemID_from_name(clean_name)
             item_id = item_id_tup[0]
@@ -939,7 +940,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 #-----Add item-----#
     def setItemTableValues(self):
         try:
-            page = self.UpageNum
+            print(f"add item state: (self.addItemState: {self.addItemState})")
             category = self.category_box_additem.currentIndex()
             searchKeyword = self.search_box.text().strip()
                 
@@ -969,6 +970,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
                     
                     available_qty = int(item[1])
+                    print(f"available quantity: f{available_qty}")
                     
                     spinbox_returned = self.createQuantitySpinBox(available_qty)
                     spinbox_damaged = self.createQuantitySpinBox(available_qty)
@@ -988,8 +990,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     spinbox_returned.valueChanged.connect(on_spinbox1_changed)
                     spinbox_damaged.valueChanged.connect(on_spinbox2_changed)
                     
-                    self.Item_table.setCellWidget(row, 3, spinbox_damaged)
                     self.Item_table.setCellWidget(row, 2, spinbox_returned)
+                    self.Item_table.setCellWidget(row, 3, spinbox_damaged)
 
                     row += 1
 
