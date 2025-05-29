@@ -5,7 +5,6 @@ from ..modules.fetchData import fetchBorrower
 from ..modules.add import addBorrower
 from PyQt6.QtWidgets import QCompleter, QMessageBox
 from PyQt6.QtCore import Qt
-
 class Confirmation:
     def __init__(self, ui: Ui_MainWindow):
         self.ui = ui
@@ -45,10 +44,6 @@ class Confirmation:
 
         if not self.studentidformat(student_id):
             self.show_warning("Input Error", "Invalid Student ID format. Must be YYYY-NNNN.")
-            return False
-        
-        if not professor:
-            self.show_warning("Input Error", "Please select a professor or Type the Professor's Name")
             return False
 
         
