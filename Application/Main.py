@@ -280,6 +280,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             add.addReturnedEquipment(id, self.borrower_id, "Returned", quantity)
             edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
         elif mode == 3:  # damaged
+            print("printing damaged...")
             add.addReturnedEquipment(id, self.borrower_id, "Damaged", quantity)
             edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
         elif mode == 1:
@@ -292,6 +293,44 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
       except Exception as e:
         print(f"Error in add_transaction_to_db: {e}")
+               
+    def set_item_header_type(self):
+        if self.addItemState == 0: #return
+            self.Item_table.setColumnCount(4)
+            self.Item_table.setHorizontalHeaderLabels(['Item', 'In use', 'Returned', 'Damaged'])
+            
+            header = self.Item_table.horizontalHeader()
+
+            header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.Stretch)
+            header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeMode.Stretch)
+
+            header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeMode.Fixed)
+            header.resizeSection(2, 100) 
+
+            header.setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeMode.Fixed)
+            header.resizeSection(3, 100)
+            
+        elif self.addItemState == 1: #replace
+            self.Item_table.setColumnCount(3)
+            self.Item_table.setHorizontalHeaderLabels(['Item', 'Damaged', 'Replace'])
+            
+        elif self.addItemState == 2: #borrow
+            self.Item_table.setColumnCount(3)
+            self.Item_table.setHorizontalHeaderLabels(['Item', 'Availabe', 'Borrow'])
+            
+        self.Item_table.horizontalHeader().setStyleSheet("""
+                QHeaderView::section {
+                    background-color: #A70000;
+                    font-family: 'Nunito Extra Bold';
+                    font-size: 20px;
+                    font-weight: bold;
+                    padding: 20px;
+                    border: 1px solid #d3d3d3;
+                }
+                """
+            )
+            
+            
             
 #-----Populates admin tables-----#
 
@@ -858,13 +897,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             print(f"Error in update_button_state: {e}")
 
     def on_user_index_change(self, new_index):
-        print("CHanging")
-        print(f"current index = {self.Ucurrent_index}")
-        
-        print(f"new_index {new_index}")
         
         change = new_index - self.Ucurrent_index 
-        print(f"change {change}")
         
         if change < 0:
             if new_index == 0:
@@ -875,7 +909,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 
         self.Ucurrent_index = new_index
             
-
     def onIndexChanged(self):
       
       self.pageNum = "1"
@@ -946,19 +979,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 
             if self.addItemState == 0:
                 self.Item_table.clearContents()
-                self.Item_table.setColumnCount(4)
-                self.Item_table.setHorizontalHeaderLabels(['Item', 'In use', 'Returned', 'Damaged'])
                 
-                header = self.Item_table.horizontalHeader()
-
-                header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeMode.Stretch)
-                header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeMode.Stretch)
-
-                header.setSectionResizeMode(2, QtWidgets.QHeaderView.ResizeMode.Fixed)
-                header.resizeSection(2, 100) 
-
-                header.setSectionResizeMode(3, QtWidgets.QHeaderView.ResizeMode.Fixed)
-                header.resizeSection(3, 100)
+                self.set_item_header_type()
                 
                 data = fetchData.fetchItemsInUse(self.input_idno_uinfo.text(), category, searchKeyword)
                 
@@ -970,7 +992,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.Item_table.setItem(row, 1, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[1]}"))
                     
                     available_qty = int(item[1])
-                    print(f"available quantity: f{available_qty}")
                     
                     spinbox_returned = self.createQuantitySpinBox(available_qty)
                     spinbox_damaged = self.createQuantitySpinBox(available_qty)
@@ -997,11 +1018,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             elif  self.addItemState == 1:
                 self.Item_table.clearContents()
+                
+                self.set_item_header_type()
+                
                 data = fetchData.fetchDamagedItems(self.input_idno_uinfo.text(), category, searchKeyword)
-                
-                #self.UtotalPages = (count // self.per_page) + (1 if count % self.per_page != 0 else 0)
-                
-                #self.Uupdate_pageNumber()
                 
                 self.Item_table.setRowCount(len(data))
                 row = 0
@@ -1017,6 +1037,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             elif  self.addItemState == 2:
                 self.Item_table.clearContents()
+                self.set_item_header_type()
                 data = fetchData.fetchAllAvailableItems(category, searchKeyword)
                 
                 #self.Uupdate_pageNumber()
