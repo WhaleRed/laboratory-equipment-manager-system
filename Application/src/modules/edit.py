@@ -93,21 +93,68 @@ def updateEquipmentQuantity(id, newQuantity, mode):
   mycursor = db.cursor()
   try:
     print("editing")
-    if mode in (0, 1):
+    if mode in (0, 3): # return
         query = """
+            UPDATE borrowed_equipment 
+            SET quantity = quantity - %s
+            WHERE equipmentID = %s
+        """
+        query = """
+            UPDATE borrowed_equipment 
+            SET quantity = quantity - %s
+            WHERE equipmentID = %s
+        """
+        query_equipment = """
             UPDATE equipment
             SET available = available + %s
             WHERE equipmentID = %s
         """
-    elif mode == 2:
+        mycursor.execute(query, (newQuantity, id))
+        
+    elif mode == 1: # replace
+      
+        mycursor.execute("""
+            SELECT id, quantity FROM returned_equipment
+            WHERE equipmentID = %s AND state = 'Damaged'
+            ORDER BY borrow_date ASC
+        """, (id,))
+        rows = mycursor.fetchall()
+        
+        for row in rows:
+            returned_id, qty = row
+            if remaining <= 0:
+                break
+
+            to_subtract = min(remaining, qty)
+            new_qty = qty - to_subtract
+            
+            mycursor.execute("""
+                UPDATE returned_equipment
+                SET quantity = %s
+                WHERE id = %s
+            """, (new_qty, returned_id))
+
+            remaining -= to_subtract
+        
+        
+        mycursor.execute("""
+            UPDATE equipment
+            SET available = available + %s
+            WHERE equipmentID = %s
+        """, (newQuantity, id))
+            
+    elif mode == 2: # borrow
         query = """
             UPDATE equipment
             SET available = available - %s
             WHERE equipmentID = %s
         """
+        mycursor.execute(query, (newQuantity, id))
     else:
         print("Invalid mode")
         return
+    
+    db.commit()
   except Exception as e:
       print(f"Error updating quantity: {e}")
   finally:
