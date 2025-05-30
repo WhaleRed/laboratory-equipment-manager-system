@@ -429,7 +429,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.borrow_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
                 self.borrow_table.setItem(row, 5, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[5]}"))
                 
-                key = (item[0], item[1], item[2])
+                key = (item[0], item[1], item[3])
                 btn = self.createOptionsButtonD(key)
                 self.borrow_table.setCellWidget(row, 6, btn)
                 
@@ -471,7 +471,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.return_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[4]}"))
                 self.return_table.setItem(row, 5, QtWidgets.QTableWidgetItem(f"{self.spacer}{item[5]}"))
                 
-                key = (item[0], item[1], item[2])
+                key = (item[0], item[1], item[3])
                 btn = self.createOptionsButtonD(key)
                 self.return_table.setCellWidget(row, 6, btn)
                 
@@ -508,7 +508,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.replace_table.setItem(row, 3, QtWidgets.QTableWidgetItem(f"{item[3]}"))
                 self.replace_table.setItem(row, 4, QtWidgets.QTableWidgetItem(f"         {item[4]}"))
                 
-                key = (item[0], item[1], item[2])
+                key = (item[0], item[1], item[3])
                 btn = self.createOptionsButtonD(key)
                 self.replace_table.setCellWidget(row, 5, btn)
             
