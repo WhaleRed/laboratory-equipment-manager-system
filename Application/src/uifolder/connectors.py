@@ -65,6 +65,7 @@ class Connector:
                 self.admin_authenticated = True
             else:
                 return
+        self.admin_authenticated = False
 
         index = self.ui.Admin_User_Page.indexOf(self.ui.page)
         if index != -1:
