@@ -112,7 +112,7 @@ def updateEquipmentQuantityState(eid, bid,newQuantity, mode):
             to_subtract = min(remaining, qty)
             remaining -= to_subtract
             print(f"updating borrowen equiment...")
-            if mode == 0:
+            if mode in (0, 3):
                 mycursor.execute("""
                     UPDATE borrowed_equipment
                     SET state = 'Returned' 
