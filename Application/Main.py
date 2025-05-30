@@ -303,10 +303,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             print("adding")
             print(f"rof id: {prof_id}")
             add.addReplacedEquipment(id, self.borrower_id, prof_id, quantity)
-            edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode, prof_id)
+            edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode, self.prof_id)
         elif mode == 2:
             add.addBorrowedEquipment(id, self.borrower_id, self.profID, 'In use', quantity)
-            edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode, prof_id)
+            edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode, self.prof_id)
         
       except Exception as e:
         print(f"Error in add_transaction_to_db: {e}")
