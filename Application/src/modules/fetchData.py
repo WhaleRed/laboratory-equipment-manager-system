@@ -82,34 +82,34 @@ def fetchCategory():
   return [row[0] for row in results]
 
 def fetchProfIDReturned(eid, bid):
-  db.commit()
-  mycursor = db.cursor()
-  
-  mycursor.execute("""
-            SELECT ProfessorID FROM borrowed_equipment
-            WHERE equipmentID = %s AND BorrowerID = %s AND state = 'In use'
-            ORDER BY borrow_date ASC
-        """, (eid, bid))
-  result = mycursor.fetchone()
-  mycursor.close()
-  
-  return result[0] if result else None
+  try:
+    db.commit()
+    mycursor = db.cursor(buffered=True)
+    
+    mycursor.execute("""
+              SELECT ProfessorID FROM borrowed_equipment
+              WHERE equipmentID = %s AND BorrowerID = %s AND state = 'In use'
+              ORDER BY borrow_date ASC
+          """, (eid, bid))
+    result = mycursor.fetchone()
+    
+    return result[0] if result else None
+  finally:
+    mycursor.close()
+    print("done")
 
 def fetchProfIDReplaced(eid, bid):
-  db.commit()
-  mycursor = db.cursor()
-  
-  mycursor.execute("""
+    mycursor = db.cursor(buffered=True)  # This is the key change
+    try:
+        mycursor.execute("""
             SELECT professorID FROM returned_equipment
             WHERE equipmentID = %s AND borrowerID = %s AND state = 'Damaged'
             ORDER BY return_date ASC
         """, (eid, bid))
-  result = mycursor.fetchone()
-  mycursor.close()
-  print(f"results: {result}")
-  print(f"result[0] if result else None:  {result[0] if result else None}")
-  
-  return result[0] if result else None
+        result = mycursor.fetchone()
+        return result[0] if result else None
+    finally:
+        mycursor.close()
 
 #-----For getting items in use-----#
 def fetchItemsInUse(borrowerID, categoryidx=None, searched=None):
@@ -163,7 +163,7 @@ def fetchDamagedItems(borrowerID, categoryidx=None, searched=None):
             
     if searched:
         searchFilter = "AND Equipment_name LIKE %s "
-        params.insert(0, searched)
+        params.insert(f"%{searched}%")
 
     query = f""" 
         SELECT e.Equipment_name, SUM(b.Quantity) as Total_Quantity
@@ -174,8 +174,26 @@ def fetchDamagedItems(borrowerID, categoryidx=None, searched=None):
         ORDER BY e.Equipment_name
     """ 
 
+    print(f"Query: {query}")
+    print(f"Params: {params}")
+
     mycursor.execute(query, params)
     results = mycursor.fetchall()
+    
+    print(f"Results: {results}")
+    print(f"Number of results: {len(results)}")
+        
+    # Let's also check if there are ANY damaged items for this borrower
+    debug_query = """
+        SELECT b.*, e.Equipment_name 
+        FROM returned_equipment b
+        INNER JOIN equipment e ON b.equipmentID = e.equipmentID
+        WHERE b.BorrowerID = %s AND b.State = 'Damaged'
+    """
+    
+    mycursor.execute(debug_query, [params[0]])
+    debug_results = mycursor.fetchall()
+    print(f"All damaged items for borrower {params[0]}: {debug_results}")
 
     mycursor.close()
 

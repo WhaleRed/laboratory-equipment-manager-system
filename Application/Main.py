@@ -293,22 +293,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             prof_id = fetchData.fetchProfIDReturned(id, self.borrower_id)
             print(f"profid {prof_id}")
             if mode == 0:
-                add.addReturnedEquipment(id, self.borrower_id, prof_id, "Returned", quantity)
-                edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
+                edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode, prof_id)
             elif mode == 3:  # damaged
                 print("printing damaged...")
                 print(f"profid {prof_id}")
-                add.addReturnedEquipment(id, self.borrower_id, prof_id, "Damaged", quantity)
-                edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
+                edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode, prof_id)
         elif mode == 1: #relaced
             prof_id = fetchData.fetchProfIDReplaced(id, self.borrower_id)
             print("adding")
             print(f"rof id: {prof_id}")
             add.addReplacedEquipment(id, self.borrower_id, prof_id, quantity)
-            edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
+            edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode, prof_id)
         elif mode == 2:
             add.addBorrowedEquipment(id, self.borrower_id, self.profID, 'In use', quantity)
-            edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
+            edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode, prof_id)
         
       except Exception as e:
         print(f"Error in add_transaction_to_db: {e}")

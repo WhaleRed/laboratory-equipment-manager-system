@@ -1,6 +1,8 @@
 import os
+from datetime import timedelta
 from dotenv import load_dotenv
 import mysql.connector
+from src.modules import add
 
 load_dotenv()
 
@@ -88,80 +90,133 @@ def editEquipment(equipment):
   finally:
     mycursor.close()
     
-def updateEquipmentQuantityState(eid, bid,newQuantity, mode):
+def updateEquipmentQuantityState(eid, bid, newQuantity, mode, pid):
   mycursor = db.cursor()
   try:
-    print("editing")
-    if mode in (0, 3):  # returned or damaged
+    if mode in (0, 3):  # Returned or Damaged
         print("Processing returned or damaged")
         remaining = newQuantity
 
         mycursor.execute("""
-            SELECT quantity FROM borrowed_equipment
-            WHERE equipmentID = %s AND BorrowerID = %s AND state = 'In use'
+            SELECT quantity, borrow_date, professorID
+            FROM borrowed_equipment
+            WHERE equipmentID = %s AND borrowerID = %s AND state = 'In use'
             ORDER BY borrow_date ASC
         """, (eid, bid))
         rows = mycursor.fetchall()
+        print("Done selecting")
 
-        for row in rows:
-            qty = row[0]
-            
+        for qty, borrow_date, pid in rows:
+            print(f"Row quantity: {qty}, Remaining to process: {remaining}")
+
             if remaining <= 0:
                 break
 
             to_subtract = min(remaining, qty)
+            if to_subtract <= 0:
+                print("Skipping update — nothing to subtract")
+                continue
+
             remaining -= to_subtract
-            print(f"updating borrowen equiment...")
-            if mode == 0:
+
+            if to_subtract == qty:
+              if mode == 0:
+                  mycursor.execute("""
+                      UPDATE borrowed_equipment
+                      SET state = 'Returned'
+                      WHERE equipmentID = %s AND borrowerID = %s AND borrow_date = %s
+                  """, (eid, bid, borrow_date))
+              else:  # mode == 3 (Damaged)
+                  mycursor.execute("""
+                      DELETE FROM borrowed_equipment
+                      WHERE equipmentID = %s AND borrowerID = %s AND borrow_date = %s
+                  """, (eid, bid, borrow_date))
+            else:
                 mycursor.execute("""
                     UPDATE borrowed_equipment
-                    SET state = 'Returned' 
-                    WHERE state = "In use" AND equipmentID = %s AND borrowerID = %s
-                    ORDER BY borrow_date ASC
-                """, (eid, bid))
-        
-        if mode == 0:
-            print("updating equipment")    
+                    SET quantity = quantity - %s
+                    WHERE equipmentID = %s AND borrowerID = %s AND borrow_date = %s
+                """, (to_subtract, eid, bid, borrow_date))
+
+                if mode == 0:
+                    new_borrow_date = get_unique_borrow_date(mycursor, eid, bid, pid, borrow_date)
+                    mycursor.execute("""
+                        INSERT INTO borrowed_equipment (equipmentID, borrowerID, professorID, quantity, state, borrow_date)
+                        VALUES (%s, %s, %s, %s, 'Returned', %s)
+                    """, (eid, bid, pid, to_subtract, new_borrow_date))
+                else:
+                    pass
+
+            # Call your addReturnedEquipment for damaged entries
+            if mode == 3 and to_subtract > 0:
+                add.addReturnedEquipment(eid, bid, pid, 'Damaged', to_subtract)
+
+            print(f"Remaining after update: {remaining}")
+
+        if mode == 0 and newQuantity > 0:
+            print("Updating equipment stock")
             mycursor.execute("""
                 UPDATE equipment
                 SET available = available + %s
                 WHERE equipmentID = %s
             """, (newQuantity, eid))
+
+
             
-    elif mode == 1:  # replace
-        remaining = newQuantity
-        mycursor.execute("""
-            SELECT quantity FROM returned_equipment
-            WHERE equipmentID = %s AND borrowerID = %s AND state = 'Damaged'
-            ORDER BY return_date ASC
-        """, (eid, bid))
-        
-        rows = mycursor.fetchall()
+    elif mode == 1:  # replace previously damaged items
+      remaining = newQuantity
 
-        for row in rows:
-            qty = row[0]
-            
-            if remaining <= 0:
-                break
+      # You now assume the damaged items are still in borrowed_equipment with state 'In use'
+      mycursor.execute("""
+          SELECT quantity, borrow_date, professorID
+          FROM borrowed_equipment
+          WHERE equipmentID = %s AND borrowerID = %s AND state = 'In use'
+          ORDER BY borrow_date ASC
+      """, (eid, bid))
 
-            to_subtract = min(remaining, qty)
-            remaining -= to_subtract
+      rows = mycursor.fetchall()
 
-            if qty - to_subtract == 0:
-               
-                mycursor.execute("""
-                    UPDATE returned_equipment
-                    SET state = 'Returned'
-                    WHERE state = "Damaged" AND equipmentID = %s and borrowerID = %s
-                    ORDER BY return_date ASC
-                """, (eid, bid))
+      for qty, borrow_date, pid in rows:
+          if remaining <= 0:
+              break
 
-        mycursor.execute("""
-            UPDATE equipment
-            SET available = available + %s
-            WHERE equipmentID = %s
-        """, (newQuantity, eid))
-            
+          to_subtract = min(remaining, qty)
+          if to_subtract <= 0:
+              continue
+
+          remaining -= to_subtract
+
+          if qty - to_subtract == 0:
+              # Entire row is being replaced
+              mycursor.execute("""
+                  UPDATE borrowed_equipment
+                  SET state = 'Replaced'
+                  WHERE equipmentID = %s AND borrowerID = %s AND borrow_date = %s
+              """, (eid, bid, borrow_date))
+          else:
+              # Partial replace — split row
+              mycursor.execute("""
+                  UPDATE borrowed_equipment
+                  SET quantity = quantity - %s
+                  WHERE equipmentID = %s AND borrowerID = %s AND borrow_date = %s
+              """, (to_subtract, eid, bid, borrow_date))
+
+              new_borrow_date = get_unique_borrow_date(mycursor, eid, bid, pid, borrow_date)
+
+              mycursor.execute("""
+                  INSERT INTO borrowed_equipment (equipmentID, borrowerID, professorID, quantity, state, borrow_date)
+                  VALUES (%s, %s, %s, %s, 'Replaced', %s)
+              """, (eid, bid, pid, to_subtract, new_borrow_date))
+
+      # Update availability to reflect new replacements added to stock
+      if newQuantity > 0:
+          print("Updating equipment stock after replacement")
+          mycursor.execute("""
+              UPDATE equipment
+              SET available = available + %s
+              WHERE equipmentID = %s
+          """, (newQuantity, eid))
+                      
     elif mode == 2: # borrow
         query = """
             UPDATE equipment
@@ -254,3 +309,14 @@ def editReturnedEquipment(equipment):
       return 2
   finally:
     mycursor.close()
+    
+def get_unique_borrow_date(mycursor, eid, bid, pid, base_date):
+    new_date = base_date + timedelta(seconds=1)
+    while True:
+        mycursor.execute("""
+            SELECT 1 FROM borrowed_equipment
+            WHERE equipmentID = %s AND borrowerID = %s AND professorID = %s AND borrow_date = %s
+        """, (eid, bid, pid, new_date))
+        if not mycursor.fetchone():
+            return new_date
+        new_date += timedelta(seconds=1)
