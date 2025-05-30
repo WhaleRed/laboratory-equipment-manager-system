@@ -45,6 +45,8 @@ def fetch_itemID_from_name(name):
   mycursor.execute("SELECT EquipmentID FROM Equipment WHERE Equipment_name = %s", (name))
   result = mycursor.fetchone()
   
+  mycursor.close()
+  
   return result
 
 def fetchEquipmentIds():
@@ -78,6 +80,36 @@ def fetchCategory():
   mycursor.close()
   
   return [row[0] for row in results]
+
+def fetchProfIDReturned(eid, bid):
+  db.commit()
+  mycursor = db.cursor()
+  
+  mycursor.execute("""
+            SELECT ProfessorID FROM borrowed_equipment
+            WHERE equipmentID = %s AND BorrowerID = %s AND state = 'In use'
+            ORDER BY borrow_date ASC
+        """, (eid, bid))
+  result = mycursor.fetchone()
+  mycursor.close()
+  
+  return result[0] if result else None
+
+def fetchProfIDReplaced(eid, bid):
+  db.commit()
+  mycursor = db.cursor()
+  
+  mycursor.execute("""
+            SELECT professorID FROM returned_equipment
+            WHERE equipmentID = %s AND borrowerID = %s AND state = 'Damaged'
+            ORDER BY return_date ASC
+        """, (eid, bid))
+  result = mycursor.fetchone()
+  mycursor.close()
+  print(f"results: {result}")
+  print(f"result[0] if result else None:  {result[0] if result else None}")
+  
+  return result[0] if result else None
 
 #-----For getting items in use-----#
 def fetchItemsInUse(borrowerID, categoryidx=None, searched=None):

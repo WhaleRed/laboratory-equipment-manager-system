@@ -81,7 +81,7 @@ class Confirmation:
         student_id = self.ui.input_idno_uinfo.text().strip()
         professor = self.ui.input_professor_uinfo.currentText().strip()
 
-        if not student_id or not professor:
+        if not student_id or (not professor and self.ui.input_professor_uinfo.isVisible()):
             self.show_warning("Input Error", "All fields must be filled out.")
             return False
 
@@ -142,7 +142,7 @@ class Confirmation:
             index = self.ui.input_professor_uinfo.currentIndex()
             professor_id = self.ui.input_professor_uinfo.itemData(index)
 
-            if professor_id is None:
+            if professor_id is None and self.ui.input_professor_uinfo.isVisible():
                 self.show_warning("Selection Error", "Please select a valid professor.")
                 return
 

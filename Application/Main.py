@@ -23,7 +23,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.total_pages = 1 # initial
         self.per_page = 10
         self.borrower_id = ""
-        self.prof_id = ""
+        self.profID = ""
 
         # For Scrollbar
         self.Item_table.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
@@ -122,7 +122,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.addborrower_button.clicked.connect(self.openBorrower)
         
         self.next_button_uinfo.clicked.connect(self.get_borrower_id)
-        self.submit_confirmation.clicked.connect(self.get_ids)
+        self.submit_confirmation.clicked.connect(self.get_item_ids)
 
 #-----Helper-----#
 
@@ -243,22 +243,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def setModeBorrow(self):
         self.addItemState = 2
+        self.input_professor_uinfo.show()
         self.setItemTableValues()
     
     def setModeReturn(self):
         self.addItemState = 0
+        self.input_professor_uinfo.hide()
         self.setItemTableValues()
         
     def setModeReplace(self):
         self.addItemState = 1
+        self.input_professor_uinfo.hide()
         self.setItemTableValues()
       
     def get_borrower_id(self):
         self.borrower_id = self.input_idno_uinfo.text().strip()
+        self.profID = self.logic.get_selected_prof_id()
       
-    def get_ids(self):
+    def get_item_ids(self):
       try:
-        self.prof_id = self.logic.get_selected_prof_id()
         item_names, quantities, states = self.logic.User_Table_Inputs()
         
         for name, qty, state in zip(item_names, quantities, states):
@@ -275,6 +278,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def add_transaction_to_db(self, id, quantity, state):
       try:
         print("Adding transaction...")
+        print(f"id: {id}")
+        print(f"quantity: {quantity}")
+        print(f"state: {state}")
         
         if state is None:
             mode = self.addItemState
@@ -284,18 +290,24 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         print(f"mode: {mode}")
 
         if mode == 0:  # returned
-            add.addReturnedEquipment(id, self.borrower_id, "Returned", quantity)
+            prof_id = fetchData.fetchProfIDReturned(id, self.borrower_id)
+            print(f"profid {prof_id}")
+            add.addReturnedEquipment(id, self.borrower_id, prof_id, "Returned", quantity)
             edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
         elif mode == 3:  # damaged
             print("printing damaged...")
-            add.addReturnedEquipment(id, self.borrower_id, "Damaged", quantity)
+            prof_id = fetchData.fetchProfIDReturned(id, self.borrower_id)
+            print(f"profid {prof_id}")
+            add.addReturnedEquipment(id, self.borrower_id, prof_id, "Damaged", quantity)
             edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
         elif mode == 1:
+            prof_id = fetchData.fetchProfIDReplaced(id, self.borrower_id)
             print("adding")
-            add.addReplacedEquipment(id, self.borrower_id, quantity)
+            print(f"rof id: {prof_id}")
+            add.addReplacedEquipment(id, self.borrower_id, prof_id, quantity)
             edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
         elif mode == 2:
-            add.addBorrowedEquipment(id, self.borrower_id, 'In use', quantity)
+            add.addBorrowedEquipment(id, self.borrower_id, self.profID, 'In use', quantity)
             edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
         
       except Exception as e:
