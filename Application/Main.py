@@ -289,18 +289,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             
         print(f"mode: {mode}")
 
-        if mode == 0:  # returned
+        if mode in (0,3):  # returned
             prof_id = fetchData.fetchProfIDReturned(id, self.borrower_id)
             print(f"profid {prof_id}")
-            add.addReturnedEquipment(id, self.borrower_id, prof_id, "Returned", quantity)
-            edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
-        elif mode == 3:  # damaged
-            print("printing damaged...")
-            prof_id = fetchData.fetchProfIDReturned(id, self.borrower_id)
-            print(f"profid {prof_id}")
-            add.addReturnedEquipment(id, self.borrower_id, prof_id, "Damaged", quantity)
-            edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
-        elif mode == 1:
+            if mode == 0:
+                add.addReturnedEquipment(id, self.borrower_id, prof_id, "Returned", quantity)
+                edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
+            elif mode == 3:  # damaged
+                print("printing damaged...")
+                print(f"profid {prof_id}")
+                add.addReturnedEquipment(id, self.borrower_id, prof_id, "Damaged", quantity)
+                edit.updateEquipmentQuantityState(id, self.borrower_id, quantity, mode)
+        elif mode == 1: #relaced
             prof_id = fetchData.fetchProfIDReplaced(id, self.borrower_id)
             print("adding")
             print(f"rof id: {prof_id}")
@@ -1022,22 +1022,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     spinbox_returned = self.createQuantitySpinBox(available_qty)
                     spinbox_damaged = self.createQuantitySpinBox(available_qty)
                     
-                    def on_returned_changed(value):
-                        remaining = available_qty - value
-                        spinbox_damaged.setMaximum(remaining)
-                        if spinbox_damaged.value() > remaining:
-                            spinbox_damaged.setValue(remaining)
+                    spinbox_returned.valueChanged.connect(
+                        lambda value, qty=available_qty, dmg_box=spinbox_damaged: (
+                            dmg_box.setMaximum(qty - value),
+                            dmg_box.setValue(min(dmg_box.value(), qty - value)) if dmg_box.value() > qty - value else None
+                        )
+                    )
                     
-                    def on_damaged_changed(value):
-                        remaining = available_qty - value
-                        spinbox_returned.setMaximum(remaining)
-                        if spinbox_returned.value() > remaining:
-                            spinbox_returned.setValue(remaining)
-                            
-                        self.addItemState = 3
-                            
-                    spinbox_returned.valueChanged.connect(on_returned_changed)
-                    spinbox_damaged.valueChanged.connect(on_damaged_changed)
+                    spinbox_damaged.valueChanged.connect(
+                        lambda value, qty=available_qty, ret_box=spinbox_returned: (
+                            ret_box.setMaximum(qty - value),
+                            ret_box.setValue(min(ret_box.value(), qty - value)) if ret_box.value() > qty - value else None,
+                            setattr(self, 'addItemState', 3)
+                        )
+                    )
                     
                     self.Item_table.setCellWidget(row, 2, spinbox_returned)
                     self.Item_table.setCellWidget(row, 3, spinbox_damaged)
@@ -1081,6 +1079,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         except Exception as e:
                 print(f"Failed to populate: {e}")
+                
+    def create_callbacks(self, available_qty, spinbox_returned, spinbox_damaged):
+        def on_returned_changed(value):
+            remaining = available_qty - value
+            spinbox_damaged.setMaximum(remaining)
+            if spinbox_damaged.value() > remaining:
+                spinbox_damaged.setValue(remaining)
+        
+        def on_damaged_changed(value):
+            remaining = available_qty - value
+            spinbox_returned.setMaximum(remaining)
+            if spinbox_returned.value() > remaining:
+                spinbox_returned.setValue(remaining)
+            self.addItemState = 3
+        
+        return on_returned_changed, on_damaged_changed
 
 
     #-----Add Professor-----#
