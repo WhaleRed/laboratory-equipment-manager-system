@@ -667,8 +667,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                             self.populateReplaceTable()
             case 1:
                 field = "equipment"
-                res = delete.delEquipment(id)
-                self.populateEquipmentTable()
+                confirm = QtWidgets.QMessageBox.question(
+                    self,
+                    "Confirm Deletion",
+                    f"Are you sure about deleting this {field}?",
+                    QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No,
+                    QtWidgets.QMessageBox.StandardButton.No
+                    )  
+                if confirm == QtWidgets.QMessageBox.StandardButton.Yes:
+                    res = delete.delEquipment(id)
+                    self.populateEquipmentTable()
             case 2:
                 current_tab_index = self.Dashboard_Frame_Borrowers.currentIndex()
                 match current_tab_index:
